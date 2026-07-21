@@ -1,5 +1,13 @@
 [build]
   publish = "."
+  functions = "netlify/functions"
+
+# Redirect form success to thank-you page
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+  conditions = {Language = ["en"]}
 
 [[redirects]]
   from = "/*"

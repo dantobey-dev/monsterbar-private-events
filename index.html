@@ -280,6 +280,22 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 </style>
 </head>
 <body>
+<!-- Hidden static form for Netlify form detection at build time -->
+<!-- This never displays to users — the real form is rendered by JS -->
+<form name="private-event-inquiry" netlify netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="private-event-inquiry"/>
+  <input name="bot-field"/>
+  <input name="name"/>
+  <input name="organization"/>
+  <input name="email"/>
+  <input name="phone"/>
+  <input name="event_date"/>
+  <input name="space"/>
+  <input name="guests"/>
+  <input name="bar_type"/>
+  <input name="quote_summary"/>
+  <input name="notes"/>
+</form>
 
 <header class="site-header">
   <div>
@@ -804,7 +820,7 @@ Estimated totals: T1 ${fmtI(totals[0])} · T2 ${fmtI(totals[1])} · T3 ${fmtI(to
       </div>
     </div>
     <!-- Netlify form — hidden fields carry all the data -->
-    <form name="private-event-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
+    <form name="private-event-inquiry" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
       <input type="hidden" name="form-name" value="private-event-inquiry"/>
       <input type="hidden" name="bot-field" style="display:none"/>
       <input type="hidden" id="nf-name" name="name" value="${S.name}"/>
