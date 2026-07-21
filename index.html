@@ -282,19 +282,20 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 <body>
 <!-- Hidden static form for Netlify form detection at build time -->
 <!-- This never displays to users — the real form is rendered by JS -->
-<form name="private-event-inquiry" netlify netlify-honeypot="bot-field" hidden>
+<form name="private-event-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" style="display:none">
   <input type="hidden" name="form-name" value="private-event-inquiry"/>
-  <input name="bot-field"/>
-  <input name="name"/>
-  <input name="organization"/>
-  <input name="email"/>
-  <input name="phone"/>
-  <input name="event_date"/>
-  <input name="space"/>
-  <input name="guests"/>
-  <input name="bar_type"/>
-  <input name="quote_summary"/>
-  <input name="notes"/>
+  <input type="text" name="bot-field"/>
+  <input type="text" name="name"/>
+  <input type="text" name="organization"/>
+  <input type="email" name="email"/>
+  <input type="tel" name="phone"/>
+  <input type="text" name="event_date"/>
+  <input type="text" name="space"/>
+  <input type="number" name="guests"/>
+  <input type="text" name="bar_type"/>
+  <textarea name="quote_summary"></textarea>
+  <input type="text" name="notes"/>
+  <button type="submit">Submit</button>
 </form>
 
 <header class="site-header">
