@@ -303,7 +303,7 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 </main>
 
 <script>
-/* ── STATE ──────────────────────────────────────── */
+/* -- STATE ---------------------------------------- */
 const S = {
   name:'', org:'', email:'', phone:'',
   date:'', flexible:false, startTime:'', endTime:'',
@@ -354,7 +354,7 @@ function getStaffNote(){
   return'This quote includes 1 bartender. For groups arriving all at once, a second bartender is recommended.';
 }
 
-/* ── STEPS ──────────────────────────────────────── */
+/* -- STEPS ---------------------------------------- */
 const STEPS=[
   'About you','Your event','Guest count','Bar service','Extras','Your quote','Confirm'
 ];
@@ -408,7 +408,7 @@ function err(msg){
   return`<div style="background:#2A1515;border:1px solid var(--red);border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#FFB0B0;margin-bottom:20px">${msg}</div>`;
 }
 
-/* ── STEP 0: Contact ─────────────────────────────── */
+/* -- STEP 0: Contact ------------------------------- */
 function step0(){
   const d=document.createElement('div');
   d.innerHTML=`
@@ -436,25 +436,25 @@ function step0(){
     </div>
     <div class="step-nav">
       <div></div>
-      <button class="btn btn-primary" onclick="saveStep0();go(1)">Continue →</button>
+      <button class="btn btn-primary" onclick="saveStep0();go(1)">Continue </button>
     </div>`;
   return d;
 }
 function saveStep0(){S.name=$('f-name').value;S.org=$('f-org').value;S.email=$('f-email').value;S.phone=$('f-phone').value;S.evtype=$('f-evtype').value;}
 
-/* ── STEP 1: Event basics ────────────────────────── */
+/* -- STEP 1: Event basics -------------------------- */
 function step1(){
   const d=document.createElement('div');
   const spaceAvail={
-    disco:'Mon, Wed & Fri 4-10pm · Thu 4-8pm · Sat 3-8pm',
+    disco:'Mon, Wed & Fri 4-10pm . Thu 4-8pm . Sat 3-8pm',
     piano:'Most days during regular hours (min. 15 guests, $250 bar min)',
-    arizona:'Mon & Wed 10pm-2am · Fri 10pm-3am · Sun 4pm-2am',
-    buyout:'By arrangement · rates from $15,000',
+    arizona:'Mon & Wed 10pm-2am . Fri 10pm-3am . Sun 4pm-2am',
+    buyout:'By arrangement . rates from $15,000',
   };
   d.innerHTML=`
     <div class="step-eyebrow">Step 2 of ${STEPS.length}</div>
     <div class="step-title">When & where.</div>
-    <div class="step-desc">Choose your date and which part of the bar you'd like to reserve.</div>
+    <div class="step-desc">Choose your date and which part of the bar you would like to reserve.</div>
     ${err(errMsg)}
     <div class="field-group">
       <div class="field-row cols-2">
@@ -483,8 +483,8 @@ function step1(){
     </div>
     <div id="space-note"></div>
     <div class="step-nav">
-      <button class="btn btn-ghost" onclick="saveStep1();go(0)">← Back</button>
-      <button class="btn btn-primary" onclick="saveStep1();go(2)">Continue →</button>
+      <button class="btn btn-ghost" onclick="saveStep1();go(0)"> Back</button>
+      <button class="btn btn-primary" onclick="saveStep1();go(2)">Continue </button>
     </div>`;
   setTimeout(()=>renderSpaceNote(),10);
   return d;
@@ -492,16 +492,16 @@ function step1(){
 function renderSpaceNote(){
   const el=document.getElementById('space-note');if(!el)return;
   const notes={
-    disco:'<div class="avail-note"><strong>The Disco</strong>  -  Stage, DJ booth, and dance floor. Available Mon, Wed & Fri 4-10pm · Thu 4-8pm · Sat 3-8pm. $1,500 bar minimum.</div>',
+    disco:'<div class="avail-note"><strong>The Disco</strong>  -  Stage, DJ booth, and dance floor. Available Mon, Wed & Fri 4-10pm . Thu 4-8pm . Sat 3-8pm. $1,500 bar minimum.</div>',
     piano:'<div class="avail-note"><strong>Piano Room</strong>  -  Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor. Available most days during regular hours. $250 bar minimum.</div>',
-    arizona:'<div class="avail-note avail-warn"><strong>Arizona Room</strong>  -  Intimate back room of the Disco. Available Mon & Wed 10pm-2am · Fri 10pm-3am · Sun 4pm-2am. Not available Thursdays or Saturdays. $400 bar minimum.</div>',
-    buyout:'<div class="avail-note"><strong>Full Bar Buyout</strong>  -  Exclusive use of the entire venue. Up to 250 guests. By arrangement, rates from $15,000. We'll follow up to confirm details.</div>',
+    arizona:'<div class="avail-note avail-warn"><strong>Arizona Room</strong>  -  Intimate back room of the Disco. Available Mon & Wed 10pm-2am . Fri 10pm-3am . Sun 4pm-2am. Not available Thursdays or Saturdays. $400 bar minimum.</div>',
+    buyout:'<div class="avail-note"><strong>Full Bar Buyout</strong>  -  Exclusive use of the entire venue. Up to 250 guests. By arrangement, rates from $15,000. We will follow up to confirm details.</div>',
   };
   el.innerHTML=notes[S.space]||'';
 }
 function saveStep1(){S.date=$('f-date').value;S.flexible=$('f-flex').value==='yes';S.startTime=$('f-start').value;S.endTime=$('f-end').value;}
 
-/* ── STEP 2: Guest count ─────────────────────────── */
+/* -- STEP 2: Guest count --------------------------- */
 function step2(){
   const d=document.createElement('div');
   d.innerHTML=`
@@ -513,7 +513,7 @@ function step2(){
       <div class="field">
         <label>Expected guest count</label>
         <input type="number" id="f-guests" value="${S.guests||''}" min="1" max="250" placeholder="e.g. 75"/>
-        <div class="field-hint">Disco: up to 130 · Arizona Room: up to 25 · Piano area: up to 15 · Full buyout: up to 250</div>
+        <div class="field-hint">Disco: up to 130 . Arizona Room: up to 25 . Piano area: up to 15 . Full buyout: up to 250</div>
       </div>
       <div class="field"><label>Arrival style</label>
         <select id="f-arrival">
@@ -524,20 +524,20 @@ function step2(){
       </div>
     </div>
     <div class="step-nav">
-      <button class="btn btn-ghost" onclick="saveStep2();go(1)">← Back</button>
-      <button class="btn btn-primary" onclick="saveStep2();go(3)">Continue →</button>
+      <button class="btn btn-ghost" onclick="saveStep2();go(1)"> Back</button>
+      <button class="btn btn-primary" onclick="saveStep2();go(3)">Continue </button>
     </div>`;
   return d;
 }
 function saveStep2(){S.guests=parseInt($('f-guests').value)||0;S.arrival=$('f-arrival').value;}
 
-/* ── STEP 3: Bar service ─────────────────────────── */
+/* -- STEP 3: Bar service --------------------------- */
 function step3(){
   const d=document.createElement('div');
   d.innerHTML=`
     <div class="step-eyebrow">Step 4 of ${STEPS.length}</div>
     <div class="step-title">Bar service.</div>
-    <div class="step-desc">Choose how you'd like bar service structured for your event.</div>
+    <div class="step-desc">Choose how you would like bar service structured for your event.</div>
     ${err(errMsg)}
     <div class="option-grid cols-2" id="bartype-grid">
       ${[
@@ -578,7 +578,7 @@ function step3(){
     <div id="tix-section" class="${S.barType!=='tickets'?'hidden':''}">
       <div class="field" style="margin-top:16px"><label>Ticket quantity method</label>
         <select id="f-tixmode" onchange="S.tixMode=this.value;toggleTixFields();updateBarCalc()">
-          <option value="per-guest" ${S.tixMode!=='fixed'?'selected':''}>Per guest (tickets × guest count)</option>
+          <option value="per-guest" ${S.tixMode!=='fixed'?'selected':''}>Per guest (tickets x guest count)</option>
           <option value="fixed" ${S.tixMode==='fixed'?'selected':''}>Fixed total (specific number of tickets)</option>
         </select>
       </div>
@@ -596,8 +596,8 @@ function step3(){
     </div>
 
     <div style="margin-top:24px" class="step-nav">
-      <button class="btn btn-ghost" onclick="go(2)">← Back</button>
-      <button class="btn btn-primary" onclick="go(4)">Continue →</button>
+      <button class="btn btn-ghost" onclick="go(2)"> Back</button>
+      <button class="btn btn-primary" onclick="go(4)">Continue </button>
     </div>`;
   setTimeout(updateBarCalc, 10);
   return d;
@@ -632,8 +632,8 @@ function updateBarCalc(){
   const mult=S.barType==='openbar'?1.5+(S.obHrs-1):null;
   const rate=TR[S.tier];
   let detail='';
-  if(S.barType==='openbar')detail=`${S.obHrs} hrs · ${mult.toFixed(1)}× $${rate} = ${fmt(mult*rate)}/person pre-tax · ${S.guests} guests`;
-  else detail=`${tix} tickets · $${rate}/ticket`;
+  if(S.barType==='openbar')detail=`${S.obHrs} hrs . ${mult.toFixed(1)}x $${rate} = ${fmt(mult*rate)}/person pre-tax . ${S.guests} guests`;
+  else detail=`${tix} tickets . $${rate}/ticket`;
   const waived=b.pretax>WAIVER;
   el.innerHTML=`
     <div style="background:var(--lift);border-radius:var(--radius);padding:12px 14px;font-size:12px">
@@ -648,23 +648,23 @@ function updateBarCalc(){
     </div>`;
 }
 
-/* ── STEP 4: Extras ──────────────────────────────── */
+/* -- STEP 4: Extras -------------------------------- */
 function step4(){
   const d=document.createElement('div');
   const rows=[
     {k:'dj',name:'House DJ',sub:'Up to 4 hrs flat rate',price:'$250'},
-    {k:'host',name:'Drag host',sub:'Performance, hosting & MC · up to 4 hrs',price:'$300'},
+    {k:'host',name:'Drag host',sub:'Performance, hosting & MC . up to 4 hrs',price:'$300'},
     {k:'soundtech',name:'Sound technician',sub:'Required for A/V presentations',price:'$125'},
-    {k:'coat',name:'Attended coat check',sub:`$40/hr · 3 hr minimum`,price:'$120+'},
+    {k:'coat',name:'Attended coat check',sub:`$40/hr . 3 hr minimum`,price:'$120+'},
     {k:'food',name:'Food & catering setup',sub:'Table setup, delivery receiving, cooler, cleanup',price:'$85'},
-    {k:'security',name:'Security',sub:'$40/hr · 3 hr minimum',price:'$120+'},
+    {k:'security',name:'Security',sub:'$40/hr . 3 hr minimum',price:'$120+'},
     {k:'xBar',name:'Additional bartender',sub:'Recommended for 65+ guests or simultaneous arrivals',price:'~$105'},
-    {k:'dancers',name:'Go-go dancers',sub:'Starting ~$150/dancer for 3 hrs · subject to availability',price:'$150+'},
+    {k:'dancers',name:'Go-go dancers',sub:'Starting ~$150/dancer for 3 hrs . subject to availability',price:'$150+'},
   ];
   d.innerHTML=`
     <div class="step-eyebrow">Step 5 of ${STEPS.length}</div>
     <div class="step-title">Add-ons.</div>
-    <div class="step-desc">All optional. Toggle anything you'd like included  -  pricing updates on the quote.</div>
+    <div class="step-desc">All optional. Toggle anything you would like included  -  pricing updates on the quote.</div>
     <div class="toggle-list">
       ${rows.map(r=>`
         <div class="toggle-row ${S[r.k]?'active':''}" onclick="S['${r.k}']=!S['${r.k}'];this.classList.toggle('active')">
@@ -680,13 +680,13 @@ function step4(){
     </div>
     ${S.arrival==='simultaneous'&&!S.xBar?'<div class="avail-note avail-warn"><strong>Note:</strong> You indicated guests are arriving all at once. We recommend adding an extra bartender to handle the initial rush.</div>':''}
     <div class="step-nav">
-      <button class="btn btn-ghost" onclick="go(3)">← Back</button>
-      <button class="btn btn-primary" onclick="go(5)">See your quote →</button>
+      <button class="btn btn-ghost" onclick="go(3)"> Back</button>
+      <button class="btn btn-primary" onclick="go(5)">See your quote </button>
     </div>`;
   return d;
 }
 
-/* ── STEP 5: Quote ───────────────────────────────── */
+/* -- STEP 5: Quote --------------------------------- */
 function step5(){
   const d=document.createElement('div');
   const addons=getAddons();
@@ -710,19 +710,19 @@ function step5(){
   ].filter(([show])=>show);
 
   const svcLabel=S.barType==='openbar'
-    ?`Open bar · ${S.obHrs} hrs · ${(1.5+(S.obHrs-1)).toFixed(1)}× multiplier · ${S.guests} guests`
+    ?`Open bar . ${S.obHrs} hrs . ${(1.5+(S.obHrs-1)).toFixed(1)}x multiplier . ${S.guests} guests`
     :S.barType==='tickets'
-    ?`Drink tickets · ${getTix()} total${S.tixMode==='fixed'?' (fixed)':' ('+S.tixPer+'/guest)'}  · ${S.guests} guests`
-    :S.barType==='cash'?'Cash bar · $1,500 minimum':'Single-payer tab';
+    ?`Drink tickets . ${getTix()} total${S.tixMode==='fixed'?' (fixed)':' ('+S.tixPer+'/guest)'}  . ${S.guests} guests`
+    :S.barType==='cash'?'Cash bar . $1,500 minimum':'Single-payer tab';
 
   let html=`
     <div class="step-eyebrow">Step 6 of ${STEPS.length}</div>
     <div class="step-title">Your quote.</div>
-    <div class="step-desc">${S.name?'Here's what we've put together for you, '+S.name.split(' ')[0]+'.':'Here's your estimated pricing.'}</div>
+    <div class="step-desc">${S.name ? 'Here is what we put together for you, ' + S.name.split(' ')[0] + '.' : 'Here is your estimated pricing.'}</div>
     <div class="quote-panel">
       <div class="quote-banner">
         <div class="qb-title">Private Event Proposal</div>
-        <div class="qb-sub">The Manhattan Monster Bar · 80 Grove St, West Village, NYC · ${fmtDate(S.date)}${dur?' · '+dur+' hrs':''} · ${S.guests} guests</div>
+        <div class="qb-sub">The Manhattan Monster Bar . 80 Grove St, West Village, NYC . ${fmtDate(S.date)}${dur?' . '+dur+' hrs':''} . ${S.guests} guests</div>
       </div>
       <div class="quote-body">
         <div class="q-section-head">Event details</div>
@@ -746,7 +746,7 @@ function step5(){
             <tr><td>Sales tax (8.875%)</td>${bars.map(b=>`<td>${fmt(b.tax)}</td>`).join('')}</tr>
             <tr><td>Rental fee</td>${bars.map(b=>`<td>${b.waived?'<span style="text-decoration:line-through;opacity:0.35">$400</span> <span class="waiver-pill">waived</span>':fmt(RENTAL)}</td>`).join('')}</tr>
             ${addonRows.length?`<tr><td colspan="4" style="padding:6px 10px 2px;color:var(--muted);font-size:11px;font-family:var(--font-body);text-align:left">Add-ons</td></tr>
-            ${addonRows.map(([,lbl,val])=>`<tr><td style="padding-left:20px">↳ ${lbl}</td>${[0,1,2].map(()=>`<td>${val}</td>`).join('')}</tr>`).join('')}`:''}
+            ${addonRows.map(([,lbl,val])=>`<tr><td style="padding-left:20px"> ${lbl}</td>${[0,1,2].map(()=>`<td>${val}</td>`).join('')}</tr>`).join('')}`:''}
             <tr class="t-total">
               <td>Estimated total</td>
               <td class="c1">${fmtI(totals[0])}</td>
@@ -769,14 +769,14 @@ function step5(){
       </div>
     </div>
     <div class="step-nav">
-      <button class="btn btn-ghost" onclick="go(4)">← Back</button>
-      <button class="btn btn-primary" onclick="go(6)">Submit inquiry →</button>
+      <button class="btn btn-ghost" onclick="go(4)"> Back</button>
+      <button class="btn btn-primary" onclick="go(6)">Submit inquiry </button>
     </div>`;
   d.innerHTML=html;
   return d;
 }
 
-/* ── STEP 6: Confirm / Netlify form submit ───────── */
+/* -- STEP 6: Confirm / Netlify form submit --------- */
 function step6(){
   const d=document.createElement('div');
   const addons=getAddons();
@@ -792,7 +792,7 @@ Guests: ${S.guests}
 Bar type: ${S.barType}
 Tier: ${S.tier}
 Add-ons: ${[S.dj&&'DJ',S.host&&'Drag host',S.soundtech&&'Sound tech',S.coat&&'Coat check',S.food&&'Food setup',S.security&&'Security',S.xBar&&'Extra bartender',S.dancers&&'Dancers'].filter(Boolean).join(', ')||'None'}
-Estimated totals: T1 ${fmtI(totals[0])} · T2 ${fmtI(totals[1])} · T3 ${fmtI(totals[2])}`;
+Estimated totals: T1 ${fmtI(totals[0])} . T2 ${fmtI(totals[1])} . T3 ${fmtI(totals[2])}`;
 
   d.innerHTML=`
     <div class="step-eyebrow">Step 7 of ${STEPS.length}</div>
@@ -819,8 +819,8 @@ Estimated totals: T1 ${fmtI(totals[0])} · T2 ${fmtI(totals[1])} · T3 ${fmtI(to
       <input type="hidden" id="nf-summary" name="quote_summary" value="${summary}"/>
       <input type="hidden" id="nf-notes" name="notes" value="${S.notes}"/>
       <div class="step-nav">
-        <button type="button" class="btn btn-ghost" onclick="go(5)">← Back</button>
-        <button type="submit" class="btn btn-primary">Submit inquiry →</button>
+        <button type="button" class="btn btn-ghost" onclick="go(5)"> Back</button>
+        <button type="submit" class="btn btn-primary">Submit inquiry </button>
       </div>
     </form>`;
   return d;
@@ -861,7 +861,7 @@ function showSuccess(){
     </div>`;
 }
 
-/* ── UTILS ──────────────────────────────────────── */
+/* -- UTILS ---------------------------------------- */
 function $(id){return document.getElementById(id);}
 
 render();
