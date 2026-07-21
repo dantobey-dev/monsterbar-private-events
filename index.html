@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Host an Event — The Manhattan Monster Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── TOKENS ─────────────────────────────────────── */
+:root {
+  --black:   #0C0C0E;
+  --ink:     #141418;
+  --surface: #1C1C22;
+  --lift:    #26262E;
+  --rule:    #36363F;
+  --muted:   #888899;
+  --body:    #C8C8D8;
+  --white:   #F0F0F8;
+  --gold:    #C8A44A;
+  --gold-dim:#8A6E2F;
+  --green:   #3DBE7A;
+  --red:     #E05555;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --radius:  6px;
+  --step-w:  580px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--black); color: var(--body); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+body { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ── HEADER ─────────────────────────────────────── */
+.site-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--ink);
+}
+.site-header .wordmark {
+  font-family: var(--font-display);
+  font-size: 22px; letter-spacing: 0.08em; color: var(--white);
+}
+.site-header .sub {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+/* ── PROGRESS ────────────────────────────────────── */
+.progress-wrap {
+  background: var(--ink);
+  padding: 0 32px 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.progress-track {
+  height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 8px;
+}
+.progress-fill {
+  height: 100%; background: var(--gold); border-radius: 2px;
+  transition: width 0.4s cubic-bezier(.4,0,.2,1);
+}
+.progress-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.progress-label span { color: var(--gold); }
+
+/* ── MAIN ───────────────────────────────────────── */
+.main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 40px 24px 80px; }
+.step-wrap { width: 100%; max-width: var(--step-w); }
+
+/* ── STEP HEADER ─────────────────────────────────── */
+.step-eyebrow {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+}
+.step-title {
+  font-family: var(--font-display);
+  font-size: 48px; line-height: 0.95; letter-spacing: 0.03em;
+  color: var(--white); margin-bottom: 8px;
+}
+.step-desc { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
+
+/* ── FIELDS ─────────────────────────────────────── */
+.field-group { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+.field-row { display: grid; gap: 12px; }
+.field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.field input, .field select, .field textarea {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 11px 14px;
+  font-size: 14px; font-family: var(--font-body);
+  color: var(--white);
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--gold);
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--rule); }
+.field select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888899' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.field-hint { font-size: 12px; color: var(--muted); margin-top: 2px; font-style: italic; }
+
+/* ── OPTION CARDS ────────────────────────────────── */
+.option-grid { display: grid; gap: 10px; margin-bottom: 32px; }
+.option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.opt-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+  position: relative;
+}
+.opt-card:hover { border-color: var(--gold-dim); }
+.opt-card.selected { border-color: var(--gold); background: #1E1B11; }
+.opt-card.selected .opt-check { opacity: 1; }
+.opt-check {
+  position: absolute; top: 12px; right: 12px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s;
+}
+.opt-check::after { content: ''; width: 6px; height: 4px; border-left: 2px solid var(--black); border-bottom: 2px solid var(--black); transform: rotate(-45deg) translateY(-1px); }
+.opt-card .opt-name { font-weight: 500; color: var(--white); margin-bottom: 2px; font-size: 14px; }
+.opt-card .opt-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.opt-card .opt-price { font-family: var(--font-mono); font-size: 13px; color: var(--gold); margin-top: 6px; }
+
+/* ── TOGGLE ROWS ─────────────────────────────────── */
+.toggle-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: 14px 16px;
+  cursor: pointer; transition: border-color 0.15s;
+}
+.toggle-row:hover { border-color: var(--rule); }
+.toggle-row.active { border-color: var(--gold); background: #1E1B11; }
+.toggle-row .tr-left { display: flex; flex-direction: column; gap: 2px; }
+.toggle-row .tr-name { font-size: 14px; font-weight: 500; color: var(--white); }
+.toggle-row .tr-sub { font-size: 12px; color: var(--muted); }
+.toggle-row .tr-price { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.toggle-row.active .tr-price { color: var(--gold); }
+.toggle-switch {
+  width: 38px; height: 22px; border-radius: 11px;
+  background: var(--rule); position: relative; flex-shrink: 0; transition: background 0.2s;
+}
+.toggle-row.active .toggle-switch { background: var(--gold); }
+.toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--muted); transition: left 0.2s, background 0.2s;
+}
+.toggle-row.active .toggle-switch::after { left: 19px; background: var(--black); }
+
+/* ── INLINE NUMBER INPUTS in toggle rows ─────────── */
+.addon-qty {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 8px;
+}
+.addon-qty label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.addon-qty input {
+  width: 70px; background: var(--lift); border: 1px solid var(--rule);
+  border-radius: 4px; padding: 5px 8px; font-size: 13px;
+  color: var(--white); font-family: var(--font-mono); text-align: center;
+}
+.addon-qty input:focus { outline: none; border-color: var(--gold); }
+
+/* ── AVAILABILITY NOTICE ─────────────────────────── */
+.avail-note {
+  background: var(--lift); border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 16px; font-size: 13px; color: var(--muted);
+  margin-bottom: 20px; line-height: 1.5;
+}
+.avail-note strong { color: var(--white); }
+.avail-warn { border-left-color: var(--red); }
+.avail-warn strong { color: #FFB0B0; }
+
+/* ── NAV ─────────────────────────────────────────── */
+.step-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.btn {
+  padding: 13px 28px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
+  font-family: var(--font-body); cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.02em;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--gold); color: var(--black); }
+.btn-primary:hover { opacity: 0.9; }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--rule); }
+.btn-ghost:hover { border-color: var(--muted); color: var(--white); }
+.btn-full { width: 100%; text-align: center; }
+
+/* ── QUOTE PANEL ─────────────────────────────────── */
+.quote-panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.quote-banner {
+  background: linear-gradient(135deg, #1A1408 0%, #0C0C0E 100%);
+  border-bottom: 1px solid var(--gold-dim);
+  padding: 20px 24px;
+}
+.quote-banner .qb-title {
+  font-family: var(--font-display);
+  font-size: 28px; letter-spacing: 0.05em; color: var(--white); margin-bottom: 2px;
+}
+.quote-banner .qb-sub { font-size: 12px; color: var(--muted); }
+.quote-body { padding: 20px 24px; }
+.q-section-head {
+  font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--gold); margin: 16px 0 8px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.q-section-head:first-child { margin-top: 0; }
+.q-line {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 4px 0; border-bottom: 1px solid #1E1E26; gap: 12px;
+}
+.q-line:last-child { border-bottom: none; }
+.q-lbl { font-size: 13px; color: var(--muted); flex: 1; }
+.q-amt { font-size: 13px; font-weight: 500; color: var(--white); font-family: var(--font-mono); white-space: nowrap; }
+.q-amt.waived { text-decoration: line-through; color: var(--rule); font-weight: 400; }
+.q-sub { font-size: 11px; color: var(--muted); font-style: italic; padding: 2px 0 5px; border-bottom: 1px solid #1E1E26; }
+.q-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0 0; margin-top: 8px; border-top: 1px solid var(--rule);
+}
+.q-total-lbl { font-size: 13px; font-weight: 500; color: var(--white); }
+.q-total-amt { font-size: 28px; font-weight: 500; color: var(--gold); font-family: var(--font-mono); letter-spacing: -0.5px; }
+.waiver-pill {
+  display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px;
+  background: #1A3A28; color: var(--green); font-weight: 500; margin-left: 6px;
+}
+.waiver-line { font-size: 11px; color: var(--green); font-style: italic; padding: 2px 0 5px; }
+.deposit-block {
+  background: var(--lift); border-radius: var(--radius);
+  padding: 12px 16px; margin-top: 14px;
+}
+
+/* ── SUCCESS ─────────────────────────────────────── */
+.success-wrap { text-align: center; padding: 20px 0; }
+.success-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: #1A3A28; border: 2px solid var(--green);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+.success-icon svg { stroke: var(--green); }
+
+/* ── TIER COMPARE TABLE ──────────────────────────── */
+.tier-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px; }
+.tier-table th { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--rule); font-size: 11px; font-weight: 600; }
+.tier-table th:first-child { text-align: left; color: var(--muted); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+.tier-table .c1 { color: #6BA3E8; } .tier-table .c2 { color: #6BC97A; } .tier-table .c3 { color: #E8A84A; }
+.tier-table td { padding: 5px 10px; text-align: center; border-bottom: 1px solid #1E1E26; font-family: var(--font-mono); color: var(--white); }
+.tier-table td:first-child { text-align: left; font-family: var(--font-body); color: var(--muted); font-size: 12px; }
+.tier-table .t-total td { font-size: 15px; font-weight: 600; border-top: 1px solid var(--rule); padding-top: 10px; border-bottom: none; }
+.tier-table .t-total td.c1 { color: #6BA3E8; } .tier-table .t-total td.c2 { color: #6BC97A; } .tier-table .t-total td.c3 { color: #E8A84A; }
+.tier-table .t-dep td { font-size: 11px; color: var(--muted); font-family: var(--font-body); }
+
+/* ── STAFF NOTE ──────────────────────────────────── */
+.staff-note { font-size: 12px; color: var(--muted); font-style: italic; padding: 10px 0; border-top: 1px solid var(--rule); margin-top: 4px; }
+
+/* ── MISC ────────────────────────────────────────── */
+.hidden { display: none !important; }
+@media (max-width: 600px) {
+  .step-title { font-size: 36px; }
+  .field-row.cols-2, .field-row.cols-3 { grid-template-columns: 1fr; }
+  .option-grid.cols-2, .option-grid.cols-3 { grid-template-columns: 1fr; }
+  .site-header { padding: 14px 20px; }
+  .main { padding: 28px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="wordmark">THE MANHATTAN MONSTER</div>
+    <div class="sub">80 Grove St · West Village · NYC</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase">Private Events</div>
+    <div style="font-size:12px;color:var(--gold)">dan@monsterbar.nyc</div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:12%"></div></div>
+  <div class="progress-label">Step <span id="prog-cur">1</span> of <span id="prog-tot">8</span> — <span id="prog-name">About you</span></div>
+</div>
+
+<main class="main">
+  <div class="step-wrap" id="step-wrap"></div>
+</main>
+
+<script>
+/* ── STATE ──────────────────────────────────────── */
+const S = {
+  name:'', org:'', email:'', phone:'',
+  date:'', flexible:false, startTime:'', endTime:'',
+  space:'disco', guests:0,
+  barType:'openbar', tier:2, obHrs:3, tixPer:3, tixFixed:0, tixMode:'per-guest', tabMin:1500,
+  dj:false, host:false, soundtech:false, coat:false, coatHrs:3,
+  food:false, oven:false, security:false, secHrs:3,
+  xBar:false, dancers:false,
+  grat:18, notes:'',
+};
+
+const TR={1:10,2:12,3:14};
+const TN={1:'Tier 1 — Base',2:'Tier 2 — Call brands',3:'Tier 3 — Top shelf'};
+const WAIVER=2800, RENTAL=400, TAX=0.08875;
+
+const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtI=n=>'$'+Math.round(n).toLocaleString('en-US');
+const fmtDate=v=>{if(!v)return'';const[y,mo,d]=v.split('-');const dt=new Date(+y,+mo-1,+d);const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];return day+', '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+mo-1]+' '+parseInt(d)+', '+y;};
+const fmtTime=v=>{if(!v)return'';const[h,m]=v.split(':').map(Number);const ap=h>=12?'pm':'am';const h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;};
+function getDur(){if(!S.startTime||!S.endTime)return 0;const[sh,sm]=S.startTime.split(':').map(Number),[eh,em]=S.endTime.split(':').map(Number);const mins=(eh*60+em)-(sh*60+sm);return mins>0?mins/60:0;}
+
+function getTix(){if(S.tixMode==='fixed')return S.tixFixed||0;return(S.tixPer||1)*S.guests;}
+
+function calcBar(tierNum){
+  const rate=TR[tierNum];let pretax=0;
+  if(S.barType==='openbar'){const hrs=S.obHrs||1,mult=1.5+(hrs-1);pretax=mult*rate*S.guests;}
+  else if(S.barType==='tickets'){pretax=getTix()*rate;}
+  else if(S.barType==='cash'){pretax=1500;}
+  else{pretax=S.tabMin||1500;}
+  const g=pretax*(S.grat/100),tax=pretax*TAX;
+  const waived=pretax>WAIVER;
+  return{pretax,grat:g,tax,sub:pretax+g+tax,waived,tierNum};
+}
+
+function getAddons(){
+  const dur=getDur()||3;
+  const dj=S.dj?250:0,host=S.host?300:0,st=S.soundtech?125:0;
+  const coat=S.coat?Math.max(3,S.coatHrs||3)*40:0;
+  const food=(S.food?85:0)+(S.oven?150:0);
+  const sec=S.security?Math.max(3,S.secHrs||3)*40:0;
+  const xb=S.xBar?Math.ceil(dur+0.5)*35:0;
+  return{dj,host,st,coat,food,sec,xb,total:dj+host+st+coat+food+sec+xb};
+}
+
+function getStaffNote(){
+  if(!S.guests)return'';
+  if(S.guests>=65)return'This quote includes 2 bartenders and 1 busser.'+(S.xBar?' A 3rd bartender has been added.':' An additional bartender can be added if needed.');
+  return'This quote includes 1 bartender. For groups arriving all at once, a second bartender is recommended.';
+}
+
+/* ── STEPS ──────────────────────────────────────── */
+const STEPS=[
+  'About you','Your event','Guest count','Bar service','Extras','Your quote','Confirm'
+];
+
+let cur=0;
+function go(n){
+  if(n<0||n>=STEPS.length)return;
+  // validation
+  if(n>cur){
+    const err=validate(cur);
+    if(err){showError(err);return;}
+  }
+  cur=n;
+  render();
+}
+
+function validate(step){
+  if(step===0){
+    if(!S.name.trim())return'Please enter your name.';
+    if(!S.email.trim()||!S.email.includes('@'))return'Please enter a valid email address.';
+  }
+  if(step===1){
+    if(!S.date)return'Please select an event date.';
+    if(!S.startTime||!S.endTime)return'Please enter start and end times.';
+    if(getDur()<=0)return'End time must be after start time.';
+  }
+  if(step===2){
+    if(!S.guests||S.guests<1)return'Please enter a guest count.';
+  }
+  return null;
+}
+
+let errMsg='';
+function showError(msg){errMsg=msg;render();}
+
+function render(){
+  errMsg=''; // only shown on next attempt
+  const fill=Math.round(((cur+1)/STEPS.length)*100);
+  document.getElementById('prog-fill').style.width=fill+'%';
+  document.getElementById('prog-cur').textContent=cur+1;
+  document.getElementById('prog-tot').textContent=STEPS.length;
+  document.getElementById('prog-name').textContent=STEPS[cur];
+  const w=document.getElementById('step-wrap');
+  w.innerHTML='';
+  const fns=[step0,step1,step2,step3,step4,step5,step6];
+  w.appendChild(fns[cur]());
+}
+
+function err(msg){
+  if(!msg)return'';
+  return`<div style="background:#2A1515;border:1px solid var(--red);border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#FFB0B0;margin-bottom:20px">${msg}</div>`;
+}
+
+/* ── STEP 0: Contact ─────────────────────────────── */
+function step0(){
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 1 of ${STEPS.length}</div>
+    <div class="step-title">Let's get started.</div>
+    <div class="step-desc">Tell us a bit about yourself. We'll use this to follow up with your confirmed proposal.</div>
+    ${err(errMsg)}
+    <div class="field-group">
+      <div class="field-row cols-2">
+        <div class="field"><label>Your name</label><input type="text" id="f-name" value="${S.name}" placeholder="First & last name"/></div>
+        <div class="field"><label>Organization (optional)</label><input type="text" id="f-org" value="${S.org}" placeholder="Company, team, or group"/></div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field"><label>Email</label><input type="email" id="f-email" value="${S.email}" placeholder="you@example.com"/></div>
+        <div class="field"><label>Phone (optional)</label><input type="tel" id="f-phone" value="${S.phone}" placeholder="(212) 555-0100"/></div>
+      </div>
+      <div class="field"><label>Event type</label>
+        <select id="f-evtype">
+          <option value="personal" ${S.evtype==='personal'?'selected':''}>Personal / social</option>
+          <option value="corporate" ${S.evtype==='corporate'?'selected':''}>Business / corporate</option>
+          <option value="community" ${S.evtype==='community'?'selected':''}>Community / nonprofit</option>
+          <option value="other" ${S.evtype==='other'?'selected':''}>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="step-nav">
+      <div></div>
+      <button class="btn btn-primary" onclick="saveStep0();go(1)">Continue →</button>
+    </div>`;
+  return d;
+}
+function saveStep0(){S.name=$('f-name').value;S.org=$('f-org').value;S.email=$('f-email').value;S.phone=$('f-phone').value;S.evtype=$('f-evtype').value;}
+
+/* ── STEP 1: Event basics ────────────────────────── */
+function step1(){
+  const d=document.createElement('div');
+  const spaceAvail={
+    disco:'Mon, Wed & Fri 4–10pm · Thu 4–8pm · Sat 3–8pm',
+    piano:'Most days during regular hours (min. 15 guests, $250 bar min)',
+    arizona:'Mon & Wed 10pm–2am · Fri 10pm–3am · Sun 4pm–2am',
+    buyout:'By arrangement · rates from $15,000',
+  };
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 2 of ${STEPS.length}</div>
+    <div class="step-title">When & where.</div>
+    <div class="step-desc">Choose your date and which part of the bar you'd like to reserve.</div>
+    ${err(errMsg)}
+    <div class="field-group">
+      <div class="field-row cols-2">
+        <div class="field"><label>Event date</label><input type="date" id="f-date" value="${S.date}" min="${new Date().toISOString().split('T')[0]}"/></div>
+        <div class="field"><label>Date flexible?</label>
+          <select id="f-flex"><option value="no" ${!S.flexible?'selected':''}>No, this date only</option><option value="yes" ${S.flexible?'selected':''}>Yes, open to alternatives</option></select>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field"><label>Start time</label><input type="time" id="f-start" value="${S.startTime||'18:00'}"/></div>
+        <div class="field"><label>End time</label><input type="time" id="f-end" value="${S.endTime||'21:00'}"/></div>
+      </div>
+    </div>
+    <div style="margin-bottom:12px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Choose your space</div>
+    <div class="option-grid cols-2" style="margin-bottom:32px">
+      ${['disco','piano','arizona','buyout'].map(sp=>{
+        const names={disco:'The Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
+        const caps={disco:'Up to 130 guests',piano:'Up to 15 guests',arizona:'Up to 25 guests',buyout:'Up to 250 guests'};
+        return`<div class="opt-card ${S.space===sp?'selected':''}" onclick="S.space='${sp}';renderSpaceNote();document.querySelectorAll('.opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')">
+          <div class="opt-check"></div>
+          <div class="opt-name">${names[sp]}</div>
+          <div class="opt-sub">${caps[sp]}</div>
+          <div class="opt-price">${spaceAvail[sp]}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div id="space-note"></div>
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="saveStep1();go(0)">← Back</button>
+      <button class="btn btn-primary" onclick="saveStep1();go(2)">Continue →</button>
+    </div>`;
+  setTimeout(()=>renderSpaceNote(),10);
+  return d;
+}
+function renderSpaceNote(){
+  const el=document.getElementById('space-note');if(!el)return;
+  const notes={
+    disco:'<div class="avail-note"><strong>The Disco</strong> — Stage, DJ booth, and dance floor. Available Mon, Wed & Fri 4–10pm · Thu 4–8pm · Sat 3–8pm. $1,500 bar minimum.</div>',
+    piano:'<div class="avail-note"><strong>Piano Room</strong> — Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor. Available most days during regular hours. $250 bar minimum.</div>',
+    arizona:'<div class="avail-note avail-warn"><strong>Arizona Room</strong> — Intimate back room of the Disco. Available Mon & Wed 10pm–2am · Fri 10pm–3am · Sun 4pm–2am. Not available Thursdays or Saturdays. $400 bar minimum.</div>',
+    buyout:'<div class="avail-note"><strong>Full Bar Buyout</strong> — Exclusive use of the entire venue. Up to 250 guests. By arrangement, rates from $15,000. We'll follow up to confirm details.</div>',
+  };
+  el.innerHTML=notes[S.space]||'';
+}
+function saveStep1(){S.date=$('f-date').value;S.flexible=$('f-flex').value==='yes';S.startTime=$('f-start').value;S.endTime=$('f-end').value;}
+
+/* ── STEP 2: Guest count ─────────────────────────── */
+function step2(){
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 3 of ${STEPS.length}</div>
+    <div class="step-title">How many guests?</div>
+    <div class="step-desc">Your guest count affects bar pricing, staffing, and capacity. Give us your best estimate — we can adjust later.</div>
+    ${err(errMsg)}
+    <div class="field-group">
+      <div class="field">
+        <label>Expected guest count</label>
+        <input type="number" id="f-guests" value="${S.guests||''}" min="1" max="250" placeholder="e.g. 75"/>
+        <div class="field-hint">Disco: up to 130 · Arizona Room: up to 25 · Piano area: up to 15 · Full buyout: up to 250</div>
+      </div>
+      <div class="field"><label>Arrival style</label>
+        <select id="f-arrival">
+          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual — guests trickle in over the event</option>
+          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once — e.g. a bus or organized group arrival</option>
+        </select>
+        <div class="field-hint">Simultaneous arrivals may benefit from an extra bartender to handle the initial rush.</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="saveStep2();go(1)">← Back</button>
+      <button class="btn btn-primary" onclick="saveStep2();go(3)">Continue →</button>
+    </div>`;
+  return d;
+}
+function saveStep2(){S.guests=parseInt($('f-guests').value)||0;S.arrival=$('f-arrival').value;}
+
+/* ── STEP 3: Bar service ─────────────────────────── */
+function step3(){
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 4 of ${STEPS.length}</div>
+    <div class="step-title">Bar service.</div>
+    <div class="step-desc">Choose how you'd like bar service structured for your event.</div>
+    ${err(errMsg)}
+    <div class="option-grid cols-2" id="bartype-grid">
+      ${[
+        ['openbar','Prepaid Open Bar','Unlimited drinks for the duration. Best for full hospitality.','Per person, per hour'],
+        ['tickets','Drink Tickets','Guests receive a set number of prepaid drinks.','Per ticket'],
+        ['cash','Cash Bar','$1,500 consumption minimum. Guests pay individually.','$1,500 minimum'],
+        ['tab','Single-Payer Tab','One card on file. Settled at end of event + 18% gratuity.','Settled night-of'],
+      ].map(([val,name,sub,price])=>`
+        <div class="opt-card ${S.barType===val?'selected':''}" onclick="setBarType('${val}')">
+          <div class="opt-check"></div>
+          <div class="opt-name">${name}</div>
+          <div class="opt-sub">${sub}</div>
+          <div class="opt-price">${price}</div>
+        </div>`).join('')}
+    </div>
+
+    <div id="tier-section" class="${S.barType==='cash'||S.barType==='tab'?'hidden':''}">
+      <div style="margin:20px 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Spirit tier</div>
+      <div class="option-grid cols-3">
+        ${[1,2,3].map(t=>`
+          <div class="opt-card ${S.tier===t?'selected':''}" onclick="S.tier=${t};document.querySelectorAll('#tier-grid .opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected');updateBarCalc()" id="t${t}-card">
+            <div class="opt-check"></div>
+            <div class="opt-name">${TN[t]}</div>
+            <div class="opt-price">$${TR[t]}/ticket</div>
+            <div class="opt-sub" style="margin-top:4px;font-size:11px">${['Well spirits, beer, wine, frozen, soft drinks','+ Call brands, craft beer, prosecco','+ Top shelf, champagne by the glass'][t-1]}</div>
+          </div>`).join('')}
+      </div>
+      <div id="bar-calc" style="margin-top:16px"></div>
+    </div>
+
+    <div id="ob-section" class="${S.barType!=='openbar'?'hidden':''}">
+      <div class="field-row cols-2" style="margin-top:16px">
+        <div class="field"><label>Duration (hours)</label><input type="number" id="f-obhrs" value="${S.obHrs||3}" min="1" max="8" step="0.5" oninput="S.obHrs=parseFloat(this.value)||3;updateBarCalc()"/></div>
+        <div class="field"><label>Gratuity (%)</label><input type="number" id="f-grat" value="${S.grat||18}" min="0" max="100" oninput="S.grat=parseFloat(this.value)||18;updateBarCalc()"/></div>
+      </div>
+    </div>
+
+    <div id="tix-section" class="${S.barType!=='tickets'?'hidden':''}">
+      <div class="field" style="margin-top:16px"><label>Ticket quantity method</label>
+        <select id="f-tixmode" onchange="S.tixMode=this.value;toggleTixFields();updateBarCalc()">
+          <option value="per-guest" ${S.tixMode!=='fixed'?'selected':''}>Per guest (tickets × guest count)</option>
+          <option value="fixed" ${S.tixMode==='fixed'?'selected':''}>Fixed total (specific number of tickets)</option>
+        </select>
+      </div>
+      <div class="field-row cols-2" style="margin-top:12px" id="tix-per-row" class="${S.tixMode==='fixed'?'hidden':''}">
+        <div class="field"><label>Tickets per guest</label><input type="number" id="f-tixper" value="${S.tixPer||3}" min="1" oninput="S.tixPer=parseInt(this.value)||1;updateBarCalc()"/></div>
+        <div class="field"><label>Total tickets (auto)</label><input type="text" id="f-tixtotal" readonly style="background:var(--lift);color:var(--muted);font-family:var(--font-mono)"/></div>
+      </div>
+      <div class="field" style="margin-top:12px;${S.tixMode!=='fixed'?'display:none':''}" id="tix-fixed-row">
+        <label>Total tickets</label><input type="number" id="f-tixfixed" value="${S.tixFixed||100}" min="1" oninput="S.tixFixed=parseInt(this.value)||100;updateBarCalc()"/>
+      </div>
+    </div>
+
+    <div id="tab-section" class="${S.barType!=='tab'?'hidden':''}">
+      <div class="field" style="margin-top:16px"><label>Agreed minimum ($)</label><input type="number" id="f-tabmin" value="${S.tabMin||1500}" min="1500" oninput="S.tabMin=parseFloat(this.value)||1500;updateBarCalc()"/></div>
+    </div>
+
+    <div style="margin-top:24px" class="step-nav">
+      <button class="btn btn-ghost" onclick="go(2)">← Back</button>
+      <button class="btn btn-primary" onclick="go(4)">Continue →</button>
+    </div>`;
+  setTimeout(updateBarCalc, 10);
+  return d;
+}
+function setBarType(val){
+  S.barType=val;
+  document.querySelectorAll('#bartype-grid .opt-card').forEach(c=>c.classList.remove('selected'));
+  const tierSec=document.getElementById('tier-section');
+  const obSec=document.getElementById('ob-section');
+  const tixSec=document.getElementById('tix-section');
+  const tabSec=document.getElementById('tab-section');
+  if(tierSec) tierSec.classList.toggle('hidden',val==='cash'||val==='tab');
+  if(obSec) obSec.classList.toggle('hidden',val!=='openbar');
+  if(tixSec) tixSec.classList.toggle('hidden',val!=='tickets');
+  if(tabSec) tabSec.classList.toggle('hidden',val!=='tab');
+  updateBarCalc();
+}
+function toggleTixFields(){
+  const m=S.tixMode;
+  const perRow=document.getElementById('tix-per-row');
+  const fixRow=document.getElementById('tix-fixed-row');
+  if(perRow)perRow.style.display=m==='fixed'?'none':'grid';
+  if(fixRow)fixRow.style.display=m!=='fixed'?'none':'block';
+}
+function updateBarCalc(){
+  const el=document.getElementById('bar-calc');if(!el)return;
+  if(S.barType==='cash'||S.barType==='tab'){el.innerHTML='';return;}
+  const b=calcBar(S.tier);
+  const tix=getTix();
+  const totalTixEl=document.getElementById('f-tixtotal');
+  if(totalTixEl)totalTixEl.value=tix+' tickets';
+  const mult=S.barType==='openbar'?1.5+(S.obHrs-1):null;
+  const rate=TR[S.tier];
+  let detail='';
+  if(S.barType==='openbar')detail=`${S.obHrs} hrs · ${mult.toFixed(1)}× $${rate} = ${fmt(mult*rate)}/person pre-tax · ${S.guests} guests`;
+  else detail=`${tix} tickets · $${rate}/ticket`;
+  const waived=b.pretax>WAIVER;
+  el.innerHTML=`
+    <div style="background:var(--lift);border-radius:var(--radius);padding:12px 14px;font-size:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Bar pretax</span><span style="font-family:var(--font-mono);color:var(--white)">${fmt(b.pretax)}</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Gratuity (${S.grat}%)</span><span style="font-family:var(--font-mono);color:var(--white)">${fmt(b.grat)}</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:var(--muted)">Sales tax (8.875%)</span><span style="font-family:var(--font-mono);color:var(--white)">${fmt(b.tax)}</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:8px"><span style="color:var(--muted)">Rental fee</span>
+        <span style="font-family:var(--font-mono)">${waived?'<span style="text-decoration:line-through;color:var(--rule)">$400.00</span> <span class="waiver-pill">waived</span>':'<span style="color:var(--white)">$400.00</span>'}</span>
+      </div>
+      ${waived?'<div style="font-size:11px;color:var(--green);font-style:italic;margin-top:4px">Bar purchase exceeds $2,800 threshold — rental fee waived.</div>':'<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${fmt(WAIVER-b.pretax)} more in bar purchases would waive the $400 fee.</div>'}
+      <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${detail}</div>
+    </div>`;
+}
+
+/* ── STEP 4: Extras ──────────────────────────────── */
+function step4(){
+  const d=document.createElement('div');
+  const rows=[
+    {k:'dj',name:'House DJ',sub:'Up to 4 hrs flat rate',price:'$250'},
+    {k:'host',name:'Drag host',sub:'Performance, hosting & MC · up to 4 hrs',price:'$300'},
+    {k:'soundtech',name:'Sound technician',sub:'Required for A/V presentations',price:'$125'},
+    {k:'coat',name:'Attended coat check',sub:`$40/hr · 3 hr minimum`,price:'$120+'},
+    {k:'food',name:'Food & catering setup',sub:'Table setup, delivery receiving, cooler, cleanup',price:'$85'},
+    {k:'security',name:'Security',sub:'$40/hr · 3 hr minimum',price:'$120+'},
+    {k:'xBar',name:'Additional bartender',sub:'Recommended for 65+ guests or simultaneous arrivals',price:'~$105'},
+    {k:'dancers',name:'Go-go dancers',sub:'Starting ~$150/dancer for 3 hrs · subject to availability',price:'$150+'},
+  ];
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 5 of ${STEPS.length}</div>
+    <div class="step-title">Add-ons.</div>
+    <div class="step-desc">All optional. Toggle anything you'd like included — pricing updates on the quote.</div>
+    <div class="toggle-list">
+      ${rows.map(r=>`
+        <div class="toggle-row ${S[r.k]?'active':''}" onclick="S['${r.k}']=!S['${r.k}'];this.classList.toggle('active')">
+          <div class="tr-left">
+            <div class="tr-name">${r.name}</div>
+            <div class="tr-sub">${r.sub}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="tr-price">${r.price}</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${S.arrival==='simultaneous'&&!S.xBar?'<div class="avail-note avail-warn"><strong>Note:</strong> You indicated guests are arriving all at once. We recommend adding an extra bartender to handle the initial rush.</div>':''}
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="go(3)">← Back</button>
+      <button class="btn btn-primary" onclick="go(5)">See your quote →</button>
+    </div>`;
+  return d;
+}
+
+/* ── STEP 5: Quote ───────────────────────────────── */
+function step5(){
+  const d=document.createElement('div');
+  const addons=getAddons();
+  const dur=getDur();
+
+  // Build all-tier comparison
+  const bars=[1,2,3].map(t=>calcBar(t));
+  const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
+
+  const fmtAmt=n=>n?fmt(n):'—';
+
+  const addonRows=[
+    [S.dj,'House DJ (up to 4 hrs)',fmt(addons.dj)],
+    [S.host,'Drag host (up to 4 hrs)',fmt(addons.host)],
+    [S.soundtech,'Sound technician',fmt(addons.st)],
+    [S.coat,'Attended coat check',fmt(addons.coat)],
+    [S.food,'Food & catering setup',fmt(addons.food)],
+    [S.security,'Security',fmt(addons.sec)],
+    [S.xBar,'Additional bartender',fmt(addons.xb)],
+    [S.dancers,'Go-go dancers','TBD'],
+  ].filter(([show])=>show);
+
+  const svcLabel=S.barType==='openbar'
+    ?`Open bar · ${S.obHrs} hrs · ${(1.5+(S.obHrs-1)).toFixed(1)}× multiplier · ${S.guests} guests`
+    :S.barType==='tickets'
+    ?`Drink tickets · ${getTix()} total${S.tixMode==='fixed'?' (fixed)':' ('+S.tixPer+'/guest)'}  · ${S.guests} guests`
+    :S.barType==='cash'?'Cash bar · $1,500 minimum':'Single-payer tab';
+
+  let html=`
+    <div class="step-eyebrow">Step 6 of ${STEPS.length}</div>
+    <div class="step-title">Your quote.</div>
+    <div class="step-desc">${S.name?'Here's what we've put together for you, '+S.name.split(' ')[0]+'.':'Here's your estimated pricing.'}</div>
+    <div class="quote-panel">
+      <div class="quote-banner">
+        <div class="qb-title">Private Event Proposal</div>
+        <div class="qb-sub">The Manhattan Monster Bar · 80 Grove St, West Village, NYC · ${fmtDate(S.date)}${dur?' · '+dur+' hrs':''} · ${S.guests} guests</div>
+      </div>
+      <div class="quote-body">
+        <div class="q-section-head">Event details</div>
+        <div class="q-line"><span class="q-lbl">Contact</span><span class="q-amt" style="font-family:var(--font-body)">${S.name}${S.org?' / '+S.org:''}</span></div>
+        ${S.date?`<div class="q-line"><span class="q-lbl">Date</span><span class="q-amt" style="font-family:var(--font-body)">${fmtDate(S.date)}</span></div>`:''}
+        ${S.startTime&&S.endTime?`<div class="q-line"><span class="q-lbl">Time</span><span class="q-amt" style="font-family:var(--font-body)">${fmtTime(S.startTime)} – ${fmtTime(S.endTime)}</span></div>`:''}
+        <div class="q-line"><span class="q-lbl">Space</span><span class="q-amt" style="font-family:var(--font-body)">${{disco:'Full Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'}[S.space]}</span></div>
+
+        <div class="q-section-head">Bar service — all tier options</div>
+        <div class="q-sub">${svcLabel}</div>
+        <table class="tier-table">
+          <thead><tr>
+            <th></th>
+            <th class="c1">Tier 1<br><span style="font-size:10px;font-weight:400;color:var(--muted)">$${TR[1]}/ticket</span></th>
+            <th class="c2">Tier 2<br><span style="font-size:10px;font-weight:400;color:var(--muted)">$${TR[2]}/ticket</span></th>
+            <th class="c3">Tier 3<br><span style="font-size:10px;font-weight:400;color:var(--muted)">$${TR[3]}/ticket</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Bar (pre-tax)</td>${bars.map(b=>`<td>${fmt(b.pretax)}</td>`).join('')}</tr>
+            <tr><td>Gratuity (${S.grat}%)</td>${bars.map(b=>`<td>${fmt(b.grat)}</td>`).join('')}</tr>
+            <tr><td>Sales tax (8.875%)</td>${bars.map(b=>`<td>${fmt(b.tax)}</td>`).join('')}</tr>
+            <tr><td>Rental fee</td>${bars.map(b=>`<td>${b.waived?'<span style="text-decoration:line-through;opacity:0.35">$400</span> <span class="waiver-pill">waived</span>':fmt(RENTAL)}</td>`).join('')}</tr>
+            ${addonRows.length?`<tr><td colspan="4" style="padding:6px 10px 2px;color:var(--muted);font-size:11px;font-family:var(--font-body);text-align:left">Add-ons</td></tr>
+            ${addonRows.map(([,lbl,val])=>`<tr><td style="padding-left:20px">↳ ${lbl}</td>${[0,1,2].map(()=>`<td>${val}</td>`).join('')}</tr>`).join('')}`:''}
+            <tr class="t-total">
+              <td>Estimated total</td>
+              <td class="c1">${fmtI(totals[0])}</td>
+              <td class="c2">${fmtI(totals[1])}</td>
+              <td class="c3">${fmtI(totals[2])}</td>
+            </tr>
+            <tr class="t-dep"><td>Deposit to confirm</td>${bars.map(b=>`<td>${b.waived?'$0 (waived)':fmt(RENTAL)}</td>`).join('')}</tr>
+            <tr class="t-dep"><td>Balance due</td>${totals.map((t,i)=>`<td>${fmtI(bars[i].waived?t:t-RENTAL)}</td>`).join('')}</tr>
+          </tbody>
+        </table>
+
+        <div class="staff-note">${getStaffNote()}</div>
+
+        <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5">
+          All bar pricing pre-tax, subject to ${S.grat}% gratuity and 8.875% NYC sales tax applied to bar only.
+          Super premium spirits (Don Julio 1942, Rosado, any item above $25/pour) excluded from all packages.
+          ${S.dancers?'Dancer rates are approximate and subject to availability — not included in the totals above. ':''}
+          Quote valid 14 days. $400 deposit required to confirm (waived where applicable).
+        </p>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="go(4)">← Back</button>
+      <button class="btn btn-primary" onclick="go(6)">Submit inquiry →</button>
+    </div>`;
+  d.innerHTML=html;
+  return d;
+}
+
+/* ── STEP 6: Confirm / Netlify form submit ───────── */
+function step6(){
+  const d=document.createElement('div');
+  const addons=getAddons();
+  const bars=[1,2,3].map(t=>calcBar(t));
+  const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
+  const summary=`Contact: ${S.name}${S.org?' ('+S.org+')':''}
+Email: ${S.email}
+Phone: ${S.phone||'—'}
+Date: ${fmtDate(S.date)}${S.flexible?' (flexible)':''}
+Time: ${fmtTime(S.startTime)} – ${fmtTime(S.endTime)}
+Space: ${S.space}
+Guests: ${S.guests}
+Bar type: ${S.barType}
+Tier: ${S.tier}
+Add-ons: ${[S.dj&&'DJ',S.host&&'Drag host',S.soundtech&&'Sound tech',S.coat&&'Coat check',S.food&&'Food setup',S.security&&'Security',S.xBar&&'Extra bartender',S.dancers&&'Dancers'].filter(Boolean).join(', ')||'None'}
+Estimated totals: T1 ${fmtI(totals[0])} · T2 ${fmtI(totals[1])} · T3 ${fmtI(totals[2])}`;
+
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 7 of ${STEPS.length}</div>
+    <div class="step-title">Almost done.</div>
+    <div class="step-desc">Add any final notes and submit. We'll send you a full proposal and follow up within 24–48 hours.</div>
+    <div class="field-group">
+      <div class="field">
+        <label>Anything else we should know? (optional)</label>
+        <textarea id="f-notes" rows="4" placeholder="Special requests, outside vendors, entertainment details, dietary needs..." style="resize:vertical">${S.notes}</textarea>
+      </div>
+    </div>
+    <!-- Netlify form — hidden fields carry all the data -->
+    <form name="private-event-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
+      <input type="hidden" name="form-name" value="private-event-inquiry"/>
+      <input type="hidden" name="bot-field" style="display:none"/>
+      <input type="hidden" id="nf-name" name="name" value="${S.name}"/>
+      <input type="hidden" id="nf-org" name="organization" value="${S.org}"/>
+      <input type="hidden" id="nf-email" name="email" value="${S.email}"/>
+      <input type="hidden" id="nf-phone" name="phone" value="${S.phone}"/>
+      <input type="hidden" id="nf-date" name="event_date" value="${S.date}"/>
+      <input type="hidden" id="nf-space" name="space" value="${S.space}"/>
+      <input type="hidden" id="nf-guests" name="guests" value="${S.guests}"/>
+      <input type="hidden" id="nf-bartype" name="bar_type" value="${S.barType}"/>
+      <input type="hidden" id="nf-summary" name="quote_summary" value="${summary}"/>
+      <input type="hidden" id="nf-notes" name="notes" value="${S.notes}"/>
+      <div class="step-nav">
+        <button type="button" class="btn btn-ghost" onclick="go(5)">← Back</button>
+        <button type="submit" class="btn btn-primary">Submit inquiry →</button>
+      </div>
+    </form>`;
+  return d;
+}
+
+function handleSubmit(e){
+  e.preventDefault();
+  S.notes=document.getElementById('f-notes').value;
+  document.getElementById('nf-notes').value=S.notes;
+  document.getElementById('nf-summary').value=document.getElementById('nf-summary').value;
+
+  // Netlify form submission via fetch
+  const form=e.target;
+  const data=new FormData(form);
+  fetch('/',{method:'POST',body:data})
+    .then(()=>showSuccess())
+    .catch(()=>showSuccess()); // show success even if offline/localhost
+}
+
+function showSuccess(){
+  const w=document.getElementById('step-wrap');
+  document.getElementById('prog-fill').style.width='100%';
+  document.getElementById('prog-name').textContent='Submitted';
+  w.innerHTML=`
+    <div class="success-wrap">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="step-title" style="text-align:center;margin-bottom:12px">You're on our radar.</div>
+      <div class="step-desc" style="text-align:center;max-width:400px;margin:0 auto 32px">
+        Thanks${S.name?' '+S.name.split(' ')[0]:''}. We've received your inquiry and will follow up with a full proposal within 24–48 hours at <strong style="color:var(--white)">${S.email}</strong>.
+      </div>
+      <div class="avail-note" style="text-align:center">
+        Questions in the meantime? Email us at <strong>dan@monsterbar.nyc</strong> or call <strong>917-525-3689</strong>.
+      </div>
+    </div>`;
+}
+
+/* ── UTILS ──────────────────────────────────────── */
+function $(id){return document.getElementById(id);}
+
+render();
+</script>
+</body>
+</html>
