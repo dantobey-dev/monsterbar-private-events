@@ -280,23 +280,7 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 </style>
 </head>
 <body>
-<!-- Hidden static form for Netlify form detection at build time -->
-<!-- This never displays to users — the real form is rendered by JS -->
-<form name="private-event-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" style="display:none">
-  <input type="hidden" name="form-name" value="private-event-inquiry"/>
-  <input type="text" name="bot-field"/>
-  <input type="text" name="name"/>
-  <input type="text" name="organization"/>
-  <input type="email" name="email"/>
-  <input type="tel" name="phone"/>
-  <input type="text" name="event_date"/>
-  <input type="text" name="space"/>
-  <input type="number" name="guests"/>
-  <input type="text" name="bar_type"/>
-  <textarea name="quote_summary"></textarea>
-  <input type="text" name="notes"/>
-  <button type="submit">Submit</button>
-</form>
+
 
 <header class="site-header">
   <div>
@@ -332,7 +316,7 @@ const S = {
 };
 
 const TR={1:10,2:12,3:14};
-const TN={1:'Tier 1 — Base',2:'Tier 2 — Call brands',3:'Tier 3 — Top shelf'};
+const TN={1:'Tier 1  -  Base',2:'Tier 2  -  Call brands',3:'Tier 3  -  Top shelf'};
 const WAIVER=2800, RENTAL=400, TAX=0.08875;
 
 const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -462,9 +446,9 @@ function saveStep0(){S.name=$('f-name').value;S.org=$('f-org').value;S.email=$('
 function step1(){
   const d=document.createElement('div');
   const spaceAvail={
-    disco:'Mon, Wed & Fri 4–10pm · Thu 4–8pm · Sat 3–8pm',
+    disco:'Mon, Wed & Fri 4-10pm · Thu 4-8pm · Sat 3-8pm',
     piano:'Most days during regular hours (min. 15 guests, $250 bar min)',
-    arizona:'Mon & Wed 10pm–2am · Fri 10pm–3am · Sun 4pm–2am',
+    arizona:'Mon & Wed 10pm-2am · Fri 10pm-3am · Sun 4pm-2am',
     buyout:'By arrangement · rates from $15,000',
   };
   d.innerHTML=`
@@ -508,10 +492,10 @@ function step1(){
 function renderSpaceNote(){
   const el=document.getElementById('space-note');if(!el)return;
   const notes={
-    disco:'<div class="avail-note"><strong>The Disco</strong> — Stage, DJ booth, and dance floor. Available Mon, Wed & Fri 4–10pm · Thu 4–8pm · Sat 3–8pm. $1,500 bar minimum.</div>',
-    piano:'<div class="avail-note"><strong>Piano Room</strong> — Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor. Available most days during regular hours. $250 bar minimum.</div>',
-    arizona:'<div class="avail-note avail-warn"><strong>Arizona Room</strong> — Intimate back room of the Disco. Available Mon & Wed 10pm–2am · Fri 10pm–3am · Sun 4pm–2am. Not available Thursdays or Saturdays. $400 bar minimum.</div>',
-    buyout:'<div class="avail-note"><strong>Full Bar Buyout</strong> — Exclusive use of the entire venue. Up to 250 guests. By arrangement, rates from $15,000. We'll follow up to confirm details.</div>',
+    disco:'<div class="avail-note"><strong>The Disco</strong>  -  Stage, DJ booth, and dance floor. Available Mon, Wed & Fri 4-10pm · Thu 4-8pm · Sat 3-8pm. $1,500 bar minimum.</div>',
+    piano:'<div class="avail-note"><strong>Piano Room</strong>  -  Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor. Available most days during regular hours. $250 bar minimum.</div>',
+    arizona:'<div class="avail-note avail-warn"><strong>Arizona Room</strong>  -  Intimate back room of the Disco. Available Mon & Wed 10pm-2am · Fri 10pm-3am · Sun 4pm-2am. Not available Thursdays or Saturdays. $400 bar minimum.</div>',
+    buyout:'<div class="avail-note"><strong>Full Bar Buyout</strong>  -  Exclusive use of the entire venue. Up to 250 guests. By arrangement, rates from $15,000. We'll follow up to confirm details.</div>',
   };
   el.innerHTML=notes[S.space]||'';
 }
@@ -523,7 +507,7 @@ function step2(){
   d.innerHTML=`
     <div class="step-eyebrow">Step 3 of ${STEPS.length}</div>
     <div class="step-title">How many guests?</div>
-    <div class="step-desc">Your guest count affects bar pricing, staffing, and capacity. Give us your best estimate — we can adjust later.</div>
+    <div class="step-desc">Your guest count affects bar pricing, staffing, and capacity. Give us your best estimate  -  we can adjust later.</div>
     ${err(errMsg)}
     <div class="field-group">
       <div class="field">
@@ -533,8 +517,8 @@ function step2(){
       </div>
       <div class="field"><label>Arrival style</label>
         <select id="f-arrival">
-          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual — guests trickle in over the event</option>
-          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once — e.g. a bus or organized group arrival</option>
+          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual  -  guests trickle in over the event</option>
+          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once  -  e.g. a bus or organized group arrival</option>
         </select>
         <div class="field-hint">Simultaneous arrivals may benefit from an extra bartender to handle the initial rush.</div>
       </div>
@@ -659,7 +643,7 @@ function updateBarCalc(){
       <div style="display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:8px"><span style="color:var(--muted)">Rental fee</span>
         <span style="font-family:var(--font-mono)">${waived?'<span style="text-decoration:line-through;color:var(--rule)">$400.00</span> <span class="waiver-pill">waived</span>':'<span style="color:var(--white)">$400.00</span>'}</span>
       </div>
-      ${waived?'<div style="font-size:11px;color:var(--green);font-style:italic;margin-top:4px">Bar purchase exceeds $2,800 threshold — rental fee waived.</div>':'<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${fmt(WAIVER-b.pretax)} more in bar purchases would waive the $400 fee.</div>'}
+      ${waived?'<div style="font-size:11px;color:var(--green);font-style:italic;margin-top:4px">Bar purchase exceeds $2,800 threshold  -  rental fee waived.</div>':'<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${fmt(WAIVER-b.pretax)} more in bar purchases would waive the $400 fee.</div>'}
       <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${detail}</div>
     </div>`;
 }
@@ -680,7 +664,7 @@ function step4(){
   d.innerHTML=`
     <div class="step-eyebrow">Step 5 of ${STEPS.length}</div>
     <div class="step-title">Add-ons.</div>
-    <div class="step-desc">All optional. Toggle anything you'd like included — pricing updates on the quote.</div>
+    <div class="step-desc">All optional. Toggle anything you'd like included  -  pricing updates on the quote.</div>
     <div class="toggle-list">
       ${rows.map(r=>`
         <div class="toggle-row ${S[r.k]?'active':''}" onclick="S['${r.k}']=!S['${r.k}'];this.classList.toggle('active')">
@@ -712,7 +696,7 @@ function step5(){
   const bars=[1,2,3].map(t=>calcBar(t));
   const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
 
-  const fmtAmt=n=>n?fmt(n):'—';
+  const fmtAmt=n=>n?fmt(n):' - ';
 
   const addonRows=[
     [S.dj,'House DJ (up to 4 hrs)',fmt(addons.dj)],
@@ -744,10 +728,10 @@ function step5(){
         <div class="q-section-head">Event details</div>
         <div class="q-line"><span class="q-lbl">Contact</span><span class="q-amt" style="font-family:var(--font-body)">${S.name}${S.org?' / '+S.org:''}</span></div>
         ${S.date?`<div class="q-line"><span class="q-lbl">Date</span><span class="q-amt" style="font-family:var(--font-body)">${fmtDate(S.date)}</span></div>`:''}
-        ${S.startTime&&S.endTime?`<div class="q-line"><span class="q-lbl">Time</span><span class="q-amt" style="font-family:var(--font-body)">${fmtTime(S.startTime)} – ${fmtTime(S.endTime)}</span></div>`:''}
+        ${S.startTime&&S.endTime?`<div class="q-line"><span class="q-lbl">Time</span><span class="q-amt" style="font-family:var(--font-body)">${fmtTime(S.startTime)} - ${fmtTime(S.endTime)}</span></div>`:''}
         <div class="q-line"><span class="q-lbl">Space</span><span class="q-amt" style="font-family:var(--font-body)">${{disco:'Full Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'}[S.space]}</span></div>
 
-        <div class="q-section-head">Bar service — all tier options</div>
+        <div class="q-section-head">Bar service  -  all tier options</div>
         <div class="q-sub">${svcLabel}</div>
         <table class="tier-table">
           <thead><tr>
@@ -779,7 +763,7 @@ function step5(){
         <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5">
           All bar pricing pre-tax, subject to ${S.grat}% gratuity and 8.875% NYC sales tax applied to bar only.
           Super premium spirits (Don Julio 1942, Rosado, any item above $25/pour) excluded from all packages.
-          ${S.dancers?'Dancer rates are approximate and subject to availability — not included in the totals above. ':''}
+          ${S.dancers?'Dancer rates are approximate and subject to availability  -  not included in the totals above. ':''}
           Quote valid 14 days. $400 deposit required to confirm (waived where applicable).
         </p>
       </div>
@@ -800,9 +784,9 @@ function step6(){
   const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
   const summary=`Contact: ${S.name}${S.org?' ('+S.org+')':''}
 Email: ${S.email}
-Phone: ${S.phone||'—'}
+Phone: ${S.phone||' - '}
 Date: ${fmtDate(S.date)}${S.flexible?' (flexible)':''}
-Time: ${fmtTime(S.startTime)} – ${fmtTime(S.endTime)}
+Time: ${fmtTime(S.startTime)} - ${fmtTime(S.endTime)}
 Space: ${S.space}
 Guests: ${S.guests}
 Bar type: ${S.barType}
@@ -813,14 +797,14 @@ Estimated totals: T1 ${fmtI(totals[0])} · T2 ${fmtI(totals[1])} · T3 ${fmtI(to
   d.innerHTML=`
     <div class="step-eyebrow">Step 7 of ${STEPS.length}</div>
     <div class="step-title">Almost done.</div>
-    <div class="step-desc">Add any final notes and submit. We'll send you a full proposal and follow up within 24–48 hours.</div>
+    <div class="step-desc">Add any final notes and submit. We'll send you a full proposal and follow up within 24-48 hours.</div>
     <div class="field-group">
       <div class="field">
         <label>Anything else we should know? (optional)</label>
         <textarea id="f-notes" rows="4" placeholder="Special requests, outside vendors, entertainment details, dietary needs..." style="resize:vertical">${S.notes}</textarea>
       </div>
     </div>
-    <!-- Netlify form — hidden fields carry all the data -->
+    <!-- Netlify form  -  hidden fields carry all the data -->
     <form name="private-event-inquiry" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
       <input type="hidden" name="form-name" value="private-event-inquiry"/>
       <input type="hidden" name="bot-field" style="display:none"/>
@@ -869,7 +853,7 @@ function showSuccess(){
       </div>
       <div class="step-title" style="text-align:center;margin-bottom:12px">You're on our radar.</div>
       <div class="step-desc" style="text-align:center;max-width:400px;margin:0 auto 32px">
-        Thanks${S.name?' '+S.name.split(' ')[0]:''}. We've received your inquiry and will follow up with a full proposal within 24–48 hours at <strong style="color:var(--white)">${S.email}</strong>.
+        Thanks${S.name?' '+S.name.split(' ')[0]:''}. We've received your inquiry and will follow up with a full proposal within 24-48 hours at <strong style="color:var(--white)">${S.email}</strong>.
       </div>
       <div class="avail-note" style="text-align:center">
         Questions in the meantime? Email us at <strong>dan@monsterbar.nyc</strong> or call <strong>917-525-3689</strong>.
@@ -882,5 +866,24 @@ function $(id){return document.getElementById(id);}
 
 render();
 </script>
+
+<!-- Netlify form detection anchor — do not remove -->
+<div id="netlify-form-anchor" style="position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;z-index:-1" aria-hidden="true">
+<form name="private-event-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" method="POST" action="/thank-you">
+  <input type="hidden" name="form-name" value="private-event-inquiry"/>
+  <p style="display:none"><input name="bot-field"/></p>
+  <input type="text" name="name" value=""/>
+  <input type="text" name="organization" value=""/>
+  <input type="email" name="email" value=""/>
+  <input type="tel" name="phone" value=""/>
+  <input type="text" name="event_date" value=""/>
+  <input type="text" name="space" value=""/>
+  <input type="text" name="guests" value=""/>
+  <input type="text" name="bar_type" value=""/>
+  <textarea name="quote_summary"></textarea>
+  <textarea name="notes"></textarea>
+  <button type="submit">Submit</button>
+</form>
+</div>
 </body>
 </html>
