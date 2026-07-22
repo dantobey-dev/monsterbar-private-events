@@ -829,15 +829,33 @@ Estimated totals: T1 ${fmtI(totals[0])} . T2 ${fmtI(totals[1])} . T3 ${fmtI(tota
 function handleSubmit(e){
   e.preventDefault();
   S.notes=document.getElementById('f-notes').value;
+  // Update all hidden fields before submitting
+  document.getElementById('nf-name').value=S.name;
+  document.getElementById('nf-org').value=S.org;
+  document.getElementById('nf-email').value=S.email;
+  document.getElementById('nf-phone').value=S.phone;
+  document.getElementById('nf-date').value=S.date;
+  document.getElementById('nf-space').value=S.space;
+  document.getElementById('nf-guests').value=S.guests;
+  document.getElementById('nf-bartype').value=S.barType;
   document.getElementById('nf-notes').value=S.notes;
-  document.getElementById('nf-summary').value=document.getElementById('nf-summary').value;
-
-  // Netlify form submission via fetch
-  const form=e.target;
-  const data=new FormData(form);
-  fetch('/',{method:'POST',body:data})
-    .then(()=>showSuccess())
-    .catch(()=>showSuccess()); // show success even if offline/localhost
+  // Build quote summary
+  const bars=[1,2,3].map(t=>calcBar(t));
+  const addons=getAddons();
+  const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
+  const summary=`Contact: ${S.name}${S.org?' ('+S.org+')':''}
+Email: ${S.email}
+Phone: ${S.phone||''}
+Date: ${fmtDate(S.date)}
+Time: ${fmtTime(S.startTime)} to ${fmtTime(S.endTime)}
+Space: ${S.space}
+Guests: ${S.guests}
+Bar type: ${S.barType}
+Estimated totals: T1 ${fmtI(totals[0])} / T2 ${fmtI(totals[1])} / T3 ${fmtI(totals[2])}
+Notes: ${S.notes}`;
+  document.getElementById('nf-summary').value=summary;
+  // Native form submit - required for Netlify to capture
+  e.target.submit();
 }
 
 function showSuccess(){
