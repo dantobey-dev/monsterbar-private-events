@@ -177,14 +177,69 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 
 /* ── AVAILABILITY NOTICE ─────────────────────────── */
 .avail-note {
-  background: var(--lift); border-left: 3px solid var(--gold);
+  background: var(--lift); border: 1px solid var(--rule);
+  border-left: 4px solid var(--gold);
   border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 12px 16px; font-size: 13px; color: var(--muted);
-  margin-bottom: 20px; line-height: 1.5;
+  padding: 16px 20px; font-size: 13px; color: var(--body);
+  margin-bottom: 20px; line-height: 1.6;
 }
 .avail-note strong { color: var(--white); }
-.avail-warn { border-left-color: var(--red); }
-.avail-warn strong { color: #FFB0B0; }
+.avail-warn { border-left-color: var(--red); background: #1A0C0C; border-color: #3A1010; }
+.avail-warn strong { color: #FF8080; }
+
+/* Large availability card shown after space selection */
+.space-avail-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.space-avail-head {
+  background: var(--lift);
+  padding: 14px 20px;
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.space-avail-head .sah-name {
+  font-family: var(--font-display);
+  font-size: 28px; letter-spacing: 0.04em; color: var(--white);
+}
+.space-avail-head .sah-min {
+  font-size: 12px; color: var(--gold);
+  font-family: var(--font-mono); letter-spacing: 0.05em;
+}
+.space-avail-body { padding: 16px 20px; }
+.space-avail-body .sab-desc {
+  font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5;
+}
+.avail-grid {
+  display: grid; gap: 8px;
+}
+.avail-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.avail-row.open { background: #1A2A1A; border: 1px solid #2A4A2A; }
+.avail-row.closed { background: #2A1515; border: 1px solid #4A2020; opacity: 0.7; }
+.avail-row .ar-day {
+  font-weight: 600; color: var(--white); width: 110px; flex-shrink: 0; font-size: 14px;
+}
+.avail-row.closed .ar-day { color: #FF8080; }
+.avail-row .ar-hours { color: #7AE0A0; font-family: var(--font-mono); font-size: 13px; }
+.avail-row.closed .ar-hours { color: #FF8080; }
+.avail-row .ar-icon { font-size: 16px; flex-shrink: 0; }
+.avail-warn-block {
+  background: #2A1515; border: 1px solid #E05555;
+  border-radius: 8px; padding: 14px 18px;
+  margin-bottom: 16px; line-height: 1.6;
+}
+.avail-ok-block {
+  background: #1A2A1A; border: 1px solid #3DBE7A;
+  border-radius: 8px; padding: 12px 18px;
+  margin-bottom: 16px; font-size: 13px; color: #7AE0A0;
+}
 
 /* ── NAV ─────────────────────────────────────────── */
 .step-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -534,21 +589,86 @@ function renderAvailNote(){
   const el=document.getElementById('avail-check');if(!el)return;
   const r=checkAvailability();
   if(!r){el.innerHTML='';return;}
-  if(!r.ok){el.innerHTML='<div class="avail-note avail-warn"><strong>Not available.</strong> '+r.msg+'</div>';}
-  else if(r.msg){el.innerHTML='<div class="avail-note"><strong>Note:</strong> '+r.msg+'</div>';}
-  else if(S.date&&S.startTime&&S.endTime){el.innerHTML='<div class="avail-note" style="border-left-color:#3DBE7A;background:#1A2A1A"><strong style="color:#7AE0A0">Looks good.</strong> Your requested time fits within available hours. Subject to confirmation.</div>';}
-  else{el.innerHTML='';}
+  if(!r.ok){
+    el.innerHTML='<div class="avail-warn-block"><strong style="color:#FF8080;font-size:15px;display:block;margin-bottom:6px">&#10005; Not available at this time.</strong><span style="color:#FFB0B0;font-size:13px">'+r.msg+'</span></div>';
+  } else if(r.msg){
+    el.innerHTML='<div class="avail-note"><strong>Note:</strong> '+r.msg+'</div>';
+  } else if(S.date&&S.startTime&&S.endTime){
+    el.innerHTML='<div class="avail-ok-block"><strong style="font-size:15px;display:block;margin-bottom:4px">&#10003; Time slot looks available.</strong><span style="font-size:12px;opacity:0.8">This is not a confirmed booking. Your inquiry will be reviewed and we will follow up within 24-48 hours.</span></div>';
+  } else {
+    el.innerHTML='';
+  }
+}
+
+function spaceCard(name,min,desc,rows){
+  const rowHtml=rows.map(r=>`<div class="avail-row ${r.open?'open':'closed'}">
+    <span class="ar-icon">${r.open?'✓':'✕'}</span>
+    <span class="ar-day">${r.day}</span>
+    <span class="ar-hours">${r.open?r.hours:'Not available'}</span>
+  </div>`).join('');
+  return`<div class="space-avail-card">
+    <div class="space-avail-head">
+      <span class="sah-name">${name}</span>
+      <span class="sah-min">${min} bar minimum</span>
+    </div>
+    <div class="space-avail-body">
+      <div class="sab-desc">${desc}</div>
+      <div class="avail-grid">${rowHtml}</div>
+    </div>
+  </div>`;
 }
 
 function renderSpaceNote(){
   const el=document.getElementById('space-note');if(!el)return;
-  const notes={
-    disco:'<div class="avail-note"><strong>The Disco</strong>  -  Stage, DJ booth, and dance floor. Available Mon, Wed & Fri 4-10pm . Thu 4-8pm . Sat 3-8pm. $1,500 bar minimum.</div>',
-    piano:'<div class="avail-note"><strong>Piano Room</strong>  -  Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor. Available most days during regular hours. $250 bar minimum.</div>',
-    arizona:'<div class="avail-note avail-warn"><strong>Arizona Room</strong>  -  Intimate back room of the Disco. Available Mon & Wed 10pm-2am . Fri 10pm-3am . Sun 4pm-2am. Not available Thursdays or Saturdays. $400 bar minimum.</div>',
-    buyout:'<div class="avail-note"><strong>Full Bar Buyout</strong>  -  Exclusive use of the entire venue. Up to 250 guests. By arrangement, rates from $15,000. We will follow up to confirm details.</div>',
+  const cards={
+    disco: spaceCard(
+      'The Disco','$1,500',
+      'Full stage, DJ booth, and dance floor. Up to 130 guests.',
+      [
+        {open:true, day:'Monday',    hours:'4:00 pm – 10:00 pm'},
+        {open:false,day:'Tuesday',   hours:''},
+        {open:true, day:'Wednesday', hours:'4:00 pm – 10:00 pm'},
+        {open:true, day:'Thursday',  hours:'4:00 pm – 8:00 pm'},
+        {open:true, day:'Friday',    hours:'4:00 pm – 10:00 pm'},
+        {open:true, day:'Saturday',  hours:'3:00 pm – 8:00 pm'},
+        {open:false,day:'Sunday',    hours:''},
+      ]
+    ),
+    piano: spaceCard(
+      'Piano Room','$250',
+      'Semi-private area on the main floor. The area behind the piano is your home base — your guests are welcome throughout the full main floor. Available most days during regular business hours.',
+      [
+        {open:true, day:'Monday',    hours:'Regular business hours'},
+        {open:true, day:'Tuesday',   hours:'Regular business hours'},
+        {open:true, day:'Wednesday', hours:'Regular business hours'},
+        {open:true, day:'Thursday',  hours:'Regular business hours'},
+        {open:true, day:'Friday',    hours:'Regular business hours'},
+        {open:true, day:'Saturday',  hours:'Regular business hours'},
+        {open:true, day:'Sunday',    hours:'Regular business hours'},
+      ]
+    ),
+    arizona: spaceCard(
+      'Arizona Room','$400',
+      'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
+      [
+        {open:true, day:'Monday',    hours:'10:00 pm – 2:00 am'},
+        {open:false,day:'Tuesday',   hours:''},
+        {open:true, day:'Wednesday', hours:'10:00 pm – 2:00 am'},
+        {open:false,day:'Thursday',  hours:''},
+        {open:true, day:'Friday',    hours:'10:00 pm – 3:00 am'},
+        {open:false,day:'Saturday',  hours:''},
+        {open:true, day:'Sunday',    hours:'4:00 pm – 2:00 am'},
+      ]
+    ),
+    buyout: spaceCard(
+      'Full Bar Buyout','$15,000+',
+      'Exclusive use of the entire venue. Up to 250 guests. Availability and pricing are by arrangement — we will confirm your date after reviewing the inquiry.',
+      [
+        {open:true, day:'Selected dates', hours:'By arrangement only'},
+      ]
+    ),
   };
-  el.innerHTML=notes[S.space]||'';
+  el.innerHTML=cards[S.space]||'';
 }
 function saveStep1(){S.date=$('f-date').value;S.flexible=$('f-flex').value==='yes';S.startTime=$('f-start').value;S.endTime=$('f-end').value;}
 
