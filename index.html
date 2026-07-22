@@ -885,6 +885,11 @@ function step5(){
     ?`Drink tickets . ${getTix()} total${S.tixMode==='fixed'?' (fixed)':' ('+S.tixPer+'/guest)'}  . ${S.guests} guests`
     :S.barType==='cash'?'Cash bar . $1,500 minimum':'Single-payer tab';
 
+  const minW=getMinWarning();
+  const minBanner=minW&&!minW.ok
+    ? '<div style="background:#2A1515;border:1px solid #E05555;border-radius:6px;padding:12px 16px;font-size:13px;color:#FFB0B0;margin-bottom:16px"><strong>Bar minimum not met.</strong> '+SPACE_NAMES[S.space]+' requires $'+minW.min.toLocaleString()+' pre-tax. Your selection: $'+Math.round(minW.pretax).toLocaleString()+' - $'+Math.round(minW.short).toLocaleString()+' short. Add guests, increase tickets or tier.</div>'
+    : minW ? '<div style="background:#1A2A1A;border:1px solid #3DBE7A;border-radius:6px;padding:8px 16px;font-size:12px;color:#7AE0A0;margin-bottom:12px">Bar minimum of $'+minW.min.toLocaleString()+' met.</div>' : '';
+
   let html=`
     <div class="step-eyebrow">Step 6 of ${STEPS.length}</div>
     <div class="step-title">Your quote.</div>
@@ -1076,9 +1081,4 @@ render();
 </form>
 </div>
 </body>
-</html
-    const minW=getMinWarning();
-    const minBanner=minW&&!minW.ok
-      ? '<div style="background:#2A1515;border:1px solid #E05555;border-radius:6px;padding:12px 16px;font-size:13px;color:#FFB0B0;margin-bottom:16px"><strong>Bar minimum not met.</strong> '+SPACE_NAMES[S.space]+' requires $'+minW.min.toLocaleString()+' pre-tax. Your selection: $'+Math.round(minW.pretax).toLocaleString()+' - $'+Math.round(minW.short).toLocaleString()+' short. Add guests, increase tickets or tier.</div>'
-      : minW ? '<div style="background:#1A2A1A;border:1px solid #3DBE7A;border-radius:6px;padding:8px 16px;font-size:12px;color:#7AE0A0;margin-bottom:12px">Bar minimum of $'+minW.min.toLocaleString()+' met.</div>' : '';
->
+</html>
