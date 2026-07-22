@@ -316,8 +316,19 @@ const S = {
 };
 
 const TR={1:10,2:12,3:14};
+const SPACE_LABEL={disco:'Full Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
 const TN={1:'Tier 1  -  Base',2:'Tier 2  -  Call brands',3:'Tier 3  -  Top shelf'};
 const WAIVER=2800, RENTAL=400, TAX=0.08875;
+
+const SPACE_MIN={disco:1500,piano:250,arizona:400,buyout:15000};
+const SPACE_NAMES={disco:'Full Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
+function getMinWarning(){
+  const min=SPACE_MIN[S.space]||0;
+  if(!min||S.barType==='cash') return null;
+  const b=calcBar(S.tier||2);
+  if(b.pretax<min) return {ok:false,min,pretax:b.pretax,short:min-b.pretax};
+  return {ok:true,min,pretax:b.pretax};
+}
 
 const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtI=n=>'$'+Math.round(n).toLocaleString('en-US');
@@ -719,6 +730,7 @@ function step5(){
     <div class="step-eyebrow">Step 6 of ${STEPS.length}</div>
     <div class="step-title">Your quote.</div>
     <div class="step-desc">${S.name ? 'Here is what we put together for you, ' + S.name.split(' ')[0] + '.' : 'Here is your estimated pricing.'}</div>
+    ${minBanner}
     <div class="quote-panel">
       <div class="quote-banner">
         <div class="qb-title">Private Event Proposal</div>
@@ -904,4 +916,9 @@ render();
 </form>
 </div>
 </body>
-</html>
+</html
+    const minW=getMinWarning();
+    const minBanner=minW&&!minW.ok
+      ? '<div style="background:#2A1515;border:1px solid #E05555;border-radius:6px;padding:12px 16px;font-size:13px;color:#FFB0B0;margin-bottom:16px"><strong>Bar minimum not met.</strong> '+SPACE_NAMES[S.space]+' requires $'+minW.min.toLocaleString()+' pre-tax. Your selection: $'+Math.round(minW.pretax).toLocaleString()+' - $'+Math.round(minW.short).toLocaleString()+' short. Add guests, increase tickets or tier.</div>'
+      : minW ? '<div style="background:#1A2A1A;border:1px solid #3DBE7A;border-radius:6px;padding:8px 16px;font-size:12px;color:#7AE0A0;margin-bottom:12px">Bar minimum of $'+minW.min.toLocaleString()+' met.</div>' : '';
+>
