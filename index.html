@@ -727,7 +727,7 @@ function step3(){
 
     <div id="tier-section" class="${S.barType==='cash'||S.barType==='tab'?'hidden':''}">
       <div style="margin:20px 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Spirit tier</div>
-      <div class="option-grid cols-3">
+      <div class="option-grid cols-3" id="tier-grid">
         ${[1,2,3].map(t=>`
           <div class="opt-card ${S.tier===t?'selected':''}" onclick="S.tier=${t};document.querySelectorAll('#tier-grid .opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected');updateBarCalc()" id="t${t}-card">
             <div class="opt-check"></div>
