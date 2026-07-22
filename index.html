@@ -469,14 +469,14 @@ function step1(){
     ${err(errMsg)}
     <div class="field-group">
       <div class="field-row cols-2">
-        <div class="field"><label>Event date</label><input type="date" id="f-date" value="${S.date}" min="${new Date().toISOString().split('T')[0]}"/></div>
+        <div class="field"><label>Event date</label><input type="date" id="f-date" value="${S.date}" onchange="S.date=this.value;renderAvailNote()" min="${new Date().toISOString().split('T')[0]}"/></div>
         <div class="field"><label>Date flexible?</label>
           <select id="f-flex"><option value="no" ${!S.flexible?'selected':''}>No, this date only</option><option value="yes" ${S.flexible?'selected':''}>Yes, open to alternatives</option></select>
         </div>
       </div>
       <div class="field-row cols-2">
-        <div class="field"><label>Start time</label><input type="time" id="f-start" value="${S.startTime||'18:00'}"/></div>
-        <div class="field"><label>End time</label><input type="time" id="f-end" value="${S.endTime||'21:00'}"/></div>
+        <div class="field"><label>Start time</label><input type="time" id="f-start" value="${S.startTime||'18:00'}" onchange="S.startTime=this.value;renderAvailNote()"/></div>
+        <div class="field"><label>End time</label><input type="time" id="f-end" value="${S.endTime||'21:00'}" onchange="S.endTime=this.value;renderAvailNote()"/></div>
       </div>
     </div>
     <div style="margin-bottom:12px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Choose your space</div>
@@ -484,7 +484,7 @@ function step1(){
       ${['disco','piano','arizona','buyout'].map(sp=>{
         const names={disco:'The Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
         const caps={disco:'Up to 130 guests',piano:'Up to 15 guests',arizona:'Up to 25 guests',buyout:'Up to 250 guests'};
-        return`<div class="opt-card ${S.space===sp?'selected':''}" onclick="S.space='${sp}';renderSpaceNote();document.querySelectorAll('.opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')">
+        return`<div class="opt-card ${S.space===sp?'selected':''}" onclick="S.space='${sp}';renderSpaceNote();renderAvailNote();document.querySelectorAll('.opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')">
           <div class="opt-check"></div>
           <div class="opt-name">${names[sp]}</div>
           <div class="opt-sub">${caps[sp]}</div>
@@ -493,13 +493,53 @@ function step1(){
       }).join('')}
     </div>
     <div id="space-note"></div>
+    <div id="avail-check"></div>
     <div class="step-nav">
       <button class="btn btn-ghost" onclick="saveStep1();go(0)"> Back</button>
-      <button class="btn btn-primary" onclick="saveStep1();go(2)">Continue </button>
+      <button class="btn btn-primary" onclick="saveStep1();const _av=checkAvailability();if(_av&&!_av.ok){renderAvailNote();return;}go(2)">Continue </button>
     </div>`;
-  setTimeout(()=>renderSpaceNote(),10);
+  setTimeout(()=>{renderSpaceNote();renderAvailNote();},10);
   return d;
 }
+function toMins(t){if(!t)return null;const[h,m]=t.split(':').map(Number);return h*60+m;}
+
+function checkAvailability(){
+  if(!S.date||!S.startTime||!S.endTime)return null;
+  const dt=new Date(S.date+'T12:00:00');
+  const dow=dt.getDay();
+  const start=toMins(S.startTime);
+  const end=toMins(S.endTime);
+  const endAdj=end<start?end+1440:end;
+  const dayNames=['Sundays','Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays'];
+  if(S.space==='buyout')return{ok:true,msg:'Full buyout availability is by arrangement. We will confirm your date after reviewing the inquiry.'};
+  if(S.space==='piano')return{ok:true,msg:''};
+  if(S.space==='disco'){
+    if(dow===2||dow===0)return{ok:false,msg:'The Disco is not available on '+dayNames[dow]+'. Available Mon/Wed/Fri 4-10pm, Thu 4-8pm, Sat 3-8pm.'};
+    if((dow===1||dow===3||dow===5)&&(start<960||endAdj>1320))return{ok:false,msg:'The Disco is available Mon, Wed and Fri from 4:00pm to 10:00pm. Please adjust your times.'};
+    if(dow===4&&(start<960||endAdj>1200))return{ok:false,msg:'The Disco is available Thursday from 4:00pm to 8:00pm. Please adjust your times.'};
+    if(dow===6&&(start<900||endAdj>1200))return{ok:false,msg:'The Disco is available Saturday from 3:00pm to 8:00pm. Please adjust your times.'};
+    return{ok:true,msg:''};
+  }
+  if(S.space==='arizona'){
+    if(dow===2||dow===4||dow===6)return{ok:false,msg:'The Arizona Room is not available on '+dayNames[dow]+'. Available Mon/Wed 10pm-2am, Fri 10pm-3am, Sun 4pm-2am.'};
+    if((dow===1||dow===3)&&(start<1320||endAdj>1560))return{ok:false,msg:'The Arizona Room is available Mon and Wed from 10:00pm to 2:00am. Please adjust your times.'};
+    if(dow===5&&(start<1320||endAdj>1620))return{ok:false,msg:'The Arizona Room is available Friday from 10:00pm to 3:00am. Please adjust your times.'};
+    if(dow===0&&(start<960||endAdj>1560))return{ok:false,msg:'The Arizona Room is available Sunday from 4:00pm to 2:00am. Please adjust your times.'};
+    return{ok:true,msg:''};
+  }
+  return{ok:true,msg:''};
+}
+
+function renderAvailNote(){
+  const el=document.getElementById('avail-check');if(!el)return;
+  const r=checkAvailability();
+  if(!r){el.innerHTML='';return;}
+  if(!r.ok){el.innerHTML='<div class="avail-note avail-warn"><strong>Not available.</strong> '+r.msg+'</div>';}
+  else if(r.msg){el.innerHTML='<div class="avail-note"><strong>Note:</strong> '+r.msg+'</div>';}
+  else if(S.date&&S.startTime&&S.endTime){el.innerHTML='<div class="avail-note" style="border-left-color:#3DBE7A;background:#1A2A1A"><strong style="color:#7AE0A0">Looks good.</strong> Your requested time fits within available hours. Subject to confirmation.</div>';}
+  else{el.innerHTML='';}
+}
+
 function renderSpaceNote(){
   const el=document.getElementById('space-note');if(!el)return;
   const notes={
@@ -776,7 +816,7 @@ function step5(){
           All bar pricing pre-tax, subject to ${S.grat}% gratuity and 8.875% NYC sales tax applied to bar only.
           Super premium spirits (Don Julio 1942, Rosado, any item above $25/pour) excluded from all packages.
           ${S.dancers?'Dancer rates are approximate and subject to availability  -  not included in the totals above. ':''}
-          Quote valid 14 days. $400 deposit required to confirm (waived where applicable).
+          Quote valid 14 days. $400 deposit required to confirm (waived where applicable). This estimate is subject to review and approval - nothing is confirmed until written confirmation is received from The Manhattan Monster Bar.
         </p>
       </div>
     </div>
@@ -809,7 +849,8 @@ Estimated totals: T1 ${fmtI(totals[0])} . T2 ${fmtI(totals[1])} . T3 ${fmtI(tota
   d.innerHTML=`
     <div class="step-eyebrow">Step 7 of ${STEPS.length}</div>
     <div class="step-title">Almost done.</div>
-    <div class="step-desc">Add any final notes and submit. We'll send you a full proposal and follow up within 24-48 hours.</div>
+    <div class="step-desc">Add any final notes and submit. We will follow up within 24-48 hours.</div>
+    <div style="background:#1A1A2A;border:1px solid #8A6E2F;border-radius:6px;padding:12px 16px;font-size:13px;color:#888899;margin-bottom:20px;line-height:1.6"><strong style="color:#C8A44A">Nothing is confirmed yet.</strong> Submitting this form sends your inquiry to our team for review. Your date and pricing are not locked in until you receive written confirmation and your deposit is processed. We review all inquiries within 24-48 hours.</div>
     <div class="field-group">
       <div class="field">
         <label>Anything else we should know? (optional)</label>
