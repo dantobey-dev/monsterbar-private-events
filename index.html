@@ -765,9 +765,11 @@ function step3(){
       <div class="field" style="margin-top:16px"><label>Agreed minimum ($)</label><input type="number" id="f-tabmin" value="${S.tabMin||1500}" min="1500" oninput="S.tabMin=parseFloat(this.value)||1500;updateBarCalc()"/></div>
     </div>
 
+    <div id="min-warning-bar"></div>
+
     <div style="margin-top:24px" class="step-nav">
       <button class="btn btn-ghost" onclick="go(2)"> Back</button>
-      <button class="btn btn-primary" onclick="go(4)">Continue </button>
+      <button class="btn btn-primary" onclick="const _mw=getMinWarning();if(_mw&&!_mw.ok){updateMinWarning();return;}go(4)">Continue </button>
     </div>`;
   setTimeout(updateBarCalc, 10);
   return d;
@@ -792,6 +794,13 @@ function toggleTixFields(){
   if(perRow)perRow.style.display=m==='fixed'?'none':'grid';
   if(fixRow)fixRow.style.display=m!=='fixed'?'none':'block';
 }
+function updateMinWarning(){
+  const el=document.getElementById('min-warning-bar');if(!el)return;
+  const mw=getMinWarning();
+  if(!mw||mw.ok){el.innerHTML='';return;}
+  el.innerHTML='<div class="avail-warn-block" style="margin-top:16px"><strong style="color:#FF8080;font-size:15px;display:block;margin-bottom:6px">&#10005; Bar minimum not met.</strong><span style="color:#FFB0B0;font-size:13px">'+SPACE_NAMES[S.space]+' requires a $'+mw.min.toLocaleString()+' pre-tax bar minimum. Your current selection generates $'+Math.round(mw.pretax).toLocaleString()+' — you are $'+Math.round(mw.short).toLocaleString()+' short. Increase your guest count, add more tickets, or choose a higher tier.</span></div>';
+}
+
 function updateBarCalc(){
   const el=document.getElementById('bar-calc');if(!el)return;
   if(S.barType==='cash'||S.barType==='tab'){el.innerHTML='';return;}
@@ -816,6 +825,7 @@ function updateBarCalc(){
       ${waived?'<div style="font-size:11px;color:var(--green);font-style:italic;margin-top:4px">Bar purchase exceeds $2,800 threshold  -  rental fee waived.</div>':'<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${fmt(WAIVER-b.pretax)} more in bar purchases would waive the $400 fee.</div>'}
       <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${detail}</div>
     </div>`;
+  updateMinWarning();
 }
 
 /* -- STEP 4: Extras -------------------------------- */
