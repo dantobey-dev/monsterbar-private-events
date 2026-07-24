@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Monster Bar Private Events</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#0C0C0E;--ink:#141418;--surface:#1C1C22;--lift:#26262E;
+  --rule:#36363F;--muted:#888899;--body:#C8C8D8;--white:#F0F0F8;
+  --gold:#C8A44A;--gold-dim:#8A6E2F;--green:#3DBE7A;--red:#E05555;
+  --blue:#5B8FD8;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--black);color:var(--body);font-family:var(--font-body);font-size:14px;line-height:1.6}
+body{min-height:100vh;display:flex;flex-direction:column}
+
+/* LOGIN */
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.login-card{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:40px;width:100%;max-width:380px}
+.login-logo{font-family:var(--font-display);font-size:28px;letter-spacing:0.06em;color:var(--white);margin-bottom:4px}
+.login-sub{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:32px}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.login-field label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.06em}
+.login-field input{background:var(--lift);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;font-size:14px;font-family:var(--font-body);color:var(--white);width:100%}
+.login-field input:focus{outline:none;border-color:var(--gold)}
+.login-btn{width:100%;background:var(--gold);color:var(--black);border:none;border-radius:var(--r);padding:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-body);margin-top:8px}
+.login-btn:hover{opacity:0.9}
+.login-err{font-size:12px;color:#FF8080;margin-top:8px;display:none}
+
+/* ADMIN LAYOUT */
+.admin-header{background:var(--ink);border-bottom:1px solid var(--rule);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px;flex-shrink:0}
+.admin-header .wordmark{font-family:var(--font-display);font-size:20px;letter-spacing:0.06em;color:var(--white)}
+.admin-header .badge{font-size:10px;background:var(--gold);color:var(--black);padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:0.06em;margin-left:10px;vertical-align:middle}
+.admin-header .hdr-right{display:flex;align-items:center;gap:16px}
+.admin-header .hdr-right span{font-size:12px;color:var(--muted)}
+.logout-btn{font-size:12px;color:var(--muted);background:none;border:1px solid var(--rule);border-radius:4px;padding:4px 10px;cursor:pointer;font-family:var(--font-body)}
+.logout-btn:hover{color:var(--white);border-color:var(--muted)}
+
+.admin-body{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:200px;background:var(--ink);border-right:1px solid var(--rule);padding:20px 0;flex-shrink:0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:var(--muted);cursor:pointer;transition:color 0.15s,background 0.15s;border-left:3px solid transparent}
+.nav-item:hover{color:var(--white);background:var(--surface)}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--surface)}
+.nav-item .ni-icon{font-size:16px;width:20px;text-align:center}
+.nav-section{font-size:10px;color:var(--rule);text-transform:uppercase;letter-spacing:0.1em;padding:16px 20px 6px;font-weight:500}
+
+/* MAIN CONTENT */
+.admin-main{flex:1;overflow-y:auto;padding:28px 32px}
+.page-title{font-family:var(--font-display);font-size:32px;letter-spacing:0.04em;color:var(--white);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.stat-card .sc-val{font-family:var(--font-display);font-size:36px;letter-spacing:0.02em;color:var(--white);line-height:1}
+.stat-card .sc-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px}
+.stat-card .sc-trend{font-size:11px;color:var(--green);margin-top:4px}
+
+/* TABLE */
+.table-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:24px}
+.table-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--rule)}
+.table-head h3{font-size:13px;font-weight:500;color:var(--white)}
+.table-controls{display:flex;gap:8px;align-items:center}
+.table-search{background:var(--lift);border:1px solid var(--rule);border-radius:var(--r);padding:6px 12px;font-size:12px;color:var(--white);font-family:var(--font-body);width:180px}
+.table-search:focus{outline:none;border-color:var(--gold)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--rule);cursor:pointer;user-select:none}
+.tbl th:hover{color:var(--white)}
+.tbl td{padding:12px 16px;border-bottom:1px solid #1E1E26;font-size:13px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#1E1E26}
+.status-pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.status-pill.new{background:#1A2A1A;color:var(--green)}
+.status-pill.pending{background:#1A1A2A;color:var(--blue)}
+.status-pill.confirmed{background:#1A2A1A;color:var(--green)}
+.status-pill.declined{background:#2A1515;color:var(--red)}
+.tbl-action{background:none;border:1px solid var(--rule);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--font-body);margin-right:4px}
+.tbl-action:hover{border-color:var(--gold);color:var(--gold)}
+.empty-state{padding:40px;text-align:center;color:var(--muted);font-size:13px}
+
+/* CALENDAR */
+.cal-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:24px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--rule)}
+.cal-head h3{font-size:13px;font-weight:500;color:var(--white)}
+.cal-nav{display:flex;align-items:center;gap:12px}
+.cal-nav button{background:none;border:1px solid var(--rule);border-radius:var(--r);padding:4px 12px;color:var(--muted);cursor:pointer;font-family:var(--font-body);font-size:12px}
+.cal-nav button:hover{border-color:var(--muted);color:var(--white)}
+.cal-nav span{font-size:14px;font-weight:500;color:var(--white);min-width:140px;text-align:center}
+.cal-grid{padding:16px 20px}
+.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.cal-days-head div{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);text-align:center;padding:4px}
+.cal-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;cursor:pointer;position:relative;transition:background 0.15s;border:1px solid transparent}
+.cal-cell:hover{background:var(--lift)}
+.cal-cell.other-month{color:var(--rule)}
+.cal-cell.today{border-color:var(--gold)}
+.cal-cell.has-booking{background:#1A2A1A;color:var(--green)}
+.cal-cell.blocked{background:#2A1515;color:var(--red)}
+.cal-cell.selected{background:var(--gold);color:var(--black)}
+.cal-cell .dot{width:4px;height:4px;border-radius:50%;background:currentColor;margin-top:2px}
+.cal-legend{display:flex;gap:16px;padding:0 20px 14px;font-size:11px;color:var(--muted)}
+.cal-legend span{display:flex;align-items:center;gap:5px}
+.cal-legend .ld{width:10px;height:10px;border-radius:2px}
+
+/* BLOCK DATE PANEL */
+.block-panel{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:20px;margin-bottom:24px}
+.block-panel h3{font-size:13px;font-weight:500;color:var(--white);margin-bottom:16px}
+.block-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
+.block-field{display:flex;flex-direction:column;gap:5px}
+.block-field label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+.block-field input,.block-field select{background:var(--lift);border:1px solid var(--rule);border-radius:var(--r);padding:8px 12px;font-size:13px;color:var(--white);font-family:var(--font-body)}
+.block-field input:focus,.block-field select:focus{outline:none;border-color:var(--gold)}
+.block-btn{background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-size:13px;cursor:pointer;font-family:var(--font-body);font-weight:500;white-space:nowrap}
+.block-btn:hover{opacity:0.85}
+.blocked-list{margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.blocked-item{display:flex;align-items:center;justify-content:space-between;background:var(--lift);border-radius:var(--r);padding:8px 14px;font-size:12px}
+.blocked-item .bi-date{color:var(--white);font-weight:500}
+.blocked-item .bi-reason{color:var(--muted)}
+.unblock-btn{background:none;border:none;color:var(--rule);cursor:pointer;font-size:16px;padding:0 4px;line-height:1}
+.unblock-btn:hover{color:var(--red)}
+
+/* REPORT */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.report-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:20px}
+.report-card h3{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:16px}
+.bar-chart{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.bar-row .br-label{color:var(--muted);width:100px;flex-shrink:0}
+.bar-track{flex:1;background:var(--lift);border-radius:2px;height:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 0.4s}
+.bar-row .br-val{font-family:var(--font-mono);color:var(--white);width:50px;text-align:right;flex-shrink:0}
+.pie-legend{display:flex;flex-direction:column;gap:8px}
+.pie-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.pie-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pie-label{color:var(--muted);flex:1}
+.pie-val{font-family:var(--font-mono);color:var(--white)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal{background:var(--surface);border:1px solid var(--rule);border-radius:12px;width:100%;max-width:580px;max-height:80vh;overflow-y:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--rule)}
+.modal-head h2{font-size:15px;font-weight:500;color:var(--white)}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0;line-height:1}
+.modal-close:hover{color:var(--white)}
+.modal-body{padding:20px 22px}
+.detail-row{display:flex;padding:8px 0;border-bottom:1px solid #1E1E26;gap:12px}
+.detail-row:last-child{border-bottom:none}
+.dr-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;width:130px;flex-shrink:0;padding-top:2px}
+.dr-val{font-size:13px;color:var(--white);flex:1}
+.modal-actions{padding:16px 22px;border-top:1px solid var(--rule);display:flex;gap:8px}
+.ma-btn{padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-body);border:1px solid var(--rule);background:transparent;color:var(--body)}
+.ma-btn:hover{background:var(--lift)}
+.ma-btn.confirm{background:var(--green);color:var(--black);border-color:transparent}
+.ma-btn.decline{background:var(--red);color:#fff;border-color:transparent}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">MONSTER</div>
+    <div class="login-sub">Private Events Admin</div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="pw-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign in</button>
+    <div class="login-err" id="login-err">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="admin-app" class="hidden" style="display:flex;flex-direction:column;flex:1;min-height:100vh">
+  <div class="admin-header">
+    <div>
+      <span class="wordmark">THE MANHATTAN MONSTER</span>
+      <span class="badge">ADMIN</span>
+    </div>
+    <div class="hdr-right">
+      <span id="hdr-date"></span>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div class="sidebar">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <span class="ni-icon">◈</span> Dashboard
+      </div>
+      <div class="nav-section">Inquiries</div>
+      <div class="nav-item" onclick="showPage('submissions')" id="nav-submissions">
+        <span class="ni-icon">◎</span> Submissions
+      </div>
+      <div class="nav-section">Calendar</div>
+      <div class="nav-item" onclick="showPage('calendar')" id="nav-calendar">
+        <span class="ni-icon">◫</span> Availability
+      </div>
+      <div class="nav-section">Reports</div>
+      <div class="nav-item" onclick="showPage('reports')" id="nav-reports">
+        <span class="ni-icon">◱</span> Reports
+      </div>
+    </div>
+    <div class="admin-main" id="admin-main"></div>
+  </div>
+</div>
+
+<!-- SUBMISSION DETAIL MODAL -->
+<div class="modal-overlay hidden" id="detail-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modal-title">Inquiry details</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="ma-btn confirm" onclick="updateStatus('confirmed')">Mark confirmed</button>
+      <button class="ma-btn decline" onclick="updateStatus('declined')">Decline</button>
+      <button class="ma-btn" onclick="updateStatus('pending')">Mark pending</button>
+      <button class="ma-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STORAGE KEYS ──────────────────────────────────────────────────────────────
+const PASS = 'monsterbar2024';  // change this to your preferred password
+const STORAGE_KEY  = 'mb_submissions';
+const BLOCKED_KEY  = 'mb_blocked_dates';
+const STATUS_KEY   = 'mb_statuses';
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function doLogin(){
+  const pw = document.getElementById('pw-input').value;
+  if(pw === PASS){
+    sessionStorage.setItem('mb_auth','1');
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-app').classList.remove('hidden');
+    document.getElementById('admin-app').style.display='flex';
+    initAdmin();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+function doLogout(){
+  sessionStorage.removeItem('mb_auth');
+  location.reload();
+}
+
+// ── DEMO/SAMPLE SUBMISSIONS (replace with Netlify API pull) ──────────────────
+function getSampleSubmissions(){
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if(stored) return JSON.parse(stored);
+  const samples = [
+    {id:'sub_001',name:'Tim Oleksy',org:'NBCUniversal',email:'Tim.Oleksy@nbcuni.com',phone:'646-784-5522',event_date:'2026-06-04',space:'disco',guests:'150',bar_type:'openbar',quote_summary:'Open Bar Tier 2 · 2.5hrs · 150 guests · Est. $7,322',notes:'Corporate Pride kickoff',status:'confirmed',submitted:'2026-04-09'},
+    {id:'sub_002',name:'Tina Hohmann',org:'Perion',email:'thohmann@perion.com',phone:'212-685-8000',event_date:'2026-06-11',space:'disco',guests:'75',bar_type:'openbar',quote_summary:'Open Bar Tier 2 · 2hrs · 75 guests · Est. $4,461',notes:'Custom DJ requested. Food setup needed.',status:'pending',submitted:'2026-04-21'},
+    {id:'sub_003',name:'Andrew Steiner',org:'',email:'andrew@example.com',phone:'',event_date:'2026-10-03',space:'disco',guests:'75',bar_type:'tickets',quote_summary:'Drink Tickets Tier 1 · 150 tickets · Est. $2,100',notes:'Dancers inquiry',status:'new',submitted:'2026-04-22'},
+    {id:'sub_004',name:'Travis Barber',org:'OUT in National Security',email:'travis@outinnationalsecurity.org',phone:'314-973-4441',event_date:'2026-06-11',space:'piano',guests:'20',bar_type:'cash',quote_summary:'Cash bar · $250 minimum · Main floor',notes:'Pride celebration for government employees',status:'new',submitted:'2026-04-23'},
+  ];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(samples));
+  return samples;
+}
+
+function getStatuses(){
+  const s = localStorage.getItem(STATUS_KEY);
+  return s ? JSON.parse(s) : {};
+}
+function setStatus(id, status){
+  const s = getStatuses();
+  s[id] = status;
+  localStorage.setItem(STATUS_KEY, JSON.stringify(s));
+  const subs = getSampleSubmissions();
+  subs.forEach(sub=>{ if(sub.id===id) sub.status=status; });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(subs));
+}
+
+function getBlockedDates(){
+  const b = localStorage.getItem(BLOCKED_KEY);
+  return b ? JSON.parse(b) : [];
+}
+function saveBlockedDates(arr){
+  localStorage.setItem(BLOCKED_KEY, JSON.stringify(arr));
+}
+
+// ── PAGES ─────────────────────────────────────────────────────────────────────
+let currentPage = 'dashboard';
+let currentSub = null;
+let calYear, calMonth;
+
+function showPage(page){
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const nav = document.getElementById('nav-'+page);
+  if(nav) nav.classList.add('active');
+  const main = document.getElementById('admin-main');
+  if(page==='dashboard') main.innerHTML = renderDashboard();
+  if(page==='submissions') main.innerHTML = renderSubmissions('');
+  if(page==='calendar') { main.innerHTML = renderCalendar(); }
+  if(page==='reports') main.innerHTML = renderReports();
+}
+
+function initAdmin(){
+  const now = new Date();
+  document.getElementById('hdr-date').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  showPage('dashboard');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard(){
+  const subs = getSampleSubmissions();
+  const newCount = subs.filter(s=>s.status==='new').length;
+  const confirmed = subs.filter(s=>s.status==='confirmed').length;
+  const pending = subs.filter(s=>s.status==='pending').length;
+  const total = subs.length;
+
+  const recentRows = subs.slice(0,4).map(s=>subRow(s)).join('');
+
+  return `
+  <div class="page-title">Dashboard</div>
+  <div class="page-sub">Overview of private event activity</div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="sc-val">${total}</div><div class="sc-lbl">Total inquiries</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--green)">${newCount}</div><div class="sc-lbl">New — needs review</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--blue)">${pending}</div><div class="sc-lbl">Pending</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--gold)">${confirmed}</div><div class="sc-lbl">Confirmed</div></div>
+  </div>
+  <div class="table-card">
+    <div class="table-head"><h3>Recent submissions</h3><button class="tbl-action" onclick="showPage('submissions')">View all →</button></div>
+    <table class="tbl">
+      <thead><tr>
+        <th>Name</th><th>Date</th><th>Space</th><th>Guests</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody>${recentRows}</tbody>
+    </table>
+  </div>`;
+}
+
+// ── SUBMISSIONS ───────────────────────────────────────────────────────────────
+function renderSubmissions(filter){
+  const subs = getSampleSubmissions();
+  const filtered = filter ? subs.filter(s=>
+    s.name.toLowerCase().includes(filter)||
+    (s.org||'').toLowerCase().includes(filter)||
+    s.email.toLowerCase().includes(filter)||
+    s.event_date.includes(filter)
+  ) : subs;
+
+  return `
+  <div class="page-title">Submissions</div>
+  <div class="page-sub">${subs.length} total inquiries</div>
+  <div class="table-card">
+    <div class="table-head">
+      <h3>All inquiries</h3>
+      <div class="table-controls">
+        <input class="table-search" placeholder="Search name, org, date..." oninput="document.getElementById('admin-main').innerHTML=renderSubmissions(this.value.toLowerCase())" value="${filter}"/>
+      </div>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th>Submitted</th><th>Name</th><th>Org</th><th>Event date</th><th>Space</th><th>Guests</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody>${filtered.length ? filtered.map(s=>subRow(s,true)).join('') : '<tr><td colspan="8" class="empty-state">No results found.</td></tr>'}</tbody>
+    </table>
+  </div>`;
+}
+
+function subRow(s, full=false){
+  const statusColors={new:'new',pending:'pending',confirmed:'confirmed',declined:'declined'};
+  const spaceNames={disco:'Disco',piano:'Piano Rm',arizona:'Arizona Rm',buyout:'Buyout'};
+  return `<tr>
+    ${full?`<td style="color:var(--muted);font-size:12px">${s.submitted||'—'}</td>`:''}
+    <td style="font-weight:500;color:var(--white)">${s.name}</td>
+    ${full?`<td style="color:var(--muted)">${s.org||'—'}</td>`:''}
+    <td style="font-family:var(--font-mono);font-size:12px">${s.event_date}</td>
+    <td>${spaceNames[s.space]||s.space}</td>
+    <td>${s.guests}</td>
+    <td><span class="status-pill ${statusColors[s.status]||'new'}">${s.status||'new'}</span></td>
+    <td>
+      <button class="tbl-action" onclick="openDetail('${s.id}')">View</button>
+      <button class="tbl-action" onclick="mailto('${s.email}','${s.name}')">Reply</button>
+    </td>
+  </tr>`;
+}
+
+function openDetail(id){
+  const subs = getSampleSubmissions();
+  const s = subs.find(x=>x.id===id);
+  if(!s) return;
+  currentSub = s;
+  document.getElementById('modal-title').textContent = s.name + (s.org?' / '+s.org:'');
+  document.getElementById('modal-body').innerHTML = `
+    <div class="detail-row"><div class="dr-label">Email</div><div class="dr-val"><a href="mailto:${s.email}" style="color:var(--gold)">${s.email}</a></div></div>
+    <div class="detail-row"><div class="dr-label">Phone</div><div class="dr-val">${s.phone||'—'}</div></div>
+    <div class="detail-row"><div class="dr-label">Event date</div><div class="dr-val">${s.event_date}</div></div>
+    <div class="detail-row"><div class="dr-label">Space</div><div class="dr-val">${s.space}</div></div>
+    <div class="detail-row"><div class="dr-label">Guests</div><div class="dr-val">${s.guests}</div></div>
+    <div class="detail-row"><div class="dr-label">Bar service</div><div class="dr-val">${s.bar_type}</div></div>
+    <div class="detail-row"><div class="dr-label">Quote summary</div><div class="dr-val" style="font-size:12px;color:var(--muted)">${s.quote_summary}</div></div>
+    <div class="detail-row"><div class="dr-label">Notes</div><div class="dr-val">${s.notes||'—'}</div></div>
+    <div class="detail-row"><div class="dr-label">Status</div><div class="dr-val"><span class="status-pill ${s.status}">${s.status}</span></div></div>
+    <div class="detail-row"><div class="dr-label">Submitted</div><div class="dr-val" style="color:var(--muted);font-size:12px">${s.submitted||'—'}</div></div>`;
+  document.getElementById('detail-modal').classList.remove('hidden');
+}
+
+function closeModal(){
+  document.getElementById('detail-modal').classList.add('hidden');
+  currentSub = null;
+}
+
+function updateStatus(status){
+  if(!currentSub) return;
+  setStatus(currentSub.id, status);
+  closeModal();
+  showPage(currentPage);
+}
+
+function mailto(email, name){
+  window.location.href = `mailto:${email}?subject=Your Monster Bar private event inquiry`;
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────────────────────
+function renderCalendar(){
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const subs = getSampleSubmissions();
+  const blocked = getBlockedDates();
+
+  const bookingDates = subs.filter(s=>s.status==='confirmed'||s.status==='pending').map(s=>s.event_date);
+  const blockedDateStrs = blocked.map(b=>b.date);
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const today = new Date().toISOString().split('T')[0];
+
+  let cells = '';
+  for(let i=0;i<firstDay;i++) cells += `<div class="cal-cell other-month"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = dateStr===today;
+    const hasBooking = bookingDates.includes(dateStr);
+    const isBlocked = blockedDateStrs.includes(dateStr);
+    const cls = [
+      'cal-cell',
+      isToday?'today':'',
+      hasBooking&&!isBlocked?'has-booking':'',
+      isBlocked?'blocked':'',
+    ].filter(Boolean).join(' ');
+    cells += `<div class="${cls}" onclick="calCellClick('${dateStr}')">
+      ${d}${hasBooking||isBlocked?'<div class="dot"></div>':''}
+    </div>`;
+  }
+
+  const blockedItems = blocked.map(b=>`
+    <div class="blocked-item">
+      <div>
+        <div class="bi-date">${b.date}</div>
+        <div class="bi-reason">${b.reason||'No reason given'}</div>
+      </div>
+      <button class="unblock-btn" onclick="unblockDate('${b.date}')">✕</button>
+    </div>`).join('');
+
+  return `
+  <div class="page-title">Availability</div>
+  <div class="page-sub">Manage blocked dates and view bookings</div>
+  <div class="cal-wrap">
+    <div class="cal-head">
+      <h3>Calendar</h3>
+      <div class="cal-nav">
+        <button onclick="calNav(-1)">‹ Prev</button>
+        <span>${months[calMonth]} ${calYear}</span>
+        <button onclick="calNav(1)">Next ›</button>
+      </div>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-days-head">${days.map(d=>`<div>${d}</div>`).join('')}</div>
+      <div class="cal-cells" id="cal-cells">${cells}</div>
+    </div>
+    <div class="cal-legend">
+      <span><div class="ld" style="background:#1A2A1A;border:1px solid #2A4A2A"></div>Booking</span>
+      <span><div class="ld" style="background:#2A1515;border:1px solid #4A2020"></div>Blocked</span>
+      <span><div class="ld" style="border:1px solid var(--gold)"></div>Today</span>
+    </div>
+  </div>
+
+  <div class="block-panel">
+    <h3>Block a date</h3>
+    <div class="block-form">
+      <div class="block-field"><label>Date</label><input type="date" id="block-date"/></div>
+      <div class="block-field"><label>Reason (optional)</label><input type="text" id="block-reason" placeholder="e.g. Staff event, closed"/></div>
+      <button class="block-btn" onclick="addBlockedDate()">Block date</button>
+    </div>
+    ${blocked.length?`<div class="blocked-list"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Blocked dates</div>${blockedItems}</div>`:''}
+  </div>`;
+}
+
+function calNav(dir){
+  calMonth += dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  showPage('calendar');
+}
+
+function calCellClick(dateStr){
+  const subs = getSampleSubmissions();
+  const sub = subs.find(s=>s.event_date===dateStr);
+  if(sub){ openDetail(sub.id); return; }
+  const blocked = getBlockedDates();
+  const isBlocked = blocked.find(b=>b.date===dateStr);
+  if(isBlocked){ if(confirm('Unblock '+dateStr+'?')) unblockDate(dateStr); return; }
+  document.getElementById('block-date').value = dateStr;
+}
+
+function addBlockedDate(){
+  const date = document.getElementById('block-date').value;
+  const reason = document.getElementById('block-reason').value;
+  if(!date){alert('Please select a date.');return;}
+  const blocked = getBlockedDates();
+  if(blocked.find(b=>b.date===date)){alert('This date is already blocked.');return;}
+  blocked.push({date,reason});
+  blocked.sort((a,b)=>a.date.localeCompare(b.date));
+  saveBlockedDates(blocked);
+  showPage('calendar');
+}
+
+function unblockDate(date){
+  const blocked = getBlockedDates().filter(b=>b.date!==date);
+  saveBlockedDates(blocked);
+  showPage('calendar');
+}
+
+// ── REPORTS ───────────────────────────────────────────────────────────────────
+function renderReports(){
+  const subs = getSampleSubmissions();
+  const spaceCount={disco:0,piano:0,arizona:0,buyout:0};
+  const barCount={openbar:0,tickets:0,cash:0,tab:0};
+  let totalGuests=0;
+
+  subs.forEach(s=>{
+    if(spaceCount[s.space]!==undefined) spaceCount[s.space]++;
+    if(barCount[s.bar_type]!==undefined) barCount[s.bar_type]++;
+    totalGuests+=parseInt(s.guests)||0;
+  });
+
+  const maxSpace=Math.max(...Object.values(spaceCount))||1;
+  const maxBar=Math.max(...Object.values(barCount))||1;
+
+  const spaceLabels={disco:'The Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Buyout'};
+  const barLabels={openbar:'Open bar',tickets:'Drink tickets',cash:'Cash bar',tab:'Single tab'};
+
+  const spaceBar=Object.entries(spaceCount).map(([k,v])=>`
+    <div class="bar-row">
+      <div class="br-label">${spaceLabels[k]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/maxSpace*100)}%"></div></div>
+      <div class="br-val">${v}</div>
+    </div>`).join('');
+
+  const barBar=Object.entries(barCount).map(([k,v])=>`
+    <div class="bar-row">
+      <div class="br-label">${barLabels[k]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/maxBar*100)}%;background:var(--blue)"></div></div>
+      <div class="br-val">${v}</div>
+    </div>`).join('');
+
+  const statusCounts={new:0,pending:0,confirmed:0,declined:0};
+  subs.forEach(s=>{ if(statusCounts[s.status]!==undefined) statusCounts[s.status]++; });
+  const colors={new:'var(--green)',pending:'var(--blue)',confirmed:'var(--gold)',declined:'var(--red)'};
+  const statusLegend=Object.entries(statusCounts).map(([k,v])=>`
+    <div class="pie-row">
+      <div class="pie-dot" style="background:${colors[k]}"></div>
+      <div class="pie-label">${k.charAt(0).toUpperCase()+k.slice(1)}</div>
+      <div class="pie-val">${v}</div>
+    </div>`).join('');
+
+  return `
+  <div class="page-title">Reports</div>
+  <div class="page-sub">Inquiry analytics across all submissions</div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="sc-val">${subs.length}</div><div class="sc-lbl">Total inquiries</div></div>
+    <div class="stat-card"><div class="sc-val">${totalGuests}</div><div class="sc-lbl">Total guests inquired</div></div>
+    <div class="stat-card"><div class="sc-val">${Math.round(totalGuests/(subs.length||1))}</div><div class="sc-lbl">Avg guests per event</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--gold)">${subs.filter(s=>s.status==='confirmed').length}</div><div class="sc-lbl">Confirmed bookings</div></div>
+  </div>
+  <div class="report-grid">
+    <div class="report-card">
+      <h3>Space popularity</h3>
+      <div class="bar-chart">${spaceBar}</div>
+    </div>
+    <div class="report-card">
+      <h3>Bar service type</h3>
+      <div class="bar-chart">${barBar}</div>
+    </div>
+    <div class="report-card">
+      <h3>Inquiry status</h3>
+      <div class="pie-legend">${statusLegend}</div>
+    </div>
+    <div class="report-card">
+      <h3>Export</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Download all submission data as CSV for your records.</p>
+      <button onclick="exportCSV()" style="background:var(--gold);color:var(--black);border:none;border-radius:var(--r);padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-body)">Download CSV</button>
+    </div>
+  </div>`;
+}
+
+function exportCSV(){
+  const subs = getSampleSubmissions();
+  const headers=['ID','Name','Org','Email','Phone','Event Date','Space','Guests','Bar Type','Status','Submitted','Quote Summary','Notes'];
+  const rows=subs.map(s=>[s.id,s.name,s.org,s.email,s.phone,s.event_date,s.space,s.guests,s.bar_type,s.status,s.submitted,s.quote_summary,s.notes].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv=[headers.join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='monster-events-submissions.csv';
+  a.click();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+if(sessionStorage.getItem('mb_auth')==='1'){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('admin-app').classList.remove('hidden');
+  document.getElementById('admin-app').style.display='flex';
+  initAdmin();
+}
+</script>
+</body>
+</html>
