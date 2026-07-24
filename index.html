@@ -448,6 +448,9 @@ function validate(step){
     if(getDur()<=0)return'End time must be after start time.';
   }
   if(step===2){
+    if(!S.space)return'Please select a space to continue.';
+  }
+  if(step===3){
     if(!S.guests||S.guests<1)return'Please enter a guest count.';
   }
   return null;
@@ -700,7 +703,7 @@ function step2b(){
     </div>
     <div class="step-nav">
       <button class="btn btn-ghost" onclick="saveStep2b();go(2)"> Back</button>
-      <button class="btn btn-primary" onclick="saveStep2b();go(3)">Continue </button>
+      <button class="btn btn-primary" onclick="saveStep2b();go(4)">Continue </button>
     </div>`;
   return d;
 }
@@ -864,7 +867,7 @@ function step4(){
     </div>
     ${S.arrival==='simultaneous'&&!S.xBar?'<div class="avail-note avail-warn"><strong>Note:</strong> You indicated guests are arriving all at once. We recommend adding an extra bartender to handle the initial rush.</div>':''}
     <div class="step-nav">
-      <button class="btn btn-ghost" onclick="go(3)"> Back</button>
+      <button class="btn btn-ghost" onclick="go(4)"> Back</button>
       <button class="btn btn-primary" onclick="go(5)">See your quote </button>
     </div>`;
   return d;
