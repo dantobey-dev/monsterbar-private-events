@@ -3,1108 +3,1077 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Host an Event  -  The Manhattan Monster Bar</title>
+<title>Host an Event - The Manhattan Monster Bar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-/* ── TOKENS ─────────────────────────────────────── */
-:root {
-  --black:   #0C0C0E;
-  --ink:     #141418;
-  --surface: #1C1C22;
-  --lift:    #26262E;
-  --rule:    #36363F;
-  --muted:   #888899;
-  --body:    #C8C8D8;
-  --white:   #F0F0F8;
-  --gold:    #C8A44A;
-  --gold-dim:#8A6E2F;
-  --green:   #3DBE7A;
-  --red:     #E05555;
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
-  --font-mono:    'DM Mono', monospace;
-  --radius:  6px;
-  --step-w:  580px;
+:root{
+  --black:#0C0C0E;--ink:#141418;--surface:#1C1C22;--lift:#26262E;
+  --rule:#36363F;--muted:#888899;--body:#C8C8D8;--white:#F0F0F8;
+  --gold:#C8A44A;--gold-dim:#8A6E2F;--green:#3DBE7A;--red:#E05555;
+  --font-d:'Bebas Neue',sans-serif;--font-b:'DM Sans',sans-serif;--font-m:'DM Mono',monospace;
+  --r:6px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: var(--black); color: var(--body); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
-body { min-height: 100vh; display: flex; flex-direction: column; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--black);color:var(--body);font-family:var(--font-b);font-size:15px;line-height:1.6}
+body{min-height:100vh;display:flex;flex-direction:column}
 
-/* ── HEADER ─────────────────────────────────────── */
-.site-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 32px;
-  border-bottom: 1px solid var(--rule);
-  background: var(--ink);
-}
-.site-header .wordmark {
-  font-family: var(--font-display);
-  font-size: 22px; letter-spacing: 0.08em; color: var(--white);
-}
-.site-header .sub {
-  font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
-}
+/* HIDDEN NETLIFY FORM */
+#netlify-anchor{position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;z-index:-1}
 
-/* ── PROGRESS ────────────────────────────────────── */
-.progress-wrap {
-  background: var(--ink);
-  padding: 0 32px 18px;
-  border-bottom: 1px solid var(--rule);
-}
-.progress-track {
-  height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; margin-bottom: 8px;
-}
-.progress-fill {
-  height: 100%; background: var(--gold); border-radius: 2px;
-  transition: width 0.4s cubic-bezier(.4,0,.2,1);
-}
-.progress-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-.progress-label span { color: var(--gold); }
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--ink);border-bottom:1px solid var(--rule)}
+.hdr-logo{font-family:var(--font-d);font-size:20px;letter-spacing:0.08em;color:var(--white)}
+.hdr-sub{font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
+.hdr-contact{font-size:12px;color:var(--gold);text-align:right}
 
-/* ── MAIN ───────────────────────────────────────── */
-.main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 40px 24px 80px; }
-.step-wrap { width: 100%; max-width: var(--step-w); }
+/* PROGRESS */
+.prog-wrap{background:var(--ink);padding:0 28px 14px;border-bottom:1px solid var(--rule)}
+.prog-track{height:2px;background:var(--rule);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.3s ease}
+.prog-label{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.prog-label b{color:var(--gold);font-weight:400}
 
-/* ── STEP HEADER ─────────────────────────────────── */
-.step-eyebrow {
-  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 10px;
-}
-.step-title {
-  font-family: var(--font-display);
-  font-size: 48px; line-height: 0.95; letter-spacing: 0.03em;
-  color: var(--white); margin-bottom: 8px;
-}
-.step-desc { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
+/* MAIN */
+.main{flex:1;display:flex;justify-content:center;padding:36px 20px 80px}
+.wrap{width:100%;max-width:560px}
 
-/* ── FIELDS ─────────────────────────────────────── */
-.field-group { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
-.field-row { display: grid; gap: 12px; }
-.field-row.cols-2 { grid-template-columns: 1fr 1fr; }
-.field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+/* TYPOGRAPHY */
+.eyebrow{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.step-title{font-family:var(--font-d);font-size:44px;line-height:0.95;letter-spacing:0.03em;color:var(--white);margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
 
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field label {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--muted);
+/* FIELDS */
+.fields{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select,.field textarea{
+  background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);
+  padding:10px 13px;font-size:14px;font-family:var(--font-b);color:var(--white);width:100%
 }
-.field input, .field select, .field textarea {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  padding: 11px 14px;
-  font-size: 14px; font-family: var(--font-body);
-  color: var(--white);
-  transition: border-color 0.15s;
-  width: 100%;
-}
-.field input:focus, .field select:focus, .field textarea:focus {
-  outline: none; border-color: var(--gold);
-}
-.field input::placeholder, .field textarea::placeholder { color: var(--rule); }
-.field select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888899' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
-.field-hint { font-size: 12px; color: var(--muted); margin-top: 2px; font-style: italic; }
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold)}
+.field input::placeholder,.field textarea::placeholder{color:var(--rule)}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888899' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.hint{font-size:11px;color:var(--muted);font-style:italic;margin-top:2px}
 
-/* ── OPTION CARDS ────────────────────────────────── */
-.option-grid { display: grid; gap: 10px; margin-bottom: 32px; }
-.option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
-.option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+/* OPTION CARDS */
+.opt-grid{display:grid;gap:10px;margin-bottom:28px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.opt-card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:16px;cursor:pointer;position:relative;transition:border-color 0.15s}
+.opt-card:hover{border-color:var(--gold-dim)}
+.opt-card.sel{border-color:var(--gold);background:#1E1B11}
+.opt-card.disabled{opacity:0.38;cursor:not-allowed;pointer-events:none}
+.opt-card .check{position:absolute;top:10px;right:10px;width:16px;height:16px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s}
+.opt-card.sel .check{opacity:1}
+.opt-card .check::after{content:'';width:5px;height:3px;border-left:2px solid var(--black);border-bottom:2px solid var(--black);transform:rotate(-45deg) translateY(-1px)}
+.opt-card .cn{font-size:14px;font-weight:500;color:var(--white);margin-bottom:2px}
+.opt-card .cs{font-size:12px;color:var(--muted);line-height:1.4}
+.opt-card .cp{font-size:12px;color:var(--gold);margin-top:6px;font-family:var(--font-m)}
+.unavail-badge{position:absolute;top:9px;right:9px;background:#3A1010;color:#FF8080;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
 
-.opt-card {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  padding: 16px;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  user-select: none;
-  position: relative;
-}
-.opt-card:hover { border-color: var(--gold-dim); }
-.opt-card.selected { border-color: var(--gold); background: #1E1B11; }
-.opt-card.selected .opt-check { opacity: 1; }
-.opt-check {
-  position: absolute; top: 12px; right: 12px;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--gold); display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.15s;
-}
-.opt-check::after { content: ''; width: 6px; height: 4px; border-left: 2px solid var(--black); border-bottom: 2px solid var(--black); transform: rotate(-45deg) translateY(-1px); }
-.opt-card .opt-name { font-weight: 500; color: var(--white); margin-bottom: 2px; font-size: 14px; }
-.opt-card .opt-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
-.opt-card .opt-price { font-family: var(--font-mono); font-size: 13px; color: var(--gold); margin-top: 6px; }
+/* AVAILABILITY CARD */
+.avail-card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-top:14px;margin-bottom:28px}
+.avail-card-head{background:var(--lift);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between}
+.avail-card-head .acn{font-family:var(--font-d);font-size:26px;letter-spacing:0.04em;color:var(--white)}
+.avail-card-head .acm{font-size:12px;color:var(--gold);font-family:var(--font-m)}
+.avail-card-body{padding:14px 18px}
+.avail-card-desc{font-size:13px;color:var(--muted);margin-bottom:14px}
+.avail-rows{display:flex;flex-direction:column;gap:6px}
+.avail-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;font-size:13px}
+.avail-row.open{background:#1A2A1A;border:1px solid #2A4A2A}
+.avail-row.closed{background:#2A1515;border:1px solid #3A1515;opacity:0.7}
+.avail-row .ar-icon{flex-shrink:0;font-size:13px}
+.avail-row .ar-day{font-weight:500;color:var(--white);width:100px;flex-shrink:0}
+.avail-row.closed .ar-day{color:#FF8080}
+.avail-row .ar-hrs{color:#7AE0A0;font-family:var(--font-m);font-size:12px}
+.avail-row.closed .ar-hrs{color:#FF8080}
 
-/* ── TOGGLE ROWS ─────────────────────────────────── */
-.toggle-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
-.toggle-row {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--surface); border: 1px solid var(--rule);
-  border-radius: var(--radius); padding: 14px 16px;
-  cursor: pointer; transition: border-color 0.15s;
-}
-.toggle-row:hover { border-color: var(--rule); }
-.toggle-row.active { border-color: var(--gold); background: #1E1B11; }
-.toggle-row .tr-left { display: flex; flex-direction: column; gap: 2px; }
-.toggle-row .tr-name { font-size: 14px; font-weight: 500; color: var(--white); }
-.toggle-row .tr-sub { font-size: 12px; color: var(--muted); }
-.toggle-row .tr-price { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
-.toggle-row.active .tr-price { color: var(--gold); }
-.toggle-switch {
-  width: 38px; height: 22px; border-radius: 11px;
-  background: var(--rule); position: relative; flex-shrink: 0; transition: background 0.2s;
-}
-.toggle-row.active .toggle-switch { background: var(--gold); }
-.toggle-switch::after {
-  content: ''; position: absolute; top: 3px; left: 3px;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--muted); transition: left 0.2s, background 0.2s;
-}
-.toggle-row.active .toggle-switch::after { left: 19px; background: var(--black); }
+/* CONTEXT BANNER */
+.ctx-banner{background:var(--lift);border:1px solid var(--rule);border-radius:8px;padding:13px 16px;margin-bottom:20px;font-size:13px;line-height:1.6}
+.ctx-banner .ctx-change{background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;padding:0;font-family:var(--font-b);text-decoration:underline;margin-top:6px;display:block}
 
-/* ── INLINE NUMBER INPUTS in toggle rows ─────────── */
-.addon-qty {
-  display: flex; align-items: center; gap: 8px;
-  margin-top: 8px;
-}
-.addon-qty label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-.addon-qty input {
-  width: 70px; background: var(--lift); border: 1px solid var(--rule);
-  border-radius: 4px; padding: 5px 8px; font-size: 13px;
-  color: var(--white); font-family: var(--font-mono); text-align: center;
-}
-.addon-qty input:focus { outline: none; border-color: var(--gold); }
+/* ALERT BOXES */
+.alert{border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:13px;line-height:1.5}
+.alert-warn{background:#2A1515;border:1px solid var(--red);color:#FFB0B0}
+.alert-warn strong{color:#FF8080;display:block;margin-bottom:3px;font-size:14px}
+.alert-ok{background:#1A2A1A;border:1px solid var(--green);color:#7AE0A0}
+.alert-ok strong{display:block;margin-bottom:3px;font-size:14px}
+.alert-gold{background:#1A1808;border:1px solid var(--gold-dim);color:var(--muted)}
+.alert-gold strong{color:var(--gold);display:block;margin-bottom:3px;font-size:14px}
+.alert-info{background:var(--lift);border:1px solid var(--rule);color:var(--muted)}
 
-/* ── AVAILABILITY NOTICE ─────────────────────────── */
-.avail-note {
-  background: var(--lift); border: 1px solid var(--rule);
-  border-left: 4px solid var(--gold);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 16px 20px; font-size: 13px; color: var(--body);
-  margin-bottom: 20px; line-height: 1.6;
-}
-.avail-note strong { color: var(--white); }
-.avail-warn { border-left-color: var(--red); background: #1A0C0C; border-color: #3A1010; }
-.avail-warn strong { color: #FF8080; }
+/* TOGGLE ROWS */
+.toggle-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.tgl-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:13px 15px;cursor:pointer;transition:border-color 0.15s}
+.tgl-row.on{border-color:var(--gold);background:#1E1B11}
+.tgl-row .tl{display:flex;flex-direction:column;gap:1px}
+.tgl-row .tn{font-size:14px;font-weight:500;color:var(--white)}
+.tgl-row .ts{font-size:12px;color:var(--muted)}
+.tgl-row .tp{font-family:var(--font-m);font-size:12px;color:var(--muted)}
+.tgl-row.on .tp{color:var(--gold)}
+.tgl-sw{width:36px;height:20px;border-radius:10px;background:var(--rule);position:relative;flex-shrink:0;transition:background 0.2s;margin-left:12px}
+.tgl-row.on .tgl-sw{background:var(--gold)}
+.tgl-sw::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--muted);transition:left 0.2s,background 0.2s}
+.tgl-row.on .tgl-sw::after{left:19px;background:var(--black)}
 
-/* Large availability card shown after space selection */
-.space-avail-card {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-.space-avail-head {
-  background: var(--lift);
-  padding: 14px 20px;
-  display: flex; align-items: baseline; justify-content: space-between;
-}
-.space-avail-head .sah-name {
-  font-family: var(--font-display);
-  font-size: 28px; letter-spacing: 0.04em; color: var(--white);
-}
-.space-avail-head .sah-min {
-  font-size: 12px; color: var(--gold);
-  font-family: var(--font-mono); letter-spacing: 0.05em;
-}
-.space-avail-body { padding: 16px 20px; }
-.space-avail-body .sab-desc {
-  font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5;
-}
-.avail-grid {
-  display: grid; gap: 8px;
-}
-.avail-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-}
-.avail-row.open { background: #1A2A1A; border: 1px solid #2A4A2A; }
-.avail-row.closed { background: #2A1515; border: 1px solid #4A2020; opacity: 0.7; }
-.avail-row .ar-day {
-  font-weight: 600; color: var(--white); width: 110px; flex-shrink: 0; font-size: 14px;
-}
-.avail-row.closed .ar-day { color: #FF8080; }
-.avail-row .ar-hours { color: #7AE0A0; font-family: var(--font-mono); font-size: 13px; }
-.avail-row.closed .ar-hours { color: #FF8080; }
-.avail-row .ar-icon { font-size: 16px; flex-shrink: 0; }
-.avail-warn-block {
-  background: #2A1515; border: 1px solid #E05555;
-  border-radius: 8px; padding: 14px 18px;
-  margin-bottom: 16px; line-height: 1.6;
-}
-.avail-ok-block {
-  background: #1A2A1A; border: 1px solid #3DBE7A;
-  border-radius: 8px; padding: 12px 18px;
-  margin-bottom: 16px; font-size: 13px; color: #7AE0A0;
-}
+/* LIVE PRICING PREVIEW */
+.price-preview{background:var(--lift);border-radius:var(--r);padding:12px 14px;font-size:12px;margin-top:12px}
+.pp-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--rule)}
+.pp-row:last-child{border-bottom:none}
+.pp-lbl{color:var(--muted)}
+.pp-val{font-family:var(--font-m);color:var(--white)}
+.pp-waiver{color:var(--green);font-style:italic;font-size:11px;margin-top:4px}
 
-/* ── NAV ─────────────────────────────────────────── */
-.step-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.btn {
-  padding: 13px 28px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
-  font-family: var(--font-body); cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s;
-  letter-spacing: 0.02em;
-}
-.btn:active { transform: scale(0.98); }
-.btn-primary { background: var(--gold); color: var(--black); }
-.btn-primary:hover { opacity: 0.9; }
-.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--rule); }
-.btn-ghost:hover { border-color: var(--muted); color: var(--white); }
-.btn-full { width: 100%; text-align: center; }
+/* QUOTE PANEL */
+.qpanel{background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:24px}
+.qbanner{background:linear-gradient(135deg,#1A1408,#0C0C0E);border-bottom:1px solid var(--gold-dim);padding:18px 22px}
+.qbanner h2{font-family:var(--font-d);font-size:26px;letter-spacing:0.05em;color:var(--white);margin-bottom:2px}
+.qbanner p{font-size:12px;color:var(--muted)}
+.qbody{padding:18px 22px}
+.qsec{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin:14px 0 6px;padding-bottom:5px;border-bottom:1px solid var(--rule)}
+.qsec:first-child{margin-top:0}
+.qrow{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid #1E1E26;gap:10px}
+.qrow:last-child{border-bottom:none}
+.ql{font-size:12px;color:var(--muted);flex:1}
+.qv{font-size:13px;font-weight:500;color:var(--white);font-family:var(--font-m);white-space:nowrap}
+.qv.strike{text-decoration:line-through;color:var(--rule);font-weight:400}
+.qsub{font-size:11px;color:var(--muted);font-style:italic;padding:2px 0 5px;border-bottom:1px solid #1E1E26}
+.waiver-pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#1A3A28;color:var(--green);font-weight:500;margin-left:6px}
+.qtotal{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 0;margin-top:6px;border-top:1px solid var(--rule)}
+.qtotal .ql2{font-size:13px;font-weight:500;color:var(--white)}
+.qtotal .qv2{font-size:26px;font-weight:500;color:var(--gold);font-family:var(--font-m)}
+.qnote{font-size:11px;color:var(--muted);font-style:italic;margin-top:10px;line-height:1.5;padding-top:10px;border-top:1px solid var(--rule)}
+.tier-tbl{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+.tier-tbl th{padding:6px 8px;text-align:center;border-bottom:1px solid var(--rule);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em}
+.tier-tbl th:first-child{text-align:left;color:var(--muted);font-weight:400}
+.tier-tbl .c1{color:#6BA3E8}.tier-tbl .c2{color:#6BC97A}.tier-tbl .c3{color:#E8A84A}
+.tier-tbl td{padding:5px 8px;text-align:center;border-bottom:1px solid #1E1E26;font-family:var(--font-m)}
+.tier-tbl td:first-child{text-align:left;font-family:var(--font-b);color:var(--muted);font-size:11px}
+.tier-tbl .trow-total td{font-size:14px;font-weight:600;border-top:1px solid var(--rule);padding-top:8px;border-bottom:none}
+.tier-tbl .trow-dep td{font-size:11px;color:var(--muted);font-family:var(--font-b);border-bottom:none}
+.staff-note{font-size:12px;color:var(--muted);font-style:italic;padding:8px 0 0;border-top:1px solid var(--rule);margin-top:4px}
 
-/* ── QUOTE PANEL ─────────────────────────────────── */
-.quote-panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-.quote-banner {
-  background: linear-gradient(135deg, #1A1408 0%, #0C0C0E 100%);
-  border-bottom: 1px solid var(--gold-dim);
-  padding: 20px 24px;
-}
-.quote-banner .qb-title {
-  font-family: var(--font-display);
-  font-size: 28px; letter-spacing: 0.05em; color: var(--white); margin-bottom: 2px;
-}
-.quote-banner .qb-sub { font-size: 12px; color: var(--muted); }
-.quote-body { padding: 20px 24px; }
-.q-section-head {
-  font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em;
-  color: var(--gold); margin: 16px 0 8px; padding-bottom: 6px;
-  border-bottom: 1px solid var(--rule);
-}
-.q-section-head:first-child { margin-top: 0; }
-.q-line {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 4px 0; border-bottom: 1px solid #1E1E26; gap: 12px;
-}
-.q-line:last-child { border-bottom: none; }
-.q-lbl { font-size: 13px; color: var(--muted); flex: 1; }
-.q-amt { font-size: 13px; font-weight: 500; color: var(--white); font-family: var(--font-mono); white-space: nowrap; }
-.q-amt.waived { text-decoration: line-through; color: var(--rule); font-weight: 400; }
-.q-sub { font-size: 11px; color: var(--muted); font-style: italic; padding: 2px 0 5px; border-bottom: 1px solid #1E1E26; }
-.q-total {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 14px 0 0; margin-top: 8px; border-top: 1px solid var(--rule);
-}
-.q-total-lbl { font-size: 13px; font-weight: 500; color: var(--white); }
-.q-total-amt { font-size: 28px; font-weight: 500; color: var(--gold); font-family: var(--font-mono); letter-spacing: -0.5px; }
-.waiver-pill {
-  display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px;
-  background: #1A3A28; color: var(--green); font-weight: 500; margin-left: 6px;
-}
-.waiver-line { font-size: 11px; color: var(--green); font-style: italic; padding: 2px 0 5px; }
-.deposit-block {
-  background: var(--lift); border-radius: var(--radius);
-  padding: 12px 16px; margin-top: 14px;
-}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
+.btn{padding:12px 26px;border-radius:var(--r);font-size:14px;font-weight:500;font-family:var(--font-b);cursor:pointer;border:none;transition:opacity 0.15s}
+.btn-p{background:var(--gold);color:var(--black)}
+.btn-p:hover{opacity:0.9}
+.btn-p:disabled{opacity:0.38;cursor:not-allowed}
+.btn-g{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+.btn-g:hover{border-color:var(--muted);color:var(--white)}
 
-/* ── SUCCESS ─────────────────────────────────────── */
-.success-wrap { text-align: center; padding: 20px 0; }
-.success-icon {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: #1A3A28; border: 2px solid var(--green);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 20px;
-}
-.success-icon svg { stroke: var(--green); }
+/* SUCCESS */
+.success{text-align:center;padding:20px 0}
+.success-icon{width:60px;height:60px;border-radius:50%;background:#1A3A28;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.success-icon svg{stroke:var(--green)}
 
-/* ── TIER COMPARE TABLE ──────────────────────────── */
-.tier-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px; }
-.tier-table th { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--rule); font-size: 11px; font-weight: 600; }
-.tier-table th:first-child { text-align: left; color: var(--muted); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
-.tier-table .c1 { color: #6BA3E8; } .tier-table .c2 { color: #6BC97A; } .tier-table .c3 { color: #E8A84A; }
-.tier-table td { padding: 5px 10px; text-align: center; border-bottom: 1px solid #1E1E26; font-family: var(--font-mono); color: var(--white); }
-.tier-table td:first-child { text-align: left; font-family: var(--font-body); color: var(--muted); font-size: 12px; }
-.tier-table .t-total td { font-size: 15px; font-weight: 600; border-top: 1px solid var(--rule); padding-top: 10px; border-bottom: none; }
-.tier-table .t-total td.c1 { color: #6BA3E8; } .tier-table .t-total td.c2 { color: #6BC97A; } .tier-table .t-total td.c3 { color: #E8A84A; }
-.tier-table .t-dep td { font-size: 11px; color: var(--muted); font-family: var(--font-body); }
-
-/* ── STAFF NOTE ──────────────────────────────────── */
-.staff-note { font-size: 12px; color: var(--muted); font-style: italic; padding: 10px 0; border-top: 1px solid var(--rule); margin-top: 4px; }
-
-/* ── MISC ────────────────────────────────────────── */
-.hidden { display: none !important; }
-@media (max-width: 600px) {
-  .step-title { font-size: 36px; }
-  .field-row.cols-2, .field-row.cols-3 { grid-template-columns: 1fr; }
-  .option-grid.cols-2, .option-grid.cols-3 { grid-template-columns: 1fr; }
-  .site-header { padding: 14px 20px; }
-  .main { padding: 28px 16px 60px; }
+@media(max-width:580px){
+  .step-title{font-size:34px}
+  .row2,.row3,.g2,.g3{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-
-<header class="site-header">
-  <div>
-    <div class="wordmark">THE MANHATTAN MONSTER</div>
-    <div class="sub">80 Grove St · West Village · NYC</div>
-  </div>
-  <div style="text-align:right">
-    <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase">Private Events</div>
-    <div style="font-size:12px;color:var(--gold)">dan@monsterbar.nyc</div>
-  </div>
-</header>
-
-<div class="progress-wrap">
-  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:12%"></div></div>
-  <div class="progress-label">Step <span id="prog-cur">1</span> of <span id="prog-tot">8</span>  -  <span id="prog-name">About you</span></div>
+<!-- Netlify static form for build-time detection -->
+<div id="netlify-anchor">
+  <form name="private-event-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" method="POST" action="/thank-you">
+    <input type="hidden" name="form-name" value="private-event-inquiry"/>
+    <input type="text" name="bot-field"/>
+    <input type="text" name="name"/><input type="text" name="organization"/>
+    <input type="email" name="email"/><input type="tel" name="phone"/>
+    <input type="text" name="event_date"/><input type="text" name="start_time"/>
+    <input type="text" name="end_time"/><input type="text" name="space"/>
+    <input type="text" name="guests"/><input type="text" name="bar_type"/>
+    <textarea name="quote_summary"></textarea><textarea name="notes"></textarea>
+    <button type="submit">Submit</button>
+  </form>
 </div>
 
-<main class="main">
-  <div class="step-wrap" id="step-wrap"></div>
-</main>
+<header class="hdr">
+  <div>
+    <div class="hdr-logo">THE MANHATTAN MONSTER</div>
+    <div style="font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase">80 Grove St &middot; West Village &middot; NYC</div>
+  </div>
+  <div class="hdr-contact">Private Events<br>dan@monsterbar.nyc</div>
+</header>
+<div class="prog-wrap">
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:12.5%"></div></div>
+  <div class="prog-label">Step <b id="prog-cur">1</b> of <b id="prog-tot">8</b> &mdash; <span id="prog-name">About you</span></div>
+</div>
+<main class="main"><div class="wrap" id="app"></div></main>
 
 <script>
-/* -- STATE ---------------------------------------- */
+// ============================================================
+// STATE
+// ============================================================
 const S = {
-  name:'', org:'', email:'', phone:'',
-  date:'', flexible:false, startTime:'', endTime:'',
-  space:'disco', guests:0,
-  barType:'openbar', tier:2, obHrs:3, tixPer:3, tixFixed:0, tixMode:'per-guest', tabMin:1500,
-  dj:false, host:false, soundtech:false, coat:false, coatHrs:3,
-  food:false, oven:false, security:false, secHrs:3,
+  name:'', org:'', email:'', phone:'', evtype:'personal',
+  date:'', flex:false, start:'', end:'',
+  space:'',
+  guests:0, arrival:'gradual',
+  barType:'openbar', tier:2, obHrs:3,
+  tixMode:'per-guest', tixPer:3, tixFixed:100,
+  tabMin:1500,
+  dj:false, host:false, soundtech:false,
+  coat:false, coatHrs:3,
+  food:false, oven:false,
+  security:false, secHrs:3,
   xBar:false, dancers:false,
-  grat:20, notes:'',
+  notes:'',
+  grat:20,
 };
 
-const TR={1:10,2:12,3:14};
-const SPACE_LABEL={disco:'Full Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
-const TN={1:'Tier 1  -  Base',2:'Tier 2  -  Call brands',3:'Tier 3  -  Top shelf'};
-const WAIVER=2800, RENTAL=400, TAX=0.08875;
+// ============================================================
+// CONSTANTS
+// ============================================================
+const TIERS = {1:10, 2:12, 3:14};
+const TNAMES = {1:'Tier 1 - Base', 2:'Tier 2 - Call brands', 3:'Tier 3 - Top shelf'};
+const WAIVER = 2800, RENTAL = 400, TAX = 0.08875;
+const SPACE_MIN = {disco:1500, piano:250, arizona:400, buyout:15000};
+const SPACE_NAME = {disco:'The Disco', piano:'Piano Room / Main Floor', arizona:'Arizona Room', buyout:'Full Bar Buyout'};
 
-const SPACE_MIN={disco:1500,piano:250,arizona:400,buyout:15000};
-const SPACE_NAMES={disco:'Full Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
-function getMinWarning(){
-  const min=SPACE_MIN[S.space]||0;
-  if(!min||S.barType==='cash') return null;
-  const b=calcBar(S.tier||2);
-  if(b.pretax<min) return {ok:false,min,pretax:b.pretax,short:min-b.pretax};
-  return {ok:true,min,pretax:b.pretax};
-}
-
-const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtI=n=>'$'+Math.round(n).toLocaleString('en-US');
-const fmtDate=v=>{if(!v)return'';const[y,mo,d]=v.split('-');const dt=new Date(+y,+mo-1,+d);const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];return day+', '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+mo-1]+' '+parseInt(d)+', '+y;};
-const fmtTime=v=>{if(!v)return'';const[h,m]=v.split(':').map(Number);const ap=h>=12?'pm':'am';const h12=h%12||12;return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;};
-function getDur(){if(!S.startTime||!S.endTime)return 0;const[sh,sm]=S.startTime.split(':').map(Number),[eh,em]=S.endTime.split(':').map(Number);const mins=(eh*60+em)-(sh*60+sm);return mins>0?mins/60:0;}
-
-function getTix(){if(S.tixMode==='fixed')return S.tixFixed||0;return(S.tixPer||1)*S.guests;}
-
-function calcBar(tierNum){
-  const rate=TR[tierNum];let pretax=0;
-  if(S.barType==='openbar'){const hrs=S.obHrs||1,mult=1.5+(hrs-1);pretax=mult*rate*S.guests;}
-  else if(S.barType==='tickets'){pretax=getTix()*rate;}
-  else if(S.barType==='cash'){pretax=1500;}
-  else{pretax=S.tabMin||1500;}
-  const g=pretax*(S.grat/100),tax=pretax*TAX;
-  const waived=pretax>WAIVER;
-  return{pretax,grat:g,tax,sub:pretax+g+tax,waived,tierNum};
-}
-
-function getAddons(){
-  const dur=getDur()||3;
-  const dj=S.dj?250:0,host=S.host?300:0,st=S.soundtech?125:0;
-  const coat=S.coat?Math.max(3,S.coatHrs||3)*40:0;
-  const food=(S.food?85:0)+(S.oven?150:0);
-  const sec=S.security?Math.max(3,S.secHrs||3)*40:0;
-  const xb=S.xBar?Math.ceil(dur+0.5)*35:0;
-  return{dj,host,st,coat,food,sec,xb,total:dj+host+st+coat+food+sec+xb};
-}
-
-function getStaffNote(){
-  if(!S.guests)return'';
-  if(S.guests>=65)return'This quote includes 2 bartenders and 1 busser.'+(S.xBar?' A 3rd bartender has been added.':' An additional bartender can be added if needed.');
-  return'This quote includes 1 bartender. For groups arriving all at once, a second bartender is recommended.';
-}
-
-/* -- STEPS ---------------------------------------- */
-const STEPS=[
-  'About you','Date & time','Choose your space','Guest count','Bar service','Extras','Your quote','Confirm'
+const STEPS = [
+  'About you', 'Date & time', 'Choose your space',
+  'Guest count', 'Bar service', 'Add-ons',
+  'Your quote', 'Confirm & submit'
 ];
 
-let cur=0;
-function go(n){
-  if(n<0||n>=STEPS.length)return;
-  // validation
-  if(n>cur){
-    const err=validate(cur);
-    if(err){showError(err);return;}
+// ============================================================
+// UTILITIES
+// ============================================================
+const fmt  = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtI = n => '$' + Math.round(n).toLocaleString('en-US');
+
+function fmtDate(v) {
+  if (!v) return '';
+  const [y,mo,d] = v.split('-');
+  const dt = new Date(+y, +mo-1, +d);
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mos  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return days[dt.getDay()] + ', ' + mos[+mo-1] + ' ' + parseInt(d) + ', ' + y;
+}
+
+function fmtTime(v) {
+  if (!v) return '';
+  const [h,m] = v.split(':').map(Number);
+  const ap = h >= 12 ? 'pm' : 'am';
+  const h12 = h % 12 || 12;
+  return h12 + (m ? ':' + String(m).padStart(2,'0') : '') + ' ' + ap;
+}
+
+function toMins(t) {
+  if (!t) return null;
+  const [h,m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function getDur() {
+  const s = toMins(S.start), e = toMins(S.end);
+  if (!s || !e || e <= s) return 0;
+  return (e - s) / 60;
+}
+
+function getTix() {
+  if (S.tixMode === 'fixed') return S.tixFixed || 0;
+  return (S.tixPer || 1) * S.guests;
+}
+
+function ge(id) { return document.getElementById(id); }
+
+// ============================================================
+// PRICING
+// ============================================================
+function calcBar(tier) {
+  const rate = TIERS[tier];
+  let pretax = 0;
+  if (S.barType === 'openbar') {
+    const mult = 1.5 + (S.obHrs - 1);
+    pretax = mult * rate * S.guests;
+  } else if (S.barType === 'tickets') {
+    pretax = getTix() * rate;
+  } else if (S.barType === 'cash') {
+    pretax = 1500;
+  } else {
+    pretax = S.tabMin || 1500;
   }
-  cur=n;
-  render();
+  const grat = pretax * (S.grat / 100);
+  const tax  = pretax * TAX;
+  const waived = pretax >= WAIVER;
+  return { pretax, grat, tax, sub: pretax + grat + tax, waived };
 }
 
-function validate(step){
-  if(step===0){
-    if(!S.name.trim())return'Please enter your name.';
-    if(!S.email.trim()||!S.email.includes('@'))return'Please enter a valid email address.';
+function getAddons() {
+  const dur = getDur() || 3;
+  const dj   = S.dj        ? 250  : 0;
+  const host = S.host       ? 300  : 0;
+  const st   = S.soundtech  ? 125  : 0;
+  const coat = S.coat       ? Math.max(3, S.coatHrs) * 40 : 0;
+  const food = (S.food ? 85 : 0) + (S.oven ? 150 : 0);
+  const sec  = S.security   ? Math.max(3, S.secHrs) * 40  : 0;
+  const xb   = S.xBar       ? Math.ceil(dur + 0.5) * 35   : 0;
+  const total = dj + host + st + coat + food + sec + xb;
+  return { dj, host, st, coat, food, sec, xb, total };
+}
+
+function getMinWarn() {
+  const min = SPACE_MIN[S.space] || 0;
+  if (!min || S.barType === 'cash') return null;
+  const b = calcBar(S.tier);
+  if (b.pretax < min) return { ok:false, min, pretax:b.pretax, short: min - b.pretax };
+  return { ok:true, min, pretax:b.pretax };
+}
+
+function staffNote() {
+  if (!S.guests) return '';
+  if (S.guests >= 65) return '2 bartenders + 1 busser included.' + (S.xBar ? ' Extra bartender added.' : '');
+  return '1 bartender included. For simultaneous arrivals, an extra bartender is recommended.';
+}
+
+// ============================================================
+// AVAILABILITY
+// ============================================================
+function checkAvail() {
+  if (!S.date || !S.start || !S.end) return null;
+  const dow = new Date(S.date + 'T12:00:00').getDay();
+  const s   = toMins(S.start);
+  const e   = toMins(S.end);
+  const ea  = e < s ? e + 1440 : e;
+  const DN  = ['Sundays','Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays'];
+
+  if (S.space === 'piano' || S.space === 'buyout') return { ok:true };
+
+  if (S.space === 'disco') {
+    if (dow === 0 || dow === 2) return { ok:false, msg:'The Disco is not available on ' + DN[dow] + '. Available Mon/Wed/Fri 4-10pm, Thu 4-8pm, Sat 3-8pm.' };
+    if ((dow===1||dow===3||dow===5) && (s<960||ea>1320)) return { ok:false, msg:'The Disco is available Monday, Wednesday and Friday from 4:00pm to 10:00pm. Please adjust your times.' };
+    if (dow===4 && (s<960||ea>1200)) return { ok:false, msg:'The Disco is available Thursday from 4:00pm to 8:00pm. Please adjust your times.' };
+    if (dow===6 && (s<900||ea>1200)) return { ok:false, msg:'The Disco is available Saturday from 3:00pm to 8:00pm. Please adjust your times.' };
+    return { ok:true };
   }
-  if(step===1){
-    if(!S.date)return'Please select an event date.';
-    if(!S.startTime||!S.endTime)return'Please enter start and end times.';
-    if(getDur()<=0)return'End time must be after start time.';
+
+  if (S.space === 'arizona') {
+    if (dow===2||dow===4||dow===6) return { ok:false, msg:'The Arizona Room is not available on ' + DN[dow] + '. Available Mon/Wed 10pm-2am, Fri 10pm-3am, Sun 4pm-2am.' };
+    if ((dow===1||dow===3) && (s<1320||ea>1560)) return { ok:false, msg:'The Arizona Room is available Monday and Wednesday from 10:00pm to 2:00am.' };
+    if (dow===5 && (s<1320||ea>1620)) return { ok:false, msg:'The Arizona Room is available Friday from 10:00pm to 3:00am.' };
+    if (dow===0 && (s<960||ea>1560)) return { ok:false, msg:'The Arizona Room is available Sunday from 4:00pm to 2:00am.' };
+    return { ok:true };
   }
-  if(step===2){
-    if(!S.space)return'Please select a space to continue.';
-  }
-  if(step===3){
-    if(!S.guests||S.guests<1)return'Please enter a guest count.';
-  }
-  return null;
+  return { ok:true };
 }
 
-let errMsg='';
-function showError(msg){errMsg=msg;render();}
-
-function render(){
-  errMsg=''; // only shown on next attempt
-  const fill=Math.round(((cur+1)/STEPS.length)*100);
-  document.getElementById('prog-fill').style.width=fill+'%';
-  document.getElementById('prog-cur').textContent=cur+1;
-  document.getElementById('prog-tot').textContent=STEPS.length;
-  document.getElementById('prog-name').textContent=STEPS[cur];
-  const w=document.getElementById('step-wrap');
-  w.innerHTML='';
-  const fns=[step0,step1,step2,step2b,step3,step4,step5,step6];
-  w.appendChild(fns[cur]());
-}
-
-function err(msg){
-  if(!msg)return'';
-  return`<div style="background:#2A1515;border:1px solid var(--red);border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#FFB0B0;margin-bottom:20px">${msg}</div>`;
-}
-
-/* -- STEP 0: Contact ------------------------------- */
-function step0(){
-  const d=document.createElement('div');
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
-    <div class="step-title">Let's get started.</div>
-    <div class="step-desc">Tell us a bit about yourself. We'll use this to follow up with your confirmed proposal.</div>
-    ${err(errMsg)}
-    <div class="field-group">
-      <div class="field-row cols-2">
-        <div class="field"><label>Your name</label><input type="text" id="f-name" value="${S.name}" placeholder="First & last name"/></div>
-        <div class="field"><label>Organization (optional)</label><input type="text" id="f-org" value="${S.org}" placeholder="Company, team, or group"/></div>
-      </div>
-      <div class="field-row cols-2">
-        <div class="field"><label>Email</label><input type="email" id="f-email" value="${S.email}" placeholder="you@example.com"/></div>
-        <div class="field"><label>Phone (optional)</label><input type="tel" id="f-phone" value="${S.phone}" placeholder="(212) 555-0100"/></div>
-      </div>
-      <div class="field"><label>Event type</label>
-        <select id="f-evtype">
-          <option value="personal" ${S.evtype==='personal'?'selected':''}>Personal / social</option>
-          <option value="corporate" ${S.evtype==='corporate'?'selected':''}>Business / corporate</option>
-          <option value="community" ${S.evtype==='community'?'selected':''}>Community / nonprofit</option>
-          <option value="other" ${S.evtype==='other'?'selected':''}>Other</option>
-        </select>
-      </div>
-    </div>
-    <div class="step-nav">
-      <div></div>
-      <button class="btn btn-primary" onclick="saveStep0();go(1)">Continue </button>
-    </div>`;
-  return d;
-}
-function saveStep0(){S.name=$('f-name').value;S.org=$('f-org').value;S.email=$('f-email').value;S.phone=$('f-phone').value;S.evtype=$('f-evtype').value;}
-
-/* -- STEP 1: Date & time --------------------------- */
-function step1(){
-  const d=document.createElement('div');
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
-    <div class="step-title">When is your event?</div>
-    <div class="step-desc">Pick a date and times. We will show you which spaces are available on the next step.</div>
-    ${err(errMsg)}
-    <div class="field-group">
-      <div class="field-row cols-2">
-        <div class="field"><label>Event date</label><input type="date" id="f-date" value="${S.date}" min="${new Date().toISOString().split('T')[0]}" onchange="S.date=this.value;renderAvailNote()"/></div>
-        <div class="field"><label>Date flexible?</label>
-          <select id="f-flex"><option value="no" ${!S.flexible?'selected':''}>No, this date only</option><option value="yes" ${S.flexible?'selected':''}>Yes, open to alternatives</option></select>
-        </div>
-      </div>
-      <div class="field-row cols-2">
-        <div class="field"><label>Start time</label><input type="time" id="f-start" value="${S.startTime||'18:00'}" onchange="S.startTime=this.value;renderAvailNote()"/></div>
-        <div class="field"><label>End time</label><input type="time" id="f-end" value="${S.endTime||'21:00'}" onchange="S.endTime=this.value;renderAvailNote()"/></div>
-      </div>
-    </div>
-    <div class="step-nav">
-      <button class="btn btn-ghost" onclick="saveStep1();go(0)"> Back</button>
-      <button class="btn btn-primary" onclick="saveStep1();go(2)">See available spaces </button>
-    </div>`;
-  return d;
-}
-function saveStep1(){S.date=$('f-date').value;S.flexible=$('f-flex').value==='yes';S.startTime=$('f-start').value;S.endTime=$('f-end').value;}
-
-/* -- STEP 2: Space selection (filtered by date/time) --- */
-function step2(){
-  const d=document.createElement('div');
-  const dow=S.date?new Date(S.date+'T12:00:00').getDay():-1;
-  const start=toMins(S.startTime);
-  const end=toMins(S.endTime);
-  const endAdj=end&&start&&end<start?end+1440:end;
-  const dayName=dow>=0?['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow]:'';
-
-  // Determine which spaces are open for selected date/time
-  function spaceOpen(sp){
-    if(!S.date||!S.startTime||!S.endTime) return true; // no date yet - show all
-    if(sp==='piano') return true;
-    if(sp==='buyout') return true;
-    if(sp==='disco'){
-      if(dow===2||dow===0) return false;
-      if((dow===1||dow===3||dow===5)&&(start<960||endAdj>1320)) return false;
-      if(dow===4&&(start<960||endAdj>1200)) return false;
-      if(dow===6&&(start<900||endAdj>1200)) return false;
-      return true;
-    }
-    if(sp==='arizona'){
-      if(dow===2||dow===4||dow===6) return false;
-      if((dow===1||dow===3)&&(start<1320||endAdj>1560)) return false;
-      if(dow===5&&(start<1320||endAdj>1620)) return false;
-      if(dow===0&&(start<960||endAdj>1560)) return false;
-      return true;
-    }
+function spaceOpenOn(sp) {
+  if (!S.date || !S.start || !S.end) return true;
+  const dow = new Date(S.date + 'T12:00:00').getDay();
+  const s   = toMins(S.start);
+  const e   = toMins(S.end);
+  const ea  = e < s ? e + 1440 : e;
+  if (sp === 'piano' || sp === 'buyout') return true;
+  if (sp === 'disco') {
+    if (dow===0||dow===2) return false;
+    if ((dow===1||dow===3||dow===5) && (s<960||ea>1320)) return false;
+    if (dow===4 && (s<960||ea>1200)) return false;
+    if (dow===6 && (s<900||ea>1200)) return false;
     return true;
   }
-
-  const spaces=['disco','piano','arizona','buyout'];
-  const openSpaces=spaces.filter(sp=>spaceOpen(sp));
-  const closedSpaces=spaces.filter(sp=>!spaceOpen(sp));
-  const hasDate=S.date&&S.startTime&&S.endTime;
-
-  const contextMsg=hasDate
-    ? '<div style="background:var(--lift);border:1px solid var(--rule);border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:13px;line-height:1.6">'
-      +(openSpaces.length===spaces.length
-        ? '<strong style="color:var(--white)">All spaces are available</strong> <span style="color:var(--muted)">on '+dayName+' '+fmtDate(S.date)+' for your requested times.</span>'
-        : '<strong style="color:var(--gold)">Showing spaces available</strong> <span style="color:var(--muted)">on '+dayName+' '+fmtDate(S.date)+' '+fmtTime(S.startTime)+' - '+fmtTime(S.endTime)+'.'
-          +(closedSpaces.length?' '+closedSpaces.length+' space'+(closedSpaces.length>1?'s are':' is')+' unavailable at this time.':'')+'</span>')
-      +'<div style="font-size:12px;color:var(--muted);margin-top:8px"> Need a different space? <button onclick="go(1)" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;padding:0;font-family:var(--font-body);text-decoration:underline">Change date or time</button></div>'
-      +'</div>'
-    : '<div class="avail-note" style="margin-bottom:20px">No date or time selected yet. <button onclick="go(1)" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:13px;padding:0;font-family:var(--font-body);text-decoration:underline">Go back and set a date first.</button></div>';
-
-  function spaceCard2(sp){
-    const isOpen=spaceOpen(sp);
-    const names={disco:'The Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
-    const caps={disco:'Up to 130 guests',piano:'Up to 15 guests (main floor open to all)',arizona:'Up to 25 guests',buyout:'Up to 250 guests'};
-    const mins={disco:'$1,500 bar min',piano:'$250 bar min',arizona:'$400 bar min',buyout:'$15,000+'};
-    const descs={
-      disco:'Full stage, DJ booth and dance floor.',
-      piano:'The area behind the piano is your home base - guests can spread across the full main floor.',
-      arizona:'Intimate private room at the back of the Disco. Late-night hours only.',
-      buyout:'Exclusive use of the entire venue. By arrangement.',
-    };
-    const unavailReasons={
-      disco:'Not available on '+dayName+'s at your requested time.',
-      arizona:'Not available on '+dayName+'s at your requested time.',
-    };
-    if(!isOpen){
-      return`<div class="opt-card" style="opacity:0.4;cursor:not-allowed;position:relative">
-        <div style="position:absolute;top:10px;right:10px;background:#3A1010;color:#FF8080;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500">Unavailable</div>
-        <div class="opt-name">${names[sp]}</div>
-        <div class="opt-sub">${unavailReasons[sp]||'Not available at this time.'}</div>
-      </div>`;
-    }
-    return`<div class="opt-card ${S.space===sp?'selected':''}" onclick="S.space='${sp}';document.querySelectorAll('#space-grid .opt-card:not([style*=not-allowed])').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')">
-      <div class="opt-check"></div>
-      <div class="opt-name">${names[sp]}</div>
-      <div class="opt-sub">${descs[sp]}<br><span style="font-size:11px">${caps[sp]}</span></div>
-      <div class="opt-price">${mins[sp]}</div>
-    </div>`;
+  if (sp === 'arizona') {
+    if (dow===2||dow===4||dow===6) return false;
+    if ((dow===1||dow===3) && (s<1320||ea>1560)) return false;
+    if (dow===5 && (s<1320||ea>1620)) return false;
+    if (dow===0 && (s<960||ea>1560)) return false;
+    return true;
   }
-
-  // If selected space is no longer available, reset
-  if(hasDate&&S.space&&!spaceOpen(S.space)) S.space='';
-
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
-    <div class="step-title">Choose your space.</div>
-    ${contextMsg}
-    <div class="option-grid cols-2" id="space-grid">
-      ${spaces.map(spaceCard2).join('')}
-    </div>
-    <div id="space-detail"></div>
-    <div class="step-nav">
-      <button class="btn btn-ghost" onclick="go(1)"> Back</button>
-      <button class="btn btn-primary" onclick="if(!S.space){alert('Please select a space to continue.');return;}go(3)">Continue </button>
-    </div>`;
-  // Show detail card for pre-selected space
-  setTimeout(()=>{
-    if(S.space){
-      const el=document.getElementById('space-detail');
-      if(el) el.innerHTML=spaceDetailCard(S.space);
-    }
-  },10);
-  return d;
+  return true;
 }
 
-function spaceDetailCard(sp){
-  const names={disco:'The Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
-  const mins={disco:'$1,500 bar minimum',piano:'$250 bar minimum',arizona:'$400 bar minimum',buyout:'$15,000+'};
-  const descs={
-    disco:'Full stage, DJ booth, and dance floor. Up to 130 guests.',
-    piano:'Semi-private area on the main floor. The area behind the piano is your home base - guests are welcome throughout the full main floor.',
-    arizona:'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
-    buyout:'Exclusive use of the entire venue. Up to 250 guests. By arrangement only.',
-  };
-  const schedules={
-    disco:[
-      {open:true, day:'Monday',    hours:'4:00 pm - 10:00 pm'},
-      {open:false,day:'Tuesday',   hours:'Not available'},
-      {open:true, day:'Wednesday', hours:'4:00 pm - 10:00 pm'},
-      {open:true, day:'Thursday',  hours:'4:00 pm - 8:00 pm'},
-      {open:true, day:'Friday',    hours:'4:00 pm - 10:00 pm'},
-      {open:true, day:'Saturday',  hours:'3:00 pm - 8:00 pm'},
-      {open:false,day:'Sunday',    hours:'Not available'},
+// ============================================================
+// SPACE DETAIL CARD
+// ============================================================
+function spaceDetailHTML(sp) {
+  const schedules = {
+    disco: [
+      {open:true,  day:'Monday',    hrs:'4:00 pm - 10:00 pm'},
+      {open:false, day:'Tuesday',   hrs:'Not available'},
+      {open:true,  day:'Wednesday', hrs:'4:00 pm - 10:00 pm'},
+      {open:true,  day:'Thursday',  hrs:'4:00 pm - 8:00 pm'},
+      {open:true,  day:'Friday',    hrs:'4:00 pm - 10:00 pm'},
+      {open:true,  day:'Saturday',  hrs:'3:00 pm - 8:00 pm'},
+      {open:false, day:'Sunday',    hrs:'Not available'},
     ],
-    piano:[{open:true,day:'All days',hours:'Regular business hours'}],
-    arizona:[
-      {open:true, day:'Monday',    hours:'10:00 pm - 2:00 am'},
-      {open:false,day:'Tuesday',   hours:'Not available'},
-      {open:true, day:'Wednesday', hours:'10:00 pm - 2:00 am'},
-      {open:false,day:'Thursday',  hours:'Not available'},
-      {open:true, day:'Friday',    hours:'10:00 pm - 3:00 am'},
-      {open:false,day:'Saturday',  hours:'Not available'},
-      {open:true, day:'Sunday',    hours:'4:00 pm - 2:00 am'},
+    piano: [{open:true, day:'All days', hrs:'Regular business hours'}],
+    arizona: [
+      {open:true,  day:'Monday',    hrs:'10:00 pm - 2:00 am'},
+      {open:false, day:'Tuesday',   hrs:'Not available'},
+      {open:true,  day:'Wednesday', hrs:'10:00 pm - 2:00 am'},
+      {open:false, day:'Thursday',  hrs:'Not available'},
+      {open:true,  day:'Friday',    hrs:'10:00 pm - 3:00 am'},
+      {open:false, day:'Saturday',  hrs:'Not available'},
+      {open:true,  day:'Sunday',    hrs:'4:00 pm - 2:00 am'},
     ],
-    buyout:[{open:true,day:'Selected dates',hours:'By arrangement only'}],
+    buyout: [{open:true, day:'Selected dates', hrs:'By arrangement only'}],
   };
-  const rows=(schedules[sp]||[]).map(r=>`<div class="avail-row ${r.open?'open':'closed'}">
-    <span class="ar-icon">${r.open?'✓':'✕'}</span>
-    <span class="ar-day">${r.day}</span>
-    <span class="ar-hours">${r.hours}</span>
-  </div>`).join('');
-  return `<div class="space-avail-card" style="margin-top:16px">
-    <div class="space-avail-head">
-      <span class="sah-name">${names[sp]||sp}</span>
-      <span class="sah-min">${mins[sp]||''}</span>
+  const descs = {
+    disco:   'Full stage, DJ booth and dance floor. Up to 130 guests.',
+    piano:   'The area behind the piano is your home base - guests are welcome throughout the full main floor. Up to 15 guests.',
+    arizona: 'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
+    buyout:  'Exclusive use of the entire venue. Up to 250 guests. By arrangement only.',
+  };
+  const rows = (schedules[sp] || []).map(r =>
+    `<div class="avail-row ${r.open ? 'open' : 'closed'}">
+      <span class="ar-icon">${r.open ? '&#10003;' : '&#10005;'}</span>
+      <span class="ar-day">${r.day}</span>
+      <span class="ar-hrs">${r.hrs}</span>
+    </div>`
+  ).join('');
+  return `<div class="avail-card">
+    <div class="avail-card-head">
+      <span class="acn">${SPACE_NAME[sp] || sp}</span>
+      <span class="acm">${fmt(SPACE_MIN[sp] || 0).replace('.00','')} bar min</span>
     </div>
-    <div class="space-avail-body">
-      <div class="sab-desc">${descs[sp]||''}</div>
-      <div class="avail-grid">${rows}</div>
+    <div class="avail-card-body">
+      <div class="avail-card-desc">${descs[sp] || ''}</div>
+      <div class="avail-rows">${rows}</div>
     </div>
   </div>`;
 }
 
-/* -- STEP 2b: Guest count --------------------------- */
-function step2b(){
-  const d=document.createElement('div');
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
-    <div class="step-title">Guest count.</div>
-    <div class="step-desc">How many guests are you expecting? This affects bar pricing, staffing, and capacity.</div>
-    ${err(errMsg)}
-    <div class="field-group">
+// ============================================================
+// ROUTING
+// ============================================================
+let cur = 0;
+let errMsg = '';
+
+const PAGES = [p0, p1, p2, p3, p4, p5, p6, p7];
+
+function go(n) {
+  if (n < 0 || n >= PAGES.length) return;
+  if (n > cur) {
+    const e = validate(cur);
+    if (e) { errMsg = e; render(); return; }
+  }
+  errMsg = '';
+  cur = n;
+  render();
+}
+
+function validate(step) {
+  if (step === 0) {
+    if (!S.name.trim()) return 'Please enter your name.';
+    if (!S.email.trim() || !S.email.includes('@')) return 'Please enter a valid email.';
+  }
+  if (step === 1) {
+    if (!S.date) return 'Please select a date.';
+    if (!S.start || !S.end) return 'Please enter start and end times.';
+    if (getDur() <= 0) return 'End time must be after start time.';
+  }
+  if (step === 2) {
+    if (!S.space) return 'Please select a space.';
+    const av = checkAvail();
+    if (av && !av.ok) return av.msg;
+  }
+  if (step === 3) {
+    if (!S.guests || S.guests < 1) return 'Please enter your guest count.';
+  }
+  return null;
+}
+
+function render() {
+  const pct = Math.round(((cur + 1) / PAGES.length) * 100);
+  ge('prog-fill').style.width = pct + '%';
+  ge('prog-cur').textContent  = cur + 1;
+  ge('prog-tot').textContent  = PAGES.length;
+  ge('prog-name').textContent = STEPS[cur];
+  ge('app').innerHTML = '';
+  const el = PAGES[cur]();
+  ge('app').appendChild(el);
+  window.scrollTo(0, 0);
+}
+
+function errBox() {
+  if (!errMsg) return '';
+  const m = errMsg;
+  return `<div class="alert alert-warn" style="margin-bottom:18px"><strong>&#10005; Please check the following</strong>${m}</div>`;
+}
+
+// ============================================================
+// PAGE 0 - ABOUT YOU
+// ============================================================
+function p0() {
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <div class="eyebrow">Step 1 of ${PAGES.length}</div>
+    <div class="step-title">Let's get started.</div>
+    <div class="step-desc">Tell us about yourself. We'll use this to follow up with your proposal.</div>
+    ${errBox()}
+    <div class="fields">
+      <div class="row2">
+        <div class="field"><label>Your name</label><input id="f0-name" type="text" placeholder="First &amp; last name" value="${S.name}"/></div>
+        <div class="field"><label>Organization (optional)</label><input id="f0-org" type="text" placeholder="Company or group" value="${S.org}"/></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Email</label><input id="f0-email" type="email" placeholder="you@example.com" value="${S.email}"/></div>
+        <div class="field"><label>Phone (optional)</label><input id="f0-phone" type="tel" placeholder="(212) 555-0100" value="${S.phone}"/></div>
+      </div>
+      <div class="field"><label>Event type</label>
+        <select id="f0-type">
+          <option value="personal" ${S.evtype==='personal'?'selected':''}>Personal / social</option>
+          <option value="corporate" ${S.evtype==='corporate'?'selected':''}>Business / corporate</option>
+          <option value="community" ${S.evtype==='community'?'selected':''}>Community / nonprofit</option>
+        </select>
+      </div>
+    </div>
+    <div class="nav">
+      <div></div>
+      <button class="btn btn-p" onclick="save0();go(1)">Continue &rarr;</button>
+    </div>`;
+  return el;
+}
+function save0() {
+  S.name   = ge('f0-name').value.trim();
+  S.org    = ge('f0-org').value.trim();
+  S.email  = ge('f0-email').value.trim();
+  S.phone  = ge('f0-phone').value.trim();
+  S.evtype = ge('f0-type').value;
+}
+
+// ============================================================
+// PAGE 1 - DATE & TIME
+// ============================================================
+function p1() {
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <div class="eyebrow">Step 2 of ${PAGES.length}</div>
+    <div class="step-title">When is your event?</div>
+    <div class="step-desc">Pick a date and your preferred start and end times. We'll show you available spaces on the next step.</div>
+    ${errBox()}
+    <div class="fields">
+      <div class="row2">
+        <div class="field"><label>Event date</label>
+          <input id="f1-date" type="date" value="${S.date}" min="${new Date().toISOString().split('T')[0]}"/>
+        </div>
+        <div class="field"><label>Date flexible?</label>
+          <select id="f1-flex">
+            <option value="no" ${!S.flex?'selected':''}>No - this date only</option>
+            <option value="yes" ${S.flex?'selected':''}>Yes - open to alternatives</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Start time</label>
+          <input id="f1-start" type="time" value="${S.start || '18:00'}"/>
+        </div>
+        <div class="field"><label>End time</label>
+          <input id="f1-end" type="time" value="${S.end || '21:00'}"/>
+        </div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-g" onclick="save1();go(0)">&larr; Back</button>
+      <button class="btn btn-p" onclick="save1();go(2)">See available spaces &rarr;</button>
+    </div>`;
+  return el;
+}
+function save1() {
+  S.date  = ge('f1-date').value;
+  S.flex  = ge('f1-flex').value === 'yes';
+  S.start = ge('f1-start').value;
+  S.end   = ge('f1-end').value;
+}
+
+// ============================================================
+// PAGE 2 - CHOOSE YOUR SPACE
+// ============================================================
+function p2() {
+  const el = document.createElement('div');
+  const hasDate = S.date && S.start && S.end;
+  const dow     = hasDate ? new Date(S.date + 'T12:00:00').getDay() : -1;
+  const dayName = dow >= 0 ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow] : '';
+
+  const spaces = ['disco','piano','arizona','buyout'];
+  const open   = spaces.filter(sp => spaceOpenOn(sp));
+  const closed = spaces.filter(sp => !spaceOpenOn(sp));
+
+  // If previously selected space is now unavailable, clear it
+  if (S.space && !spaceOpenOn(S.space)) S.space = '';
+
+  const bannerHTML = hasDate
+    ? `<div class="ctx-banner">
+        <strong style="color:var(--white)">${open.length === spaces.length ? 'All spaces are available' : open.length + ' of 4 spaces available'}</strong>
+        <span style="color:var(--muted)"> on ${dayName} ${fmtDate(S.date)} for ${fmtTime(S.start)} - ${fmtTime(S.end)}.</span>
+        ${closed.length ? `<span style="color:var(--muted)"> ${closed.map(sp=>SPACE_NAME[sp]).join(' and ')} ${closed.length>1?'are':'is'} not available at this time.</span>` : ''}
+        <button class="ctx-change" onclick="go(1)">&#8592; Change date or time</button>
+      </div>`
+    : `<div class="alert alert-info" style="margin-bottom:20px">No date selected yet. <button onclick="go(1)" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:13px;padding:0;font-family:var(--font-b);text-decoration:underline">Go back and pick a date first.</button></div>`;
+
+  const spaceCards = spaces.map(sp => {
+    const isOpen = spaceOpenOn(sp);
+    const isSel  = S.space === sp;
+    const caps   = {disco:'Up to 130 guests', piano:'Up to 15 guests', arizona:'Up to 25 guests', buyout:'Up to 250 guests'};
+    const descs  = {
+      disco:   'Full stage, DJ booth and dance floor.',
+      piano:   'Home base behind the piano - guests welcome throughout the main floor.',
+      arizona: 'Intimate back room of the Disco. Late-night only.',
+      buyout:  'Exclusive use of entire venue. By arrangement.',
+    };
+    if (!isOpen) {
+      return `<div class="opt-card disabled">
+        <div class="unavail-badge">Unavailable</div>
+        <div class="cn">${SPACE_NAME[sp]}</div>
+        <div class="cs">${descs[sp]}<br><span style="font-size:11px">${caps[sp]}</span></div>
+        <div class="cp">${fmt(SPACE_MIN[sp]).replace('.00','')} minimum</div>
+      </div>`;
+    }
+    return `<div class="opt-card${isSel?' sel':''}" id="sc-${sp}" onclick="selectSpace('${sp}')">
+      <div class="check"></div>
+      <div class="cn">${SPACE_NAME[sp]}</div>
+      <div class="cs">${descs[sp]}<br><span style="font-size:11px">${caps[sp]}</span></div>
+      <div class="cp">${fmt(SPACE_MIN[sp]).replace('.00','')} minimum</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="eyebrow">Step 3 of ${PAGES.length}</div>
+    <div class="step-title">Choose your space.</div>
+    ${bannerHTML}
+    ${errBox()}
+    <div class="opt-grid g2">${spaceCards}</div>
+    <div id="space-detail">${S.space ? spaceDetailHTML(S.space) : ''}</div>
+    <div class="nav">
+      <button class="btn btn-g" onclick="go(1)">&larr; Back</button>
+      <button class="btn btn-p" onclick="go(3)">Continue &rarr;</button>
+    </div>`;
+  return el;
+}
+
+function selectSpace(sp) {
+  S.space = sp;
+  document.querySelectorAll('.opt-grid .opt-card').forEach(c => c.classList.remove('sel'));
+  const card = ge('sc-' + sp);
+  if (card) card.classList.add('sel');
+  const detail = ge('space-detail');
+  if (detail) detail.innerHTML = spaceDetailHTML(sp);
+}
+
+// ============================================================
+// PAGE 3 - GUEST COUNT
+// ============================================================
+function p3() {
+  const el = document.createElement('div');
+  el.innerHTML = `
+    <div class="eyebrow">Step 4 of ${PAGES.length}</div>
+    <div class="step-title">How many guests?</div>
+    <div class="step-desc">Your best estimate is fine - we can adjust later. This affects staffing and bar pricing.</div>
+    ${errBox()}
+    <div class="fields">
       <div class="field">
         <label>Expected guest count</label>
-        <input type="number" id="f-guests" value="${S.guests||''}" min="1" max="250" placeholder="e.g. 75"/>
-        <div class="field-hint">Disco: up to 130 . Arizona Room: up to 25 . Piano area: up to 15 . Full buyout: up to 250</div>
+        <input id="f3-guests" type="number" min="1" max="250" placeholder="e.g. 75" value="${S.guests || ''}"/>
+        <div class="hint">Disco: max 130 &middot; Arizona Room: max 25 &middot; Piano area: max 15 &middot; Full buyout: max 250</div>
       </div>
-      <div class="field"><label>Arrival style</label>
-        <select id="f-arrival">
-          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual - guests trickle in over the event</option>
-          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once - e.g. a bus or organized group arrival</option>
+      <div class="field">
+        <label>Arrival style</label>
+        <select id="f3-arrival">
+          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual - guests arrive throughout the event</option>
+          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once - bus drop-off or coordinated arrival</option>
         </select>
-        <div class="field-hint">Simultaneous arrivals may benefit from an extra bartender to handle the initial rush.</div>
+        <div class="hint">Simultaneous arrivals may benefit from an extra bartender.</div>
       </div>
     </div>
-    <div class="step-nav">
-      <button class="btn btn-ghost" onclick="saveStep2b();go(2)"> Back</button>
-      <button class="btn btn-primary" onclick="saveStep2b();go(4)">Continue </button>
+    <div class="nav">
+      <button class="btn btn-g" onclick="save3();go(2)">&larr; Back</button>
+      <button class="btn btn-p" onclick="save3();go(4)">Continue &rarr;</button>
     </div>`;
-  return d;
+  return el;
 }
-function saveStep2b(){S.guests=parseInt($('f-guests').value)||0;S.arrival=$('f-arrival').value;}
+function save3() {
+  S.guests  = parseInt(ge('f3-guests').value) || 0;
+  S.arrival = ge('f3-arrival').value;
+}
 
-/* -- STEP 3: Bar service --------------------------- */
-function step3(){
-  const d=document.createElement('div');
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
+// ============================================================
+// PAGE 4 - BAR SERVICE
+// ============================================================
+function p4() {
+  const el = document.createElement('div');
+
+  const barTypes = [
+    ['openbar', 'Prepaid Open Bar', 'Unlimited drinks for the duration of the event.', 'Per person / per hour'],
+    ['tickets', 'Drink Tickets',    'Guests each receive a set number of prepaid drinks.', 'Per ticket'],
+    ['cash',    'Cash Bar',         '$1,500 consumption minimum. Guests pay individually.', '$1,500 minimum'],
+    ['tab',     'Single-Payer Tab', 'One card on file, settled at end of event.', 'Settled night-of + 20% grat'],
+  ];
+
+  const tierCards = [1,2,3].map(t => {
+    const descs = {
+      1: 'Well spirits, beer, wine, frozen cocktails, soft drinks',
+      2: '+ Call brands, craft beer, prosecco, cordials',
+      3: '+ Top shelf, champagne by the glass',
+    };
+    return `<div class="opt-card${S.tier===t?' sel':''}" id="tier-${t}" onclick="selectTier(${t})">
+      <div class="check"></div>
+      <div class="cn">${TNAMES[t]}</div>
+      <div class="cs">${descs[t]}</div>
+      <div class="cp">$${TIERS[t]}/ticket</div>
+    </div>`;
+  }).join('');
+
+  const showTiers = S.barType !== 'cash' && S.barType !== 'tab';
+  const showOB    = S.barType === 'openbar';
+  const showTix   = S.barType === 'tickets';
+  const showTab   = S.barType === 'tab';
+
+  el.innerHTML = `
+    <div class="eyebrow">Step 5 of ${PAGES.length}</div>
     <div class="step-title">Bar service.</div>
     <div class="step-desc">Choose how you would like bar service structured for your event.</div>
-    ${err(errMsg)}
-    <div class="option-grid cols-2" id="bartype-grid">
-      ${[
-        ['openbar','Prepaid Open Bar','Unlimited drinks for the duration. Best for full hospitality.','Per person, per hour'],
-        ['tickets','Drink Tickets','Guests receive a set number of prepaid drinks.','Per ticket'],
-        ['cash','Cash Bar','$1,500 consumption minimum. Guests pay individually.','$1,500 minimum'],
-        ['tab','Single-Payer Tab','One card on file. Settled at end of event + 20% gratuity.','Settled night-of'],
-      ].map(([val,name,sub,price])=>`
-        <div class="opt-card ${S.barType===val?'selected':''}" onclick="setBarType('${val}')">
-          <div class="opt-check"></div>
-          <div class="opt-name">${name}</div>
-          <div class="opt-sub">${sub}</div>
-          <div class="opt-price">${price}</div>
-        </div>`).join('')}
+    <div class="opt-grid g2" id="bt-grid">
+      ${barTypes.map(([val,name,sub,price]) =>
+        `<div class="opt-card${S.barType===val?' sel':''}" onclick="selectBarType('${val}')">
+          <div class="check"></div>
+          <div class="cn">${name}</div>
+          <div class="cs">${sub}</div>
+          <div class="cp">${price}</div>
+        </div>`
+      ).join('')}
     </div>
-
-    <div id="tier-section" class="${S.barType==='cash'||S.barType==='tab'?'hidden':''}">
-      <div style="margin:20px 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Spirit tier</div>
-      <div class="option-grid cols-3" id="tier-grid">
-        ${[1,2,3].map(t=>`
-          <div class="opt-card ${S.tier===t?'selected':''}" onclick="S.tier=${t};document.querySelectorAll('#tier-grid .opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected');updateBarCalc()" id="t${t}-card">
-            <div class="opt-check"></div>
-            <div class="opt-name">${TN[t]}</div>
-            <div class="opt-price">$${TR[t]}/ticket</div>
-            <div class="opt-sub" style="margin-top:4px;font-size:11px">${['Well spirits, beer, wine, frozen, soft drinks','+ Call brands, craft beer, prosecco','+ Top shelf, champagne by the glass'][t-1]}</div>
-          </div>`).join('')}
-      </div>
-      <div id="bar-calc" style="margin-top:16px"></div>
+    <div id="tier-section" style="${showTiers?'':'display:none'}">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:10px">Spirit tier</div>
+      <div class="opt-grid g3" id="tier-grid">${tierCards}</div>
     </div>
-
-    <div id="ob-section" class="${S.barType!=='openbar'?'hidden':''}">
-      <div class="field-row cols-2" style="margin-top:16px">
-        <div class="field"><label>Duration (hours)</label><input type="number" id="f-obhrs" value="${S.obHrs||3}" min="1" max="8" step="0.5" oninput="S.obHrs=parseFloat(this.value)||3;updateBarCalc()"/></div>
+    <div id="ob-fields" style="${showOB?'':'display:none'}">
+      <div class="row2" style="margin-top:12px">
+        <div class="field"><label>Duration (hours)</label>
+          <input id="f4-hrs" type="number" min="1" max="8" step="0.5" value="${S.obHrs}" oninput="S.obHrs=parseFloat(this.value)||1;refreshPreview()"/>
+        </div>
       </div>
     </div>
-
-    <div id="tix-section" class="${S.barType!=='tickets'?'hidden':''}">
-      <div class="field" style="margin-top:16px"><label>Ticket quantity method</label>
-        <select id="f-tixmode" onchange="S.tixMode=this.value;toggleTixFields();updateBarCalc()">
+    <div id="tix-fields" style="${showTix?'':'display:none'}">
+      <div class="field" style="margin-top:12px"><label>Ticket quantity</label>
+        <select id="f4-tixmode" onchange="S.tixMode=this.value;refreshTixFields();refreshPreview()">
           <option value="per-guest" ${S.tixMode!=='fixed'?'selected':''}>Per guest (tickets x guest count)</option>
           <option value="fixed" ${S.tixMode==='fixed'?'selected':''}>Fixed total (specific number of tickets)</option>
         </select>
       </div>
-      <div class="field-row cols-2" style="margin-top:12px" id="tix-per-row" class="${S.tixMode==='fixed'?'hidden':''}">
-        <div class="field"><label>Tickets per guest</label><input type="number" id="f-tixper" value="${S.tixPer||3}" min="1" oninput="S.tixPer=parseInt(this.value)||1;updateBarCalc()"/></div>
-        <div class="field"><label>Total tickets (auto)</label><input type="text" id="f-tixtotal" readonly style="background:var(--lift);color:var(--muted);font-family:var(--font-mono)"/></div>
+      <div class="row2" style="margin-top:10px" id="tix-per-row" ${S.tixMode==='fixed'?'style="display:none"':''}>
+        <div class="field"><label>Tickets per guest</label>
+          <input id="f4-tixper" type="number" min="1" value="${S.tixPer}" oninput="S.tixPer=parseInt(this.value)||1;refreshPreview()"/>
+        </div>
+        <div class="field"><label>Total (auto)</label>
+          <input type="text" readonly style="background:var(--lift);color:var(--muted);font-family:var(--font-m)" id="f4-tixtotal" value="${getTix()} tickets"/>
+        </div>
       </div>
-      <div class="field" style="margin-top:12px;${S.tixMode!=='fixed'?'display:none':''}" id="tix-fixed-row">
-        <label>Total tickets</label><input type="number" id="f-tixfixed" value="${S.tixFixed||100}" min="1" oninput="S.tixFixed=parseInt(this.value)||100;updateBarCalc()"/>
+      <div class="field" style="margin-top:10px;${S.tixMode==='fixed'?'':'display:none'}" id="tix-fixed-row">
+        <label>Total tickets</label>
+        <input id="f4-tixfixed" type="number" min="1" value="${S.tixFixed}" oninput="S.tixFixed=parseInt(this.value)||1;refreshPreview()"/>
       </div>
     </div>
-
-    <div id="tab-section" class="${S.barType!=='tab'?'hidden':''}">
-      <div class="field" style="margin-top:16px"><label>Agreed minimum ($)</label><input type="number" id="f-tabmin" value="${S.tabMin||1500}" min="1500" oninput="S.tabMin=parseFloat(this.value)||1500;updateBarCalc()"/></div>
-    </div>
-
-    <div id="min-warning-bar"></div>
-
-    <div style="margin-top:24px" class="step-nav">
-      <button class="btn btn-ghost" onclick="go(3)"> Back</button>
-      <button class="btn btn-primary" onclick="const _mw=getMinWarning();if(_mw&&!_mw.ok){updateMinWarning();return;}go(4)">Continue </button>
-    </div>`;
-  setTimeout(updateBarCalc, 10);
-  return d;
-}
-function setBarType(val){
-  S.barType=val;
-  document.querySelectorAll('#bartype-grid .opt-card').forEach(c=>c.classList.remove('selected'));
-  const tierSec=document.getElementById('tier-section');
-  const obSec=document.getElementById('ob-section');
-  const tixSec=document.getElementById('tix-section');
-  const tabSec=document.getElementById('tab-section');
-  if(tierSec) tierSec.classList.toggle('hidden',val==='cash'||val==='tab');
-  if(obSec) obSec.classList.toggle('hidden',val!=='openbar');
-  if(tixSec) tixSec.classList.toggle('hidden',val!=='tickets');
-  if(tabSec) tabSec.classList.toggle('hidden',val!=='tab');
-  updateBarCalc();
-}
-function toggleTixFields(){
-  const m=S.tixMode;
-  const perRow=document.getElementById('tix-per-row');
-  const fixRow=document.getElementById('tix-fixed-row');
-  if(perRow)perRow.style.display=m==='fixed'?'none':'grid';
-  if(fixRow)fixRow.style.display=m!=='fixed'?'none':'block';
-}
-function updateMinWarning(){
-  const el=document.getElementById('min-warning-bar');if(!el)return;
-  const mw=getMinWarning();
-  if(!mw||mw.ok){el.innerHTML='';return;}
-  el.innerHTML='<div class="avail-warn-block" style="margin-top:16px"><strong style="color:#FF8080;font-size:15px;display:block;margin-bottom:6px">&#10005; Bar minimum not met.</strong><span style="color:#FFB0B0;font-size:13px">'+SPACE_NAMES[S.space]+' requires a $'+mw.min.toLocaleString()+' pre-tax bar minimum. Your current selection generates $'+Math.round(mw.pretax).toLocaleString()+' — you are $'+Math.round(mw.short).toLocaleString()+' short. Increase your guest count, add more tickets, or choose a higher tier.</span></div>';
-}
-
-function updateBarCalc(){
-  const el=document.getElementById('bar-calc');if(!el)return;
-  if(S.barType==='cash'||S.barType==='tab'){el.innerHTML='';return;}
-  const b=calcBar(S.tier);
-  const tix=getTix();
-  const totalTixEl=document.getElementById('f-tixtotal');
-  if(totalTixEl)totalTixEl.value=tix+' tickets';
-  const mult=S.barType==='openbar'?1.5+(S.obHrs-1):null;
-  const rate=TR[S.tier];
-  let detail='';
-  if(S.barType==='openbar')detail=`${S.obHrs} hrs . ${mult.toFixed(1)}x $${rate} = ${fmt(mult*rate)}/person pre-tax . ${S.guests} guests`;
-  else detail=`${tix} tickets . $${rate}/ticket`;
-  const waived=b.pretax>WAIVER;
-  el.innerHTML=`
-    <div style="background:var(--lift);border-radius:var(--radius);padding:12px 14px;font-size:12px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Bar pretax</span><span style="font-family:var(--font-mono);color:var(--white)">${fmt(b.pretax)}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Gratuity (${S.grat}%)</span><span style="font-family:var(--font-mono);color:var(--white)">${fmt(b.grat)}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:var(--muted)">Sales tax (8.875%)</span><span style="font-family:var(--font-mono);color:var(--white)">${fmt(b.tax)}</span></div>
-      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:8px"><span style="color:var(--muted)">Rental fee</span>
-        <span style="font-family:var(--font-mono)">${waived?'<span style="text-decoration:line-through;color:var(--rule)">$400.00</span> <span class="waiver-pill">waived</span>':'<span style="color:var(--white)">$400.00</span>'}</span>
+    <div id="tab-fields" style="${showTab?'':'display:none'}">
+      <div class="field" style="margin-top:12px"><label>Agreed minimum</label>
+        <input id="f4-tabmin" type="number" min="1500" value="${S.tabMin}" oninput="S.tabMin=parseFloat(this.value)||1500;refreshPreview()"/>
       </div>
-      ${waived?'<div style="font-size:11px;color:var(--green);font-style:italic;margin-top:4px">Bar purchase exceeds $2,800 threshold  -  rental fee waived.</div>':'<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${fmt(WAIVER-b.pretax)} more in bar purchases would waive the $400 fee.</div>'}
-      <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${detail}</div>
+    </div>
+    <div id="price-preview"></div>
+    <div id="min-warning"></div>
+    <div class="nav" style="margin-top:20px">
+      <button class="btn btn-g" onclick="go(3)">&larr; Back</button>
+      <button class="btn btn-p" id="bar-continue" onclick="go(5)">Continue &rarr;</button>
     </div>`;
-  updateMinWarning();
+
+  // Init preview after render
+  setTimeout(() => { refreshPreview(); refreshTixFields(); }, 10);
+  return el;
 }
 
-/* -- STEP 4: Extras -------------------------------- */
-function step4(){
-  const d=document.createElement('div');
-  const rows=[
-    {k:'dj',name:'House DJ',sub:'Up to 4 hrs flat rate',price:'$250'},
-    {k:'host',name:'Drag host',sub:'Performance, hosting & MC . up to 4 hrs',price:'$300'},
-    {k:'soundtech',name:'Sound technician',sub:'Required for A/V presentations',price:'$125'},
-    {k:'coat',name:'Attended coat check',sub:`$40/hr . 3 hr minimum`,price:'$120+'},
-    {k:'food',name:'Food & catering setup',sub:'Table setup, delivery receiving, cooler, cleanup',price:'$85'},
-    {k:'security',name:'Security',sub:'$40/hr . 3 hr minimum',price:'$120+'},
-    {k:'xBar',name:'Additional bartender',sub:'Recommended for 65+ guests or simultaneous arrivals',price:'~$105'},
-    {k:'dancers',name:'Go-go dancers',sub:'Starting ~$150/dancer for 3 hrs . subject to availability',price:'$150+'},
+function selectBarType(val) {
+  S.barType = val;
+  document.querySelectorAll('#bt-grid .opt-card').forEach(c => c.classList.remove('sel'));
+  event.currentTarget.classList.add('sel');
+  const showTiers = val !== 'cash' && val !== 'tab';
+  ge('tier-section').style.display = showTiers ? '' : 'none';
+  ge('ob-fields').style.display    = val === 'openbar'  ? '' : 'none';
+  ge('tix-fields').style.display   = val === 'tickets'  ? '' : 'none';
+  ge('tab-fields').style.display   = val === 'tab'      ? '' : 'none';
+  refreshPreview();
+}
+
+function selectTier(t) {
+  S.tier = t;
+  document.querySelectorAll('#tier-grid .opt-card').forEach(c => c.classList.remove('sel'));
+  const card = ge('tier-' + t);
+  if (card) card.classList.add('sel');
+  refreshPreview();
+}
+
+function refreshTixFields() {
+  const fixed = S.tixMode === 'fixed';
+  const perRow   = ge('tix-per-row');
+  const fixedRow = ge('tix-fixed-row');
+  if (perRow)   perRow.style.display   = fixed ? 'none' : '';
+  if (fixedRow) fixedRow.style.display = fixed ? '' : 'none';
+  const tot = ge('f4-tixtotal');
+  if (tot) tot.value = getTix() + ' tickets';
+}
+
+function refreshPreview() {
+  const pp = ge('price-preview');
+  const mw = ge('min-warning');
+  const bc = ge('bar-continue');
+  if (!pp) return;
+
+  if (S.barType === 'cash' || S.barType === 'tab') {
+    pp.innerHTML = '';
+    if (mw) mw.innerHTML = '';
+    return;
+  }
+
+  const b   = calcBar(S.tier);
+  const tix = getTix();
+  const dur = S.barType === 'openbar' ? S.obHrs : null;
+  const mult = dur ? (1.5 + (dur - 1)).toFixed(1) : null;
+  const detail = S.barType === 'openbar'
+    ? `${dur} hrs &middot; ${mult}&times; $${TIERS[S.tier]} = ${fmt(mult * TIERS[S.tier])}/person pre-tax &middot; ${S.guests} guests`
+    : `${tix} tickets &middot; $${TIERS[S.tier]}/ticket`;
+
+  pp.innerHTML = `<div class="price-preview">
+    <div class="pp-row"><span class="pp-lbl">Bar subtotal (pre-tax)</span><span class="pp-val">${fmt(b.pretax)}</span></div>
+    <div class="pp-row"><span class="pp-lbl">Gratuity (${S.grat}%)</span><span class="pp-val">${fmt(b.grat)}</span></div>
+    <div class="pp-row"><span class="pp-lbl">Sales tax (8.875%)</span><span class="pp-val">${fmt(b.tax)}</span></div>
+    <div class="pp-row"><span class="pp-lbl">Space rental</span><span class="pp-val">${b.waived ? '<span class="waiver-pill">waived</span>' : fmt(RENTAL)}</span></div>
+    ${b.waived ? '<div class="pp-waiver">&#10003; Bar purchase exceeds $2,800 &mdash; rental fee waived</div>' : ''}
+    <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:4px">${detail}</div>
+  </div>`;
+
+  // Min warning
+  const warn = getMinWarn();
+  if (mw) {
+    if (warn && !warn.ok) {
+      mw.innerHTML = `<div class="alert alert-warn" style="margin-top:12px">
+        <strong>&#10005; Bar minimum not met</strong>
+        ${SPACE_NAME[S.space]} requires a ${fmt(warn.min).replace('.00','')} pre-tax bar minimum.
+        Your selection generates ${fmtI(warn.pretax)} &mdash; you are ${fmtI(warn.short)} short.
+        Increase guest count, add more tickets, or choose a higher tier.
+      </div>`;
+      if (bc) bc.disabled = true;
+    } else {
+      mw.innerHTML = warn ? `<div class="alert alert-ok" style="margin-top:12px"><strong>&#10003; Bar minimum met</strong> ${fmtI(warn.pretax)} pre-tax &mdash; ${SPACE_NAME[S.space]} minimum of ${fmt(warn.min).replace('.00','')} cleared.</div>` : '';
+      if (bc) bc.disabled = false;
+    }
+  }
+
+  const tot = ge('f4-tixtotal');
+  if (tot) tot.value = tix + ' tickets';
+}
+
+// ============================================================
+// PAGE 5 - ADD-ONS
+// ============================================================
+function p5() {
+  const el = document.createElement('div');
+  const addons = [
+    {k:'dj',        name:'House DJ',                sub:'Up to 4 hrs flat rate',                         price:'$250'},
+    {k:'host',      name:'Drag host',               sub:'Performance, hosting & MC - up to 4 hrs',       price:'$300'},
+    {k:'soundtech', name:'Sound technician',        sub:'Required for A/V presentations',                 price:'$125'},
+    {k:'coat',      name:'Attended coat check',     sub:'$40/hr - 3 hr minimum',                         price:'$120+'},
+    {k:'food',      name:'Food & catering setup',   sub:'Table setup, delivery receiving & cleanup',      price:'$85'},
+    {k:'security',  name:'Security',                sub:'$40/hr - 3 hr minimum',                         price:'$120+'},
+    {k:'xBar',      name:'Additional bartender',    sub:'Recommended for 65+ guests or bus arrivals',     price:'~$105'},
+    {k:'dancers',   name:'Go-go dancers',           sub:'Starting ~$150/dancer for 3 hrs - subject to availability', price:'$150+'},
   ];
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
+
+  el.innerHTML = `
+    <div class="eyebrow">Step 6 of ${PAGES.length}</div>
     <div class="step-title">Add-ons.</div>
-    <div class="step-desc">All optional. Toggle anything you would like included  -  pricing updates on the quote.</div>
+    <div class="step-desc">All optional. Toggle anything you would like included.</div>
     <div class="toggle-list">
-      ${rows.map(r=>`
-        <div class="toggle-row ${S[r.k]?'active':''}" onclick="S['${r.k}']=!S['${r.k}'];this.classList.toggle('active')">
-          <div class="tr-left">
-            <div class="tr-name">${r.name}</div>
-            <div class="tr-sub">${r.sub}</div>
+      ${addons.map(a => `
+        <div class="tgl-row${S[a.k]?' on':''}" onclick="toggleAddon('${a.k}',this)">
+          <div class="tl">
+            <div class="tn">${a.name}</div>
+            <div class="ts">${a.sub}</div>
           </div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <div class="tr-price">${r.price}</div>
-            <div class="toggle-switch"></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="tp">${a.price}</div>
+            <div class="tgl-sw"></div>
           </div>
         </div>`).join('')}
     </div>
-    ${S.arrival==='simultaneous'&&!S.xBar?'<div class="avail-note avail-warn"><strong>Note:</strong> You indicated guests are arriving all at once. We recommend adding an extra bartender to handle the initial rush.</div>':''}
-    <div class="step-nav">
-      <button class="btn btn-ghost" onclick="go(4)"> Back</button>
-      <button class="btn btn-primary" onclick="go(5)">See your quote </button>
+    ${S.arrival==='simultaneous'&&!S.xBar ? `<div class="alert alert-warn" style="margin-bottom:20px"><strong>Heads up</strong>You indicated guests arrive all at once. Consider adding an extra bartender to handle the initial rush.</div>` : ''}
+    <div class="nav">
+      <button class="btn btn-g" onclick="go(4)">&larr; Back</button>
+      <button class="btn btn-p" onclick="go(6)">See your quote &rarr;</button>
     </div>`;
-  return d;
+  return el;
 }
 
-/* -- STEP 5: Quote --------------------------------- */
-function step5(){
-  const d=document.createElement('div');
-  const addons=getAddons();
-  const dur=getDur();
+function toggleAddon(key, row) {
+  S[key] = !S[key];
+  row.classList.toggle('on', S[key]);
+}
 
-  // Build all-tier comparison
-  const bars=[1,2,3].map(t=>calcBar(t));
-  const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
+// ============================================================
+// PAGE 6 - QUOTE
+// ============================================================
+function p6() {
+  const el = document.createElement('div');
+  const addons = getAddons();
+  const dur    = getDur();
 
-  const fmtAmt=n=>n?fmt(n):' - ';
+  // All-tier table
+  const bars   = [1,2,3].map(t => calcBar(t));
+  const totals = bars.map(b => b.sub + (b.waived ? 0 : RENTAL) + addons.total);
+  const deps   = bars.map((b,i) => b.waived ? 0 : RENTAL);
 
-  const addonRows=[
-    [S.dj,'House DJ (up to 4 hrs)',fmt(addons.dj)],
-    [S.host,'Drag host (up to 4 hrs)',fmt(addons.host)],
-    [S.soundtech,'Sound technician',fmt(addons.st)],
-    [S.coat,'Attended coat check',fmt(addons.coat)],
-    [S.food,'Food & catering setup',fmt(addons.food)],
-    [S.security,'Security',fmt(addons.sec)],
-    [S.xBar,'Additional bartender',fmt(addons.xb)],
-    [S.dancers,'Go-go dancers','TBD'],
-  ].filter(([show])=>show);
+  const svcLabel = S.barType === 'openbar'
+    ? `Open bar &middot; ${S.obHrs} hrs &middot; ${(1.5+(S.obHrs-1)).toFixed(1)}&times; multiplier &middot; ${S.guests} guests`
+    : S.barType === 'tickets'
+    ? `Drink tickets &middot; ${getTix()} total (${S.tixMode==='fixed'?'fixed':S.tixPer+'/guest'}) &middot; ${S.guests} guests`
+    : S.barType === 'cash' ? 'Cash bar &middot; $1,500 minimum' : 'Single-payer tab';
 
-  const svcLabel=S.barType==='openbar'
-    ?`Open bar . ${S.obHrs} hrs . ${(1.5+(S.obHrs-1)).toFixed(1)}x multiplier . ${S.guests} guests`
-    :S.barType==='tickets'
-    ?`Drink tickets . ${getTix()} total${S.tixMode==='fixed'?' (fixed)':' ('+S.tixPer+'/guest)'}  . ${S.guests} guests`
-    :S.barType==='cash'?'Cash bar . $1,500 minimum':'Single-payer tab';
+  const addonRows = [
+    [S.dj,        'House DJ (up to 4 hrs)',       fmt(addons.dj)],
+    [S.host,      'Drag host (up to 4 hrs)',       fmt(addons.host)],
+    [S.soundtech, 'Sound technician',              fmt(addons.st)],
+    [S.coat,      'Attended coat check',           fmt(addons.coat)],
+    [S.food,      'Food & catering setup',         fmt(addons.food)],
+    [S.security,  'Security',                      fmt(addons.sec)],
+    [S.xBar,      'Additional bartender',          fmt(addons.xb)],
+    [S.dancers,   'Go-go dancers',                 'TBD'],
+  ].filter(([show]) => show);
 
-  const minW=getMinWarning();
-  const minBanner=minW&&!minW.ok
-    ? '<div style="background:#2A1515;border:1px solid #E05555;border-radius:6px;padding:12px 16px;font-size:13px;color:#FFB0B0;margin-bottom:16px"><strong>Bar minimum not met.</strong> '+SPACE_NAMES[S.space]+' requires $'+minW.min.toLocaleString()+' pre-tax. Your selection: $'+Math.round(minW.pretax).toLocaleString()+' - $'+Math.round(minW.short).toLocaleString()+' short. Add guests, increase tickets or tier.</div>'
-    : minW ? '<div style="background:#1A2A1A;border:1px solid #3DBE7A;border-radius:6px;padding:8px 16px;font-size:12px;color:#7AE0A0;margin-bottom:12px">Bar minimum of $'+minW.min.toLocaleString()+' met.</div>' : '';
-
-  let html=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
+  el.innerHTML = `
+    <div class="eyebrow">Step 7 of ${PAGES.length}</div>
     <div class="step-title">Your quote.</div>
     <div class="step-desc">${S.name ? 'Here is what we put together for you, ' + S.name.split(' ')[0] + '.' : 'Here is your estimated pricing.'}</div>
-    ${minBanner}
-    <div class="quote-panel">
-      <div class="quote-banner">
-        <div class="qb-title">Private Event Proposal</div>
-        <div class="qb-sub">The Manhattan Monster Bar . 80 Grove St, West Village, NYC . ${fmtDate(S.date)}${dur?' . '+dur+' hrs':''} . ${S.guests} guests</div>
+    <div class="qpanel">
+      <div class="qbanner">
+        <h2>Private Event Proposal</h2>
+        <p>The Manhattan Monster Bar &middot; 80 Grove St, West Village, NYC</p>
       </div>
-      <div class="quote-body">
-        <div class="q-section-head">Event details</div>
-        <div class="q-line"><span class="q-lbl">Contact</span><span class="q-amt" style="font-family:var(--font-body)">${S.name}${S.org?' / '+S.org:''}</span></div>
-        ${S.date?`<div class="q-line"><span class="q-lbl">Date</span><span class="q-amt" style="font-family:var(--font-body)">${fmtDate(S.date)}</span></div>`:''}
-        ${S.startTime&&S.endTime?`<div class="q-line"><span class="q-lbl">Time</span><span class="q-amt" style="font-family:var(--font-body)">${fmtTime(S.startTime)} - ${fmtTime(S.endTime)}</span></div>`:''}
-        <div class="q-line"><span class="q-lbl">Space</span><span class="q-amt" style="font-family:var(--font-body)">${{disco:'Full Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'}[S.space]}</span></div>
+      <div class="qbody">
+        <div class="qsec">Event details</div>
+        <div class="qrow"><span class="ql">Contact</span><span class="qv" style="font-family:var(--font-b)">${S.name}${S.org?' / '+S.org:''}</span></div>
+        ${S.date  ? `<div class="qrow"><span class="ql">Date</span><span class="qv" style="font-family:var(--font-b)">${fmtDate(S.date)}</span></div>` : ''}
+        ${S.start ? `<div class="qrow"><span class="ql">Time</span><span class="qv" style="font-family:var(--font-b)">${fmtTime(S.start)} &ndash; ${fmtTime(S.end)}${dur?' ('+dur+' hrs)':''}</span></div>` : ''}
+        <div class="qrow"><span class="ql">Space</span><span class="qv" style="font-family:var(--font-b)">${SPACE_NAME[S.space]||''}</span></div>
+        <div class="qrow"><span class="ql">Guests</span><span class="qv" style="font-family:var(--font-b)">${S.guests}</span></div>
 
-        <div class="q-section-head">Bar service  -  all tier options</div>
-        <div class="q-sub">${svcLabel}</div>
-        <table class="tier-table">
+        <div class="qsec">Bar service &mdash; all tier options</div>
+        <div class="qsub">${svcLabel}</div>
+        <table class="tier-tbl">
           <thead><tr>
             <th></th>
-            <th class="c1">Tier 1<br><span style="font-size:10px;font-weight:400;color:var(--muted)">$${TR[1]}/ticket</span></th>
-            <th class="c2">Tier 2<br><span style="font-size:10px;font-weight:400;color:var(--muted)">$${TR[2]}/ticket</span></th>
-            <th class="c3">Tier 3<br><span style="font-size:10px;font-weight:400;color:var(--muted)">$${TR[3]}/ticket</span></th>
+            <th class="c1">Tier 1<br><span style="font-size:9px;font-weight:400;color:var(--muted)">$${TIERS[1]}/ticket</span></th>
+            <th class="c2">Tier 2<br><span style="font-size:9px;font-weight:400;color:var(--muted)">$${TIERS[2]}/ticket</span></th>
+            <th class="c3">Tier 3<br><span style="font-size:9px;font-weight:400;color:var(--muted)">$${TIERS[3]}/ticket</span></th>
           </tr></thead>
           <tbody>
             <tr><td>Bar (pre-tax)</td>${bars.map(b=>`<td>${fmt(b.pretax)}</td>`).join('')}</tr>
             <tr><td>Gratuity (${S.grat}%)</td>${bars.map(b=>`<td>${fmt(b.grat)}</td>`).join('')}</tr>
             <tr><td>Sales tax (8.875%)</td>${bars.map(b=>`<td>${fmt(b.tax)}</td>`).join('')}</tr>
-            <tr><td>Rental fee</td>${bars.map(b=>`<td>${b.waived?'<span style="text-decoration:line-through;opacity:0.35">$400</span> <span class="waiver-pill">waived</span>':fmt(RENTAL)}</td>`).join('')}</tr>
-            ${addonRows.length?`<tr><td colspan="4" style="padding:6px 10px 2px;color:var(--muted);font-size:11px;font-family:var(--font-body);text-align:left">Add-ons</td></tr>
-            ${addonRows.map(([,lbl,val])=>`<tr><td style="padding-left:20px"> ${lbl}</td>${[0,1,2].map(()=>`<td>${val}</td>`).join('')}</tr>`).join('')}`:''}
-            <tr class="t-total">
-              <td>Estimated total</td>
+            <tr><td>Space rental</td>${bars.map(b=>`<td>${b.waived?'<span class="waiver-pill">waived</span>':fmt(RENTAL)}</td>`).join('')}</tr>
+            ${addonRows.length ? `<tr><td colspan="4" style="padding:5px 8px 2px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;text-align:left">Add-ons</td></tr>
+            ${addonRows.map(([,lbl,val])=>`<tr><td style="padding-left:16px">&rsaquo; ${lbl}</td>${[0,1,2].map(()=>`<td>${val}</td>`).join('')}</tr>`).join('')}` : ''}
+            <tr class="trow-total">
+              <td>Est. total</td>
               <td class="c1">${fmtI(totals[0])}</td>
               <td class="c2">${fmtI(totals[1])}</td>
               <td class="c3">${fmtI(totals[2])}</td>
             </tr>
-            <tr class="t-dep"><td>Deposit to confirm</td>${bars.map(b=>`<td>${b.waived?'$0 (waived)':fmt(RENTAL)}</td>`).join('')}</tr>
-            <tr class="t-dep"><td>Balance due</td>${totals.map((t,i)=>`<td>${fmtI(bars[i].waived?t:t-RENTAL)}</td>`).join('')}</tr>
+            <tr class="trow-dep">
+              <td>Deposit</td>
+              ${deps.map(d=>`<td>${d===0?'$0 (waived)':fmt(d)}</td>`).join('')}
+            </tr>
+            <tr class="trow-dep">
+              <td>Balance due</td>
+              ${totals.map((t,i)=>`<td>${fmtI(t-deps[i])}</td>`).join('')}
+            </tr>
           </tbody>
         </table>
-
-        <div class="staff-note">${getStaffNote()}</div>
-
-        <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5">
-          All bar pricing pre-tax, subject to ${S.grat}% gratuity and 8.875% NYC sales tax applied to bar only.
-          Super premium spirits (Don Julio 1942, Rosado, any item above $25/pour) excluded from all packages.
-          ${S.dancers?'Dancer rates are approximate and subject to availability  -  not included in the totals above. ':''}
-          Quote valid 14 days. $400 deposit required to confirm (waived where applicable). This estimate is subject to review and approval - nothing is confirmed until written confirmation is received from The Manhattan Monster Bar.
-        </p>
+        <div class="staff-note">${staffNote()}</div>
+        ${S.dancers ? '<div class="staff-note">Go-go dancer rates are approximate and subject to availability. Not included in totals above.</div>' : ''}
+        <div class="qnote">All bar pricing pre-tax, subject to ${S.grat}% gratuity and 8.875% NYC sales tax on bar only. Super premium spirits (Don Julio 1942, Don Julio Rosado, or any item above $25/pour) excluded from all packages. Deposit required to hold date (waived where applicable). This estimate is subject to review and approval &mdash; nothing is confirmed until written confirmation is received from The Manhattan Monster Bar. Quote valid 14 days.</div>
       </div>
     </div>
-    <div class="step-nav">
-      <button class="btn btn-ghost" onclick="go(4)"> Back</button>
-      <button class="btn btn-primary" onclick="go(6)">Submit inquiry </button>
+    <div class="nav">
+      <button class="btn btn-g" onclick="go(5)">&larr; Back</button>
+      <button class="btn btn-p" onclick="go(7)">Submit inquiry &rarr;</button>
     </div>`;
-  d.innerHTML=html;
-  return d;
+  return el;
 }
 
-/* -- STEP 6: Confirm / Netlify form submit --------- */
-function step6(){
-  const d=document.createElement('div');
-  const addons=getAddons();
-  const bars=[1,2,3].map(t=>calcBar(t));
-  const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
-  const summary=`Contact: ${S.name}${S.org?' ('+S.org+')':''}
-Email: ${S.email}
-Phone: ${S.phone||' - '}
-Date: ${fmtDate(S.date)}${S.flexible?' (flexible)':''}
-Time: ${fmtTime(S.startTime)} - ${fmtTime(S.endTime)}
-Space: ${S.space}
-Guests: ${S.guests}
-Bar type: ${S.barType}
-Tier: ${S.tier}
-Add-ons: ${[S.dj&&'DJ',S.host&&'Drag host',S.soundtech&&'Sound tech',S.coat&&'Coat check',S.food&&'Food setup',S.security&&'Security',S.xBar&&'Extra bartender',S.dancers&&'Dancers'].filter(Boolean).join(', ')||'None'}
-Estimated totals: T1 ${fmtI(totals[0])} . T2 ${fmtI(totals[1])} . T3 ${fmtI(totals[2])}`;
+// ============================================================
+// PAGE 7 - CONFIRM & SUBMIT
+// ============================================================
+function p7() {
+  const el = document.createElement('div');
+  const addons = getAddons();
+  const bars   = [1,2,3].map(t => calcBar(t));
+  const totals = bars.map(b => b.sub + (b.waived ? 0 : RENTAL) + addons.total);
+  const summary = [
+    'Contact: ' + S.name + (S.org ? ' (' + S.org + ')' : ''),
+    'Email: ' + S.email,
+    'Phone: ' + (S.phone || '-'),
+    'Date: ' + fmtDate(S.date) + (S.flex ? ' (flexible)' : ''),
+    'Time: ' + fmtTime(S.start) + ' to ' + fmtTime(S.end),
+    'Space: ' + (SPACE_NAME[S.space] || S.space),
+    'Guests: ' + S.guests,
+    'Bar type: ' + S.barType,
+    'Estimated totals: T1 ' + fmtI(totals[0]) + ' / T2 ' + fmtI(totals[1]) + ' / T3 ' + fmtI(totals[2]),
+  ].join('\n');
 
-  d.innerHTML=`
-    <div class="step-eyebrow">Step ${cur+1} of ${STEPS.length}</div>
-    <div class="step-title">Almost done.</div>
+  el.innerHTML = `
+    <div class="eyebrow">Step 8 of ${PAGES.length}</div>
+    <div class="step-title">Almost there.</div>
     <div class="step-desc">Add any final notes and submit. We will follow up within 24-48 hours.</div>
-    <div style="background:#1A1A2A;border:1px solid #8A6E2F;border-radius:6px;padding:12px 16px;font-size:13px;color:#888899;margin-bottom:20px;line-height:1.6"><strong style="color:#C8A44A">Nothing is confirmed yet.</strong> Submitting this form sends your inquiry to our team for review. Your date and pricing are not locked in until you receive written confirmation and your deposit is processed. We review all inquiries within 24-48 hours.</div>
-    <div class="field-group">
+    <div class="alert alert-gold" style="margin-bottom:20px">
+      <strong>Nothing is confirmed yet.</strong>
+      Submitting this form sends your inquiry to our team for review.
+      Your date and pricing are not locked in until you receive written confirmation and your deposit is processed.
+    </div>
+    <div class="fields" style="margin-bottom:24px">
       <div class="field">
         <label>Anything else we should know? (optional)</label>
-        <textarea id="f-notes" rows="4" placeholder="Special requests, outside vendors, entertainment details, dietary needs..." style="resize:vertical">${S.notes}</textarea>
+        <textarea id="f7-notes" rows="4" placeholder="Special requests, outside vendors, entertainment details...">${S.notes}</textarea>
       </div>
     </div>
-    <!-- Netlify form  -  hidden fields carry all the data -->
-    <form name="private-event-inquiry" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
+    <form id="nf-form" name="private-event-inquiry" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
       <input type="hidden" name="form-name" value="private-event-inquiry"/>
       <input type="hidden" name="bot-field" style="display:none"/>
-      <input type="hidden" id="nf-name" name="name" value="${S.name}"/>
-      <input type="hidden" id="nf-org" name="organization" value="${S.org}"/>
-      <input type="hidden" id="nf-email" name="email" value="${S.email}"/>
-      <input type="hidden" id="nf-phone" name="phone" value="${S.phone}"/>
-      <input type="hidden" id="nf-date" name="event_date" value="${S.date}"/>
-      <input type="hidden" id="nf-space" name="space" value="${S.space}"/>
-      <input type="hidden" id="nf-guests" name="guests" value="${S.guests}"/>
-      <input type="hidden" id="nf-bartype" name="bar_type" value="${S.barType}"/>
+      <input type="hidden" id="nf-name"    name="name"          value="${S.name}"/>
+      <input type="hidden" id="nf-org"     name="organization"  value="${S.org}"/>
+      <input type="hidden" id="nf-email"   name="email"         value="${S.email}"/>
+      <input type="hidden" id="nf-phone"   name="phone"         value="${S.phone}"/>
+      <input type="hidden" id="nf-date"    name="event_date"    value="${S.date}"/>
+      <input type="hidden" id="nf-start"   name="start_time"    value="${S.start}"/>
+      <input type="hidden" id="nf-end"     name="end_time"      value="${S.end}"/>
+      <input type="hidden" id="nf-space"   name="space"         value="${S.space}"/>
+      <input type="hidden" id="nf-guests"  name="guests"        value="${S.guests}"/>
+      <input type="hidden" id="nf-bartype" name="bar_type"      value="${S.barType}"/>
       <input type="hidden" id="nf-summary" name="quote_summary" value="${summary}"/>
-      <input type="hidden" id="nf-notes" name="notes" value="${S.notes}"/>
-      <div class="step-nav">
-        <button type="button" class="btn btn-ghost" onclick="go(5)"> Back</button>
-        <button type="submit" class="btn btn-primary">Submit inquiry </button>
+      <input type="hidden" id="nf-notes"   name="notes"         value=""/>
+      <div class="nav">
+        <button type="button" class="btn btn-g" onclick="go(6)">&larr; Back</button>
+        <button type="submit" class="btn btn-p">Submit inquiry &rarr;</button>
       </div>
     </form>`;
-  return d;
+  return el;
 }
 
-function handleSubmit(e){
+function handleSubmit(e) {
   e.preventDefault();
-  S.notes=document.getElementById('f-notes').value;
-  // Update all hidden fields before submitting
-  document.getElementById('nf-name').value=S.name;
-  document.getElementById('nf-org').value=S.org;
-  document.getElementById('nf-email').value=S.email;
-  document.getElementById('nf-phone').value=S.phone;
-  document.getElementById('nf-date').value=S.date;
-  document.getElementById('nf-space').value=S.space;
-  document.getElementById('nf-guests').value=S.guests;
-  document.getElementById('nf-bartype').value=S.barType;
-  document.getElementById('nf-notes').value=S.notes;
-  // Build quote summary
-  const bars=[1,2,3].map(t=>calcBar(t));
-  const addons=getAddons();
-  const totals=bars.map(b=>b.sub+(b.waived?0:RENTAL)+addons.total);
-  const summary=`Contact: ${S.name}${S.org?' ('+S.org+')':''}
-Email: ${S.email}
-Phone: ${S.phone||''}
-Date: ${fmtDate(S.date)}
-Time: ${fmtTime(S.startTime)} to ${fmtTime(S.endTime)}
-Space: ${S.space}
-Guests: ${S.guests}
-Bar type: ${S.barType}
-Estimated totals: T1 ${fmtI(totals[0])} / T2 ${fmtI(totals[1])} / T3 ${fmtI(totals[2])}
-Notes: ${S.notes}`;
-  document.getElementById('nf-summary').value=summary;
-  // Native form submit - required for Netlify to capture
-  e.target.submit();
+  S.notes = ge('f7-notes').value;
+  ge('nf-notes').value   = S.notes;
+  ge('nf-summary').value = ge('nf-summary').value;
+  // Native form submit for Netlify capture
+  ge('nf-form').submit();
 }
 
-function showSuccess(){
-  const w=document.getElementById('step-wrap');
-  document.getElementById('prog-fill').style.width='100%';
-  document.getElementById('prog-name').textContent='Submitted';
-  w.innerHTML=`
-    <div class="success-wrap">
-      <div class="success-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-      </div>
-      <div class="step-title" style="text-align:center;margin-bottom:12px">You're on our radar.</div>
-      <div class="step-desc" style="text-align:center;max-width:400px;margin:0 auto 32px">
-        Thanks${S.name?' '+S.name.split(' ')[0]:''}. We've received your inquiry and will follow up with a full proposal within 24-48 hours at <strong style="color:var(--white)">${S.email}</strong>.
-      </div>
-      <div class="avail-note" style="text-align:center">
-        Questions in the meantime? Email us at <strong>dan@monsterbar.nyc</strong> or call <strong>917-525-3689</strong>.
-      </div>
-    </div>`;
-}
-
-/* -- UTILS ---------------------------------------- */
-function $(id){return document.getElementById(id);}
-
+// ============================================================
+// BOOT
+// ============================================================
 render();
 </script>
-
-<!-- Netlify form detection anchor  -  do not remove -->
-<div id="netlify-form-anchor" style="position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;z-index:-1" aria-hidden="true">
-<form name="private-event-inquiry" data-netlify="true" data-netlify-honeypot="bot-field" method="POST" action="/thank-you">
-  <input type="hidden" name="form-name" value="private-event-inquiry"/>
-  <p style="display:none"><input name="bot-field"/></p>
-  <input type="text" name="name" value=""/>
-  <input type="text" name="organization" value=""/>
-  <input type="email" name="email" value=""/>
-  <input type="tel" name="phone" value=""/>
-  <input type="text" name="event_date" value=""/>
-  <input type="text" name="space" value=""/>
-  <input type="text" name="guests" value=""/>
-  <input type="text" name="bar_type" value=""/>
-  <textarea name="quote_summary"></textarea>
-  <textarea name="notes"></textarea>
-  <button type="submit">Submit</button>
-</form>
-</div>
 </body>
 </html>
