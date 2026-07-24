@@ -155,6 +155,8 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .tier-tbl .trow-total td{font-size:14px;font-weight:600;border-top:1px solid var(--rule);padding-top:8px;border-bottom:none}
 .tier-tbl .trow-dep td{font-size:11px;color:var(--muted);font-family:var(--font-b);border-bottom:none}
 .staff-note{font-size:12px;color:var(--muted);font-style:italic;padding:8px 0 0;border-top:1px solid var(--rule);margin-top:4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--black);box-shadow:0 0 0 2px var(--gold)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--black)}
 
 /* NAV */
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
@@ -743,9 +745,16 @@ function p4() {
       <div class="opt-grid g3" id="tier-grid">${tierCards}</div>
     </div>
     <div id="ob-fields" style="${showOB?'':'display:none'}">
-      <div class="row2" style="margin-top:12px">
-        <div class="field"><label>Duration (hours)</label>
-          <input id="f4-hrs" type="number" min="1" max="8" step="0.5" value="${S.obHrs}" oninput="S.obHrs=parseFloat(this.value)||1;refreshPreview()"/>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+          <label style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">Duration</label>
+          <span id="hrs-display" style="font-family:var(--font-m);font-size:20px;color:var(--gold);font-weight:500">${S.obHrs} hrs</span>
+        </div>
+        <input id="f4-hrs" type="range" min="1" max="8" step="0.5" value="${S.obHrs}"
+          style="width:100%;appearance:none;-webkit-appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,var(--gold) 0%,var(--gold) ${((S.obHrs-1)/7*100).toFixed(0)}%,var(--rule) ${((S.obHrs-1)/7*100).toFixed(0)}%,var(--rule) 100%);outline:none;cursor:pointer;accent-color:var(--gold)"
+          oninput="S.obHrs=parseFloat(this.value);ge('hrs-display').textContent=S.obHrs+' hrs';this.style.background='linear-gradient(to right,var(--gold) 0%,var(--gold) '+((S.obHrs-1)/7*100).toFixed(0)+'%,var(--rule) '+((S.obHrs-1)/7*100).toFixed(0)+'%,var(--rule) 100%)';refreshPreview()"/>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--rule);margin-top:5px;padding:0 2px">
+          <span>1 hr</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8 hrs</span>
         </div>
       </div>
     </div>
