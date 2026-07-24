@@ -465,7 +465,7 @@ function render(){
   document.getElementById('prog-name').textContent=STEPS[cur];
   const w=document.getElementById('step-wrap');
   w.innerHTML='';
-  const fns=[step0,step1,step2,step3,step4,step5,step6];
+  const fns=[step0,step1,step2,step2b,step3,step4,step5,step6];
   w.appendChild(fns[cur]());
 }
 
@@ -508,23 +508,17 @@ function step0(){
 }
 function saveStep0(){S.name=$('f-name').value;S.org=$('f-org').value;S.email=$('f-email').value;S.phone=$('f-phone').value;S.evtype=$('f-evtype').value;}
 
-/* -- STEP 1: Event basics -------------------------- */
+/* -- STEP 1: Date & time --------------------------- */
 function step1(){
   const d=document.createElement('div');
-  const spaceAvail={
-    disco:'Mon, Wed & Fri 4-10pm . Thu 4-8pm . Sat 3-8pm',
-    piano:'Most days during regular hours (min. 15 guests, $250 bar min)',
-    arizona:'Mon & Wed 10pm-2am . Fri 10pm-3am . Sun 4pm-2am',
-    buyout:'By arrangement . rates from $15,000',
-  };
   d.innerHTML=`
     <div class="step-eyebrow">Step 2 of ${STEPS.length}</div>
-    <div class="step-title">When & where.</div>
-    <div class="step-desc">Choose your date and which part of the bar you would like to reserve.</div>
+    <div class="step-title">When is your event?</div>
+    <div class="step-desc">Pick a date and times. We will show you which spaces are available on the next step.</div>
     ${err(errMsg)}
     <div class="field-group">
       <div class="field-row cols-2">
-        <div class="field"><label>Event date</label><input type="date" id="f-date" value="${S.date}" onchange="S.date=this.value;renderAvailNote()" min="${new Date().toISOString().split('T')[0]}"/></div>
+        <div class="field"><label>Event date</label><input type="date" id="f-date" value="${S.date}" min="${new Date().toISOString().split('T')[0]}" onchange="S.date=this.value;renderAvailNote()"/></div>
         <div class="field"><label>Date flexible?</label>
           <select id="f-flex"><option value="no" ${!S.flexible?'selected':''}>No, this date only</option><option value="yes" ${S.flexible?'selected':''}>Yes, open to alternatives</option></select>
         </div>
@@ -534,151 +528,161 @@ function step1(){
         <div class="field"><label>End time</label><input type="time" id="f-end" value="${S.endTime||'21:00'}" onchange="S.endTime=this.value;renderAvailNote()"/></div>
       </div>
     </div>
-    <div style="margin-bottom:12px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Choose your space</div>
-    <div class="option-grid cols-2" style="margin-bottom:32px">
-      ${['disco','piano','arizona','buyout'].map(sp=>{
-        const names={disco:'The Disco',piano:'Piano Room',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
-        const caps={disco:'Up to 130 guests',piano:'Up to 15 guests',arizona:'Up to 25 guests',buyout:'Up to 250 guests'};
-        return`<div class="opt-card ${S.space===sp?'selected':''}" onclick="S.space='${sp}';renderSpaceNote();renderAvailNote();document.querySelectorAll('.opt-card').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')">
-          <div class="opt-check"></div>
-          <div class="opt-name">${names[sp]}</div>
-          <div class="opt-sub">${caps[sp]}</div>
-          <div class="opt-price">${spaceAvail[sp]}</div>
-        </div>`;
-      }).join('')}
-    </div>
-    <div id="space-note"></div>
-    <div id="avail-check"></div>
     <div class="step-nav">
       <button class="btn btn-ghost" onclick="saveStep1();go(0)"> Back</button>
-      <button class="btn btn-primary" onclick="saveStep1();const _av=checkAvailability();if(_av&&!_av.ok){renderAvailNote();return;}go(2)">Continue </button>
+      <button class="btn btn-primary" onclick="saveStep1();go(2)">See available spaces </button>
     </div>`;
-  setTimeout(()=>{renderSpaceNote();renderAvailNote();},10);
   return d;
-}
-function toMins(t){if(!t)return null;const[h,m]=t.split(':').map(Number);return h*60+m;}
-
-function checkAvailability(){
-  if(!S.date||!S.startTime||!S.endTime)return null;
-  const dt=new Date(S.date+'T12:00:00');
-  const dow=dt.getDay();
-  const start=toMins(S.startTime);
-  const end=toMins(S.endTime);
-  const endAdj=end<start?end+1440:end;
-  const dayNames=['Sundays','Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays'];
-  if(S.space==='buyout')return{ok:true,msg:'Full buyout availability is by arrangement. We will confirm your date after reviewing the inquiry.'};
-  if(S.space==='piano')return{ok:true,msg:''};
-  if(S.space==='disco'){
-    if(dow===2||dow===0)return{ok:false,msg:'The Disco is not available on '+dayNames[dow]+'. Available Mon/Wed/Fri 4-10pm, Thu 4-8pm, Sat 3-8pm.'};
-    if((dow===1||dow===3||dow===5)&&(start<960||endAdj>1320))return{ok:false,msg:'The Disco is available Mon, Wed and Fri from 4:00pm to 10:00pm. Please adjust your times.'};
-    if(dow===4&&(start<960||endAdj>1200))return{ok:false,msg:'The Disco is available Thursday from 4:00pm to 8:00pm. Please adjust your times.'};
-    if(dow===6&&(start<900||endAdj>1200))return{ok:false,msg:'The Disco is available Saturday from 3:00pm to 8:00pm. Please adjust your times.'};
-    return{ok:true,msg:''};
-  }
-  if(S.space==='arizona'){
-    if(dow===2||dow===4||dow===6)return{ok:false,msg:'The Arizona Room is not available on '+dayNames[dow]+'. Available Mon/Wed 10pm-2am, Fri 10pm-3am, Sun 4pm-2am.'};
-    if((dow===1||dow===3)&&(start<1320||endAdj>1560))return{ok:false,msg:'The Arizona Room is available Mon and Wed from 10:00pm to 2:00am. Please adjust your times.'};
-    if(dow===5&&(start<1320||endAdj>1620))return{ok:false,msg:'The Arizona Room is available Friday from 10:00pm to 3:00am. Please adjust your times.'};
-    if(dow===0&&(start<960||endAdj>1560))return{ok:false,msg:'The Arizona Room is available Sunday from 4:00pm to 2:00am. Please adjust your times.'};
-    return{ok:true,msg:''};
-  }
-  return{ok:true,msg:''};
-}
-
-function renderAvailNote(){
-  const el=document.getElementById('avail-check');if(!el)return;
-  const r=checkAvailability();
-  if(!r){el.innerHTML='';return;}
-  if(!r.ok){
-    el.innerHTML='<div class="avail-warn-block"><strong style="color:#FF8080;font-size:15px;display:block;margin-bottom:6px">&#10005; Not available at this time.</strong><span style="color:#FFB0B0;font-size:13px">'+r.msg+'</span></div>';
-  } else if(r.msg){
-    el.innerHTML='<div class="avail-note"><strong>Note:</strong> '+r.msg+'</div>';
-  } else if(S.date&&S.startTime&&S.endTime){
-    el.innerHTML='<div class="avail-ok-block"><strong style="font-size:15px;display:block;margin-bottom:4px">&#10003; Time slot looks available.</strong><span style="font-size:12px;opacity:0.8">This is not a confirmed booking. Your inquiry will be reviewed and we will follow up within 24-48 hours.</span></div>';
-  } else {
-    el.innerHTML='';
-  }
-}
-
-function spaceCard(name,min,desc,rows){
-  const rowHtml=rows.map(r=>`<div class="avail-row ${r.open?'open':'closed'}">
-    <span class="ar-icon">${r.open?'✓':'✕'}</span>
-    <span class="ar-day">${r.day}</span>
-    <span class="ar-hours">${r.open?r.hours:'Not available'}</span>
-  </div>`).join('');
-  return`<div class="space-avail-card">
-    <div class="space-avail-head">
-      <span class="sah-name">${name}</span>
-      <span class="sah-min">${min} bar minimum</span>
-    </div>
-    <div class="space-avail-body">
-      <div class="sab-desc">${desc}</div>
-      <div class="avail-grid">${rowHtml}</div>
-    </div>
-  </div>`;
-}
-
-function renderSpaceNote(){
-  const el=document.getElementById('space-note');if(!el)return;
-  const cards={
-    disco: spaceCard(
-      'The Disco','$1,500',
-      'Full stage, DJ booth, and dance floor. Up to 130 guests.',
-      [
-        {open:true, day:'Monday',    hours:'4:00 pm – 10:00 pm'},
-        {open:false,day:'Tuesday',   hours:''},
-        {open:true, day:'Wednesday', hours:'4:00 pm – 10:00 pm'},
-        {open:true, day:'Thursday',  hours:'4:00 pm – 8:00 pm'},
-        {open:true, day:'Friday',    hours:'4:00 pm – 10:00 pm'},
-        {open:true, day:'Saturday',  hours:'3:00 pm – 8:00 pm'},
-        {open:false,day:'Sunday',    hours:''},
-      ]
-    ),
-    piano: spaceCard(
-      'Piano Room','$250',
-      'Semi-private area on the main floor. The area behind the piano is your home base — your guests are welcome throughout the full main floor. Available most days during regular business hours.',
-      [
-        {open:true, day:'Monday',    hours:'Regular business hours'},
-        {open:true, day:'Tuesday',   hours:'Regular business hours'},
-        {open:true, day:'Wednesday', hours:'Regular business hours'},
-        {open:true, day:'Thursday',  hours:'Regular business hours'},
-        {open:true, day:'Friday',    hours:'Regular business hours'},
-        {open:true, day:'Saturday',  hours:'Regular business hours'},
-        {open:true, day:'Sunday',    hours:'Regular business hours'},
-      ]
-    ),
-    arizona: spaceCard(
-      'Arizona Room','$400',
-      'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
-      [
-        {open:true, day:'Monday',    hours:'10:00 pm – 2:00 am'},
-        {open:false,day:'Tuesday',   hours:''},
-        {open:true, day:'Wednesday', hours:'10:00 pm – 2:00 am'},
-        {open:false,day:'Thursday',  hours:''},
-        {open:true, day:'Friday',    hours:'10:00 pm – 3:00 am'},
-        {open:false,day:'Saturday',  hours:''},
-        {open:true, day:'Sunday',    hours:'4:00 pm – 2:00 am'},
-      ]
-    ),
-    buyout: spaceCard(
-      'Full Bar Buyout','$15,000+',
-      'Exclusive use of the entire venue. Up to 250 guests. Availability and pricing are by arrangement — we will confirm your date after reviewing the inquiry.',
-      [
-        {open:true, day:'Selected dates', hours:'By arrangement only'},
-      ]
-    ),
-  };
-  el.innerHTML=cards[S.space]||'';
 }
 function saveStep1(){S.date=$('f-date').value;S.flexible=$('f-flex').value==='yes';S.startTime=$('f-start').value;S.endTime=$('f-end').value;}
 
-/* -- STEP 2: Guest count --------------------------- */
+/* -- STEP 2: Space selection (filtered by date/time) --- */
 function step2(){
+  const d=document.createElement('div');
+  const dow=S.date?new Date(S.date+'T12:00:00').getDay():-1;
+  const start=toMins(S.startTime);
+  const end=toMins(S.endTime);
+  const endAdj=end&&start&&end<start?end+1440:end;
+  const dayName=dow>=0?['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow]:'';
+
+  // Determine which spaces are open for selected date/time
+  function spaceOpen(sp){
+    if(!S.date||!S.startTime||!S.endTime) return true; // no date yet - show all
+    if(sp==='piano') return true;
+    if(sp==='buyout') return true;
+    if(sp==='disco'){
+      if(dow===2||dow===0) return false;
+      if((dow===1||dow===3||dow===5)&&(start<960||endAdj>1320)) return false;
+      if(dow===4&&(start<960||endAdj>1200)) return false;
+      if(dow===6&&(start<900||endAdj>1200)) return false;
+      return true;
+    }
+    if(sp==='arizona'){
+      if(dow===2||dow===4||dow===6) return false;
+      if((dow===1||dow===3)&&(start<1320||endAdj>1560)) return false;
+      if(dow===5&&(start<1320||endAdj>1620)) return false;
+      if(dow===0&&(start<960||endAdj>1560)) return false;
+      return true;
+    }
+    return true;
+  }
+
+  const spaces=['disco','piano','arizona','buyout'];
+  const openSpaces=spaces.filter(sp=>spaceOpen(sp));
+  const closedSpaces=spaces.filter(sp=>!spaceOpen(sp));
+  const hasDate=S.date&&S.startTime&&S.endTime;
+
+  const contextMsg=hasDate
+    ? '<div style="background:var(--lift);border:1px solid var(--rule);border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:13px;line-height:1.6">'
+      +(openSpaces.length===spaces.length
+        ? '<strong style="color:var(--white)">All spaces are available</strong> <span style="color:var(--muted)">on '+dayName+' '+fmtDate(S.date)+' for your requested times.</span>'
+        : '<strong style="color:var(--gold)">Showing spaces available</strong> <span style="color:var(--muted)">on '+dayName+' '+fmtDate(S.date)+' '+fmtTime(S.startTime)+' - '+fmtTime(S.endTime)+'.'
+          +(closedSpaces.length?' '+closedSpaces.length+' space'+(closedSpaces.length>1?'s are':' is')+' unavailable at this time.':'')+'</span>')
+      +'<div style="font-size:12px;color:var(--muted);margin-top:8px"> Need a different space? <button onclick="go(1)" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;padding:0;font-family:var(--font-body);text-decoration:underline">Change date or time</button></div>'
+      +'</div>'
+    : '<div class="avail-note" style="margin-bottom:20px">No date or time selected yet. <button onclick="go(1)" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:13px;padding:0;font-family:var(--font-body);text-decoration:underline">Go back and set a date first.</button></div>';
+
+  function spaceCard2(sp){
+    const isOpen=spaceOpen(sp);
+    const names={disco:'The Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
+    const caps={disco:'Up to 130 guests',piano:'Up to 15 guests (main floor open to all)',arizona:'Up to 25 guests',buyout:'Up to 250 guests'};
+    const mins={disco:'$1,500 bar min',piano:'$250 bar min',arizona:'$400 bar min',buyout:'$15,000+'};
+    const descs={
+      disco:'Full stage, DJ booth and dance floor.',
+      piano:'The area behind the piano is your home base - guests can spread across the full main floor.',
+      arizona:'Intimate private room at the back of the Disco. Late-night hours only.',
+      buyout:'Exclusive use of the entire venue. By arrangement.',
+    };
+    const unavailReasons={
+      disco:'Not available on '+dayName+'s at your requested time.',
+      arizona:'Not available on '+dayName+'s at your requested time.',
+    };
+    if(!isOpen){
+      return`<div class="opt-card" style="opacity:0.4;cursor:not-allowed;position:relative">
+        <div style="position:absolute;top:10px;right:10px;background:#3A1010;color:#FF8080;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500">Unavailable</div>
+        <div class="opt-name">${names[sp]}</div>
+        <div class="opt-sub">${unavailReasons[sp]||'Not available at this time.'}</div>
+      </div>`;
+    }
+    return`<div class="opt-card ${S.space===sp?'selected':''}" onclick="S.space='${sp}';document.querySelectorAll('#space-grid .opt-card:not([style*=not-allowed])').forEach(c=>c.classList.remove('selected'));this.classList.add('selected')">
+      <div class="opt-check"></div>
+      <div class="opt-name">${names[sp]}</div>
+      <div class="opt-sub">${descs[sp]}<br><span style="font-size:11px">${caps[sp]}</span></div>
+      <div class="opt-price">${mins[sp]}</div>
+    </div>`;
+  }
+
+  // If selected space is no longer available, reset
+  if(hasDate&&S.space&&!spaceOpen(S.space)) S.space='';
+
+  d.innerHTML=`
+    <div class="step-eyebrow">Step 3 of ${STEPS.length}</div>
+    <div class="step-title">Choose your space.</div>
+    ${contextMsg}
+    <div class="option-grid cols-2" id="space-grid">
+      ${spaces.map(spaceCard2).join('')}
+    </div>
+    <div id="space-detail"></div>
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="go(1)"> Back</button>
+      <button class="btn btn-primary" onclick="if(!S.space){alert('Please select a space to continue.');return;}go(3)">Continue </button>
+    </div>`;
+  // Show detail card for pre-selected space
+  setTimeout(()=>{
+    if(S.space){
+      const el=document.getElementById('space-detail');
+      if(el) el.innerHTML=spaceDetailCard(S.space);
+    }
+  },10);
+  return d;
+}
+
+function spaceDetailCard(sp){
+  return spaceCard(
+    {disco:'The Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'}[sp],
+    {disco:'$1,500',piano:'$250',arizona:'$400',buyout:'$15,000+'}[sp],
+    {
+      disco:'Full stage, DJ booth, and dance floor. Up to 130 guests.',
+      piano:'Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor.',
+      arizona:'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
+      buyout:'Exclusive use of the entire venue. Up to 250 guests. By arrangement.',
+    }[sp],
+    {
+      disco:[
+        {open:true, day:'Monday',    hours:'4:00 pm - 10:00 pm'},
+        {open:false,day:'Tuesday',   hours:''},
+        {open:true, day:'Wednesday', hours:'4:00 pm - 10:00 pm'},
+        {open:true, day:'Thursday',  hours:'4:00 pm - 8:00 pm'},
+        {open:true, day:'Friday',    hours:'4:00 pm - 10:00 pm'},
+        {open:true, day:'Saturday',  hours:'3:00 pm - 8:00 pm'},
+        {open:false,day:'Sunday',    hours:''},
+      ],
+      piano:[
+        {open:true,day:'All days',hours:'Regular business hours'},
+      ],
+      arizona:[
+        {open:true, day:'Monday',    hours:'10:00 pm - 2:00 am'},
+        {open:false,day:'Tuesday',   hours:''},
+        {open:true, day:'Wednesday', hours:'10:00 pm - 2:00 am'},
+        {open:false,day:'Thursday',  hours:''},
+        {open:true, day:'Friday',    hours:'10:00 pm - 3:00 am'},
+        {open:false,day:'Saturday',  hours:''},
+        {open:true, day:'Sunday',    hours:'4:00 pm - 2:00 am'},
+      ],
+      buyout:[
+        {open:true,day:'Selected dates',hours:'By arrangement only'},
+      ],
+    }[sp]||[]
+  );
+}
+
+/* -- STEP 2b: Guest count --------------------------- */
+function step2b(){
   const d=document.createElement('div');
   d.innerHTML=`
     <div class="step-eyebrow">Step 3 of ${STEPS.length}</div>
-    <div class="step-title">How many guests?</div>
-    <div class="step-desc">Your guest count affects bar pricing, staffing, and capacity. Give us your best estimate  -  we can adjust later.</div>
+    <div class="step-title">Guest count.</div>
+    <div class="step-desc">How many guests are you expecting? This affects bar pricing, staffing, and capacity.</div>
     ${err(errMsg)}
     <div class="field-group">
       <div class="field">
@@ -688,19 +692,19 @@ function step2(){
       </div>
       <div class="field"><label>Arrival style</label>
         <select id="f-arrival">
-          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual  -  guests trickle in over the event</option>
-          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once  -  e.g. a bus or organized group arrival</option>
+          <option value="gradual" ${S.arrival!=='simultaneous'?'selected':''}>Gradual - guests trickle in over the event</option>
+          <option value="simultaneous" ${S.arrival==='simultaneous'?'selected':''}>All at once - e.g. a bus or organized group arrival</option>
         </select>
         <div class="field-hint">Simultaneous arrivals may benefit from an extra bartender to handle the initial rush.</div>
       </div>
     </div>
     <div class="step-nav">
-      <button class="btn btn-ghost" onclick="saveStep2();go(1)"> Back</button>
-      <button class="btn btn-primary" onclick="saveStep2();go(3)">Continue </button>
+      <button class="btn btn-ghost" onclick="saveStep2b();go(2)"> Back</button>
+      <button class="btn btn-primary" onclick="saveStep2b();go(3)">Continue </button>
     </div>`;
   return d;
 }
-function saveStep2(){S.guests=parseInt($('f-guests').value)||0;S.arrival=$('f-arrival').value;}
+function saveStep2b(){S.guests=parseInt($('f-guests').value)||0;S.arrival=$('f-arrival').value;}
 
 /* -- STEP 3: Bar service --------------------------- */
 function step3(){
@@ -768,7 +772,7 @@ function step3(){
     <div id="min-warning-bar"></div>
 
     <div style="margin-top:24px" class="step-nav">
-      <button class="btn btn-ghost" onclick="go(2)"> Back</button>
+      <button class="btn btn-ghost" onclick="go(3)"> Back</button>
       <button class="btn btn-primary" onclick="const _mw=getMinWarning();if(_mw&&!_mw.ok){updateMinWarning();return;}go(4)">Continue </button>
     </div>`;
   setTimeout(updateBarCalc, 10);
