@@ -641,42 +641,51 @@ function step2(){
 }
 
 function spaceDetailCard(sp){
-  return spaceCard(
-    {disco:'The Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'}[sp],
-    {disco:'$1,500',piano:'$250',arizona:'$400',buyout:'$15,000+'}[sp],
-    {
-      disco:'Full stage, DJ booth, and dance floor. Up to 130 guests.',
-      piano:'Semi-private area on the main floor. The area behind the piano is your home base, but your guests are welcome throughout the full main floor.',
-      arizona:'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
-      buyout:'Exclusive use of the entire venue. Up to 250 guests. By arrangement.',
-    }[sp],
-    {
-      disco:[
-        {open:true, day:'Monday',    hours:'4:00 pm - 10:00 pm'},
-        {open:false,day:'Tuesday',   hours:''},
-        {open:true, day:'Wednesday', hours:'4:00 pm - 10:00 pm'},
-        {open:true, day:'Thursday',  hours:'4:00 pm - 8:00 pm'},
-        {open:true, day:'Friday',    hours:'4:00 pm - 10:00 pm'},
-        {open:true, day:'Saturday',  hours:'3:00 pm - 8:00 pm'},
-        {open:false,day:'Sunday',    hours:''},
-      ],
-      piano:[
-        {open:true,day:'All days',hours:'Regular business hours'},
-      ],
-      arizona:[
-        {open:true, day:'Monday',    hours:'10:00 pm - 2:00 am'},
-        {open:false,day:'Tuesday',   hours:''},
-        {open:true, day:'Wednesday', hours:'10:00 pm - 2:00 am'},
-        {open:false,day:'Thursday',  hours:''},
-        {open:true, day:'Friday',    hours:'10:00 pm - 3:00 am'},
-        {open:false,day:'Saturday',  hours:''},
-        {open:true, day:'Sunday',    hours:'4:00 pm - 2:00 am'},
-      ],
-      buyout:[
-        {open:true,day:'Selected dates',hours:'By arrangement only'},
-      ],
-    }[sp]||[]
-  );
+  const names={disco:'The Disco',piano:'Piano Room / Main Floor',arizona:'Arizona Room',buyout:'Full Bar Buyout'};
+  const mins={disco:'$1,500 bar minimum',piano:'$250 bar minimum',arizona:'$400 bar minimum',buyout:'$15,000+'};
+  const descs={
+    disco:'Full stage, DJ booth, and dance floor. Up to 130 guests.',
+    piano:'Semi-private area on the main floor. The area behind the piano is your home base - guests are welcome throughout the full main floor.',
+    arizona:'Intimate private room at the back of the Disco. Up to 25 guests. Late-night hours only.',
+    buyout:'Exclusive use of the entire venue. Up to 250 guests. By arrangement only.',
+  };
+  const schedules={
+    disco:[
+      {open:true, day:'Monday',    hours:'4:00 pm - 10:00 pm'},
+      {open:false,day:'Tuesday',   hours:'Not available'},
+      {open:true, day:'Wednesday', hours:'4:00 pm - 10:00 pm'},
+      {open:true, day:'Thursday',  hours:'4:00 pm - 8:00 pm'},
+      {open:true, day:'Friday',    hours:'4:00 pm - 10:00 pm'},
+      {open:true, day:'Saturday',  hours:'3:00 pm - 8:00 pm'},
+      {open:false,day:'Sunday',    hours:'Not available'},
+    ],
+    piano:[{open:true,day:'All days',hours:'Regular business hours'}],
+    arizona:[
+      {open:true, day:'Monday',    hours:'10:00 pm - 2:00 am'},
+      {open:false,day:'Tuesday',   hours:'Not available'},
+      {open:true, day:'Wednesday', hours:'10:00 pm - 2:00 am'},
+      {open:false,day:'Thursday',  hours:'Not available'},
+      {open:true, day:'Friday',    hours:'10:00 pm - 3:00 am'},
+      {open:false,day:'Saturday',  hours:'Not available'},
+      {open:true, day:'Sunday',    hours:'4:00 pm - 2:00 am'},
+    ],
+    buyout:[{open:true,day:'Selected dates',hours:'By arrangement only'}],
+  };
+  const rows=(schedules[sp]||[]).map(r=>`<div class="avail-row ${r.open?'open':'closed'}">
+    <span class="ar-icon">${r.open?'✓':'✕'}</span>
+    <span class="ar-day">${r.day}</span>
+    <span class="ar-hours">${r.hours}</span>
+  </div>`).join('');
+  return `<div class="space-avail-card" style="margin-top:16px">
+    <div class="space-avail-head">
+      <span class="sah-name">${names[sp]||sp}</span>
+      <span class="sah-min">${mins[sp]||''}</span>
+    </div>
+    <div class="space-avail-body">
+      <div class="sab-desc">${descs[sp]||''}</div>
+      <div class="avail-grid">${rows}</div>
+    </div>
+  </div>`;
 }
 
 /* -- STEP 2b: Guest count --------------------------- */
