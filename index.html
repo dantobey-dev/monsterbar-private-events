@@ -882,13 +882,13 @@ function p5() {
   const el = document.createElement('div');
   const addons = [
     {k:'dj',        name:'House DJ',                sub:'Up to 4 hrs flat rate',                         price:'$250'},
-    {k:'host',      name:'Drag host',               sub:'Performance, hosting & MC - up to 4 hrs',       price:'$300'},
+    {k:'host',      name:'Drag host',               sub:'Performance, hosting & MC - up to 4 hrs. *Starting rate - performers set their own rates.',       price:'$300*'},
     {k:'soundtech', name:'Sound technician',        sub:'Required for A/V presentations',                 price:'$125'},
     {k:'coat',      name:'Attended coat check',     sub:'$40/hr - 3 hr minimum',                         price:'$120+'},
     {k:'food',      name:'Food & catering setup',   sub:'Table setup, delivery receiving & cleanup',      price:'$85'},
     {k:'security',  name:'Security',                sub:'$40/hr - 3 hr minimum',                         price:'$120+'},
     {k:'xBar',      name:'Additional bartender',    sub:'Recommended for 65+ guests or bus arrivals',     price:'~$105'},
-    {k:'dancers',   name:'Go-go dancers',           sub:'Starting ~$150/dancer for 3 hrs - subject to availability', price:'$150+'},
+    {k:'dancers',   name:'Go-go dancers',           sub:'Starting ~$150/dancer for 3 hrs - subject to availability. *Starting rates only - performers set their own rates.', price:'$150+/dancer', qty:true},
   ];
 
   el.innerHTML = `
@@ -897,7 +897,7 @@ function p5() {
     <div class="step-desc">All optional. Toggle anything you would like included.</div>
     <div class="toggle-list">
       ${addons.map(a => `
-        <div class="tgl-row${S[a.k]?' on':''}" onclick="toggleAddon('${a.k}',this)">
+        <div class="tgl-row${S[a.k]?' on':''}" id="tgl-${a.k}" onclick="toggleAddon('${a.k}',this)">
           <div class="tl">
             <div class="tn">${a.name}</div>
             <div class="ts">${a.sub}</div>
@@ -906,7 +906,17 @@ function p5() {
             <div class="tp">${a.price}</div>
             <div class="tgl-sw"></div>
           </div>
-        </div>`).join('')}
+        </div>
+        ${a.qty ? `<div id="qty-${a.k}" style="display:${S[a.k]?'flex':'none'};align-items:center;gap:12px;background:var(--lift);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;margin-top:-6px;border-top:none;border-radius:0 0 var(--r) var(--r)">
+          <label style="font-size:12px;color:var(--muted);white-space:nowrap">Number of dancers</label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="event.stopPropagation();adjustDancers(-1)" style="background:var(--rule);border:none;border-radius:4px;color:var(--white);width:28px;height:28px;font-size:16px;cursor:pointer;font-family:var(--font-b);display:flex;align-items:center;justify-content:center">-</button>
+            <span id="dancer-count" style="font-family:var(--font-m);font-size:16px;color:var(--gold);min-width:24px;text-align:center">${S.dancerCount||1}</span>
+            <button onclick="event.stopPropagation();adjustDancers(1)" style="background:var(--rule);border:none;border-radius:4px;color:var(--white);width:28px;height:28px;font-size:16px;cursor:pointer;font-family:var(--font-b);display:flex;align-items:center;justify-content:center">+</button>
+          </div>
+          <span style="font-size:12px;color:var(--muted)" id="dancer-est">est. $150/dancer starting</span>
+        </div>` : ''}
+      `).join('')}
     </div>
     ${S.arrival==='simultaneous'&&!S.xBar ? `<div class="alert alert-warn" style="margin-bottom:20px"><strong>Heads up</strong>You indicated guests arrive all at once. Consider adding an extra bartender to handle the initial rush.</div>` : ''}
     <div class="nav">
@@ -919,6 +929,17 @@ function p5() {
 function toggleAddon(key, row) {
   S[key] = !S[key];
   row.classList.toggle('on', S[key]);
+  // Show/hide qty selector for dancers
+  const qtyEl = document.getElementById('qty-' + key);
+  if (qtyEl) qtyEl.style.display = S[key] ? 'flex' : 'none';
+}
+
+function adjustDancers(delta) {
+  S.dancerCount = Math.max(1, Math.min(10, (S.dancerCount || 1) + delta));
+  const countEl = document.getElementById('dancer-count');
+  if (countEl) countEl.textContent = S.dancerCount;
+  const estEl = document.getElementById('dancer-est');
+  if (estEl) estEl.textContent = 'est. $' + (150 * S.dancerCount) + '/dancer starting';
 }
 
 // ============================================================
@@ -1001,7 +1022,7 @@ function p6() {
           </tbody>
         </table>
         <div class="staff-note">${staffNote()}</div>
-        ${S.dancers ? '<div class="staff-note">Go-go dancer rates are approximate and subject to availability. Not included in totals above.</div>' : ''}
+        ${S.dancers ? '<div class="staff-note">' + (S.dancerCount||1) + ' go-go dancer' + ((S.dancerCount||1)>1?'s':'') + ' requested. Starting rates ~$' + (150*(S.dancerCount||1)) + ' - performers set their own rates. Subject to availability. Not included in totals above.</div>' : ''}
         <div class="qnote">All bar pricing pre-tax, subject to ${S.grat}% gratuity and 8.875% NYC sales tax on bar only. Super premium spirits (Don Julio 1942, Don Julio Rosado, or any item above $25/pour) excluded from all packages. Deposit required to hold date (waived where applicable). This estimate is subject to review and approval &mdash; nothing is confirmed until written confirmation is received from The Manhattan Monster Bar. Quote valid 14 days.</div>
       </div>
     </div>
