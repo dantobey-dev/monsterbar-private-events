@@ -883,7 +883,7 @@ function p5() {
   const addons = [
     {k:'dj',        name:'House DJ',                sub:'Up to 4 hrs flat rate',                         price:'$250'},
     {k:'host',      name:'Drag host',               sub:'Performance, hosting & MC - up to 4 hrs. *Starting rate - performers set their own rates.',       price:'$300*'},
-    {k:'soundtech', name:'Sound technician',        sub:'Required for A/V presentations',                 price:'$125'},
+    {k:'soundtech', name:'Sound technician',        sub:'Required for A/V presentations. Not needed if you selected a house DJ - the DJ handles sound.', note: () => S.dj ? '&#9432; House DJ selected - sound tech not required unless you have A/V presentations.' : '', price:'$125'},
     {k:'coat',      name:'Attended coat check',     sub:'$40/hr - 3 hr minimum',                         price:'$120+'},
     {k:'food',      name:'Food & catering setup',   sub:'Table setup, delivery receiving & cleanup',      price:'$85'},
     {k:'security',  name:'Security',                sub:'$40/hr - 3 hr minimum',                         price:'$120+'},
@@ -901,6 +901,7 @@ function p5() {
           <div class="tl">
             <div class="tn">${a.name}</div>
             <div class="ts">${a.sub}</div>
+            ${a.note && a.note() ? `<div style="font-size:11px;color:var(--gold);margin-top:4px">${a.note()}</div>` : ''}
           </div>
           <div style="display:flex;align-items:center;gap:10px">
             <div class="tp">${a.price}</div>
@@ -932,6 +933,8 @@ function toggleAddon(key, row) {
   // Show/hide qty selector for dancers
   const qtyEl = document.getElementById('qty-' + key);
   if (qtyEl) qtyEl.style.display = S[key] ? 'flex' : 'none';
+  // Re-render step when DJ toggled so sound tech note updates
+  if (key === 'dj') { cur = 5; render(); }
 }
 
 function adjustDancers(delta) {
