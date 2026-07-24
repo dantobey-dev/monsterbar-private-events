@@ -1086,105 +1086,102 @@ render();
 </script>
 
 <!-- AVAILABILITY POPUP -->
-<div id="avail-popup" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.82);overflow-y:auto;padding:24px 16px" onclick="if(event.target===this)closeAvailPopup()">
-  <div style="max-width:620px;margin:0 auto;background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden">
-    <!-- Popup header -->
-    <div style="background:var(--ink);border-bottom:1px solid var(--rule);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-family:var(--font-d);font-size:22px;letter-spacing:0.06em;color:var(--white)">Space Availability</div>
-        <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px">The Manhattan Monster Bar</div>
-      </div>
-      <button onclick="closeAvailPopup()" style="background:none;border:1px solid var(--rule);border-radius:6px;color:var(--muted);font-size:18px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">&times;</button>
-    </div>
-    <!-- Popup body -->
-    <div style="padding:22px">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6">All spaces are subject to prior bookings and confirmed availability. Use this as a guide when selecting your date and time.</p>
-
-      <!-- THE DISCO -->
-      <div style="background:var(--lift);border-radius:10px;overflow:hidden;margin-bottom:16px">
-        <div style="padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--rule)">
-          <div>
-            <div style="font-family:var(--font-d);font-size:24px;letter-spacing:0.04em;color:var(--white)">The Disco</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">Full stage, DJ booth and dance floor &middot; Up to 130 guests</div>
-          </div>
-          <div style="font-family:var(--font-m);font-size:12px;color:var(--gold);text-align:right">$1,500 bar min</div>
-        </div>
-        <div style="padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          ${['Monday|4:00 pm - 10:00 pm|true','Tuesday|Not available|false','Wednesday|4:00 pm - 10:00 pm|true','Thursday|4:00 pm - 8:00 pm|true','Friday|4:00 pm - 10:00 pm|true','Saturday|3:00 pm - 8:00 pm|true','Sunday|Not available|false'].map(r=>{const[d,h,o]=r.split('|');return avRow(d,h,o==='true');}).join('')}
-        </div>
-      </div>
-
-      <!-- PIANO ROOM -->
-      <div style="background:var(--lift);border-radius:10px;overflow:hidden;margin-bottom:16px">
-        <div style="padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--rule)">
-          <div>
-            <div style="font-family:var(--font-d);font-size:24px;letter-spacing:0.04em;color:var(--white)">Piano Room / Main Floor</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">Area behind piano as home base &middot; Up to 15 guests</div>
-          </div>
-          <div style="font-family:var(--font-m);font-size:12px;color:var(--gold);text-align:right">$250 bar min</div>
-        </div>
-        <div style="padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          ${['Monday|Regular business hours|true','Tuesday|Regular business hours|true','Wednesday|Regular business hours|true','Thursday|Regular business hours|true','Friday|Regular business hours|true','Saturday|Regular business hours|true','Sunday|Regular business hours|true'].map(r=>{const[d,h,o]=r.split('|');return avRow(d,h,o==='true');}).join('')}
-        </div>
-      </div>
-
-      <!-- ARIZONA ROOM -->
-      <div style="background:var(--lift);border-radius:10px;overflow:hidden;margin-bottom:16px">
-        <div style="padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--rule)">
-          <div>
-            <div style="font-family:var(--font-d);font-size:24px;letter-spacing:0.04em;color:var(--white)">Arizona Room</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">Intimate back room of the Disco &middot; Up to 25 guests &middot; Late-night only</div>
-          </div>
-          <div style="font-family:var(--font-m);font-size:12px;color:var(--gold);text-align:right">$400 bar min</div>
-        </div>
-        <div style="padding:14px 18px;display:flex;flex-direction:column;gap:6px">
-          ${['Monday|10:00 pm - 2:00 am|true','Tuesday|Not available|false','Wednesday|10:00 pm - 2:00 am|true','Thursday|Not available|false','Friday|10:00 pm - 3:00 am|true','Saturday|Not available|false','Sunday|4:00 pm - 2:00 am|true'].map(r=>{const[d,h,o]=r.split('|');return avRow(d,h,o==='true');}).join('')}
-        </div>
-      </div>
-
-      <!-- FULL BUYOUT -->
-      <div style="background:var(--lift);border-radius:10px;overflow:hidden;margin-bottom:22px">
-        <div style="padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--rule)">
-          <div>
-            <div style="font-family:var(--font-d);font-size:24px;letter-spacing:0.04em;color:var(--white)">Full Bar Buyout</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">Exclusive use of entire venue &middot; Up to 250 guests</div>
-          </div>
-          <div style="font-family:var(--font-m);font-size:12px;color:var(--gold);text-align:right">$15,000+</div>
-        </div>
-        <div style="padding:14px 18px">
-          ${avRow('Selected dates','By arrangement only - we will confirm after reviewing your inquiry',true)}
-        </div>
-      </div>
-
-      <p style="font-size:11px;color:var(--muted);line-height:1.6;padding-top:10px;border-top:1px solid var(--rule)">All times shown are the outer limits of availability. Events must begin and end within these windows. Actual availability subject to prior bookings. Tuesday and Sunday are not available for Disco events. Arizona Room is not available Thursday or Saturday.</p>
-
-      <div style="text-align:center;margin-top:20px">
-        <button onclick="closeAvailPopup()" style="background:var(--gold);color:var(--black);border:none;border-radius:6px;padding:12px 32px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-b)">Got it &mdash; back to my date</button>
-      </div>
-    </div>
-  </div>
-</div>
+<div id="avail-popup" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.82);overflow-y:auto;padding:24px 16px" onclick="if(event.target===this)closeAvailPopup()"></div>
 
 <script>
 function avRow(day, hrs, open) {
-  return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;font-size:13px;background:'+(open?'#1A2A1A':'#2A1515')+';border:1px solid '+(open?'#2A4A2A':'#3A1515')+(open?'':'opacity:0.7')+'">'
-    +'<span style="flex-shrink:0;color:'+(open?'#7AE0A0':'#FF8080')+'">'+(open?'&#10003;':'&#10005;')+'</span>'
-    +'<span style="font-weight:500;color:'+(open?'var(--white)':'#FF8080')+';width:110px;flex-shrink:0">'+day+'</span>'
-    +'<span style="color:'+(open?'#7AE0A0':'#FF8080')+';font-family:var(--font-m);font-size:12px">'+hrs+'</span>'
-    +'</div>';
+  return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;font-size:13px;'
+    + 'background:' + (open ? '#1A2A1A' : '#2A1515') + ';'
+    + 'border:1px solid ' + (open ? '#2A4A2A' : '#3A1515') + ';margin-bottom:6px">'
+    + '<span style="flex-shrink:0;color:' + (open ? '#7AE0A0' : '#FF8080') + '">' + (open ? '&#10003;' : '&#10005;') + '</span>'
+    + '<span style="font-weight:500;color:' + (open ? 'var(--white)' : '#FF8080') + ';width:110px;flex-shrink:0">' + day + '</span>'
+    + '<span style="color:' + (open ? '#7AE0A0' : '#FF8080') + ';font-family:var(--font-m);font-size:12px">' + hrs + '</span>'
+    + '</div>';
 }
+
+function spaceSection(name, min, desc, rows) {
+  return '<div style="background:var(--lift);border-radius:10px;overflow:hidden;margin-bottom:16px">'
+    + '<div style="padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--rule)">'
+    + '<div>'
+    + '<div style="font-family:var(--font-d);font-size:24px;letter-spacing:0.04em;color:var(--white)">' + name + '</div>'
+    + '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + desc + '</div>'
+    + '</div>'
+    + '<div style="font-family:var(--font-m);font-size:12px;color:var(--gold);text-align:right">' + min + '</div>'
+    + '</div>'
+    + '<div style="padding:14px 18px">' + rows + '</div>'
+    + '</div>';
+}
+
+function buildPopupHTML() {
+  const disco = spaceSection(
+    'The Disco', '$1,500 bar min', 'Full stage, DJ booth and dance floor &middot; Up to 130 guests',
+    avRow('Monday',    '4:00 pm - 10:00 pm', true)
+    + avRow('Tuesday',   'Not available', false)
+    + avRow('Wednesday', '4:00 pm - 10:00 pm', true)
+    + avRow('Thursday',  '4:00 pm - 8:00 pm', true)
+    + avRow('Friday',    '4:00 pm - 10:00 pm', true)
+    + avRow('Saturday',  '3:00 pm - 8:00 pm', true)
+    + avRow('Sunday',    'Not available', false)
+  );
+
+  const piano = spaceSection(
+    'Piano Room / Main Floor', '$250 bar min', 'Area behind piano as home base &middot; Full main floor open to guests &middot; Up to 15 guests',
+    avRow('Monday',    'Regular business hours', true)
+    + avRow('Tuesday',   'Regular business hours', true)
+    + avRow('Wednesday', 'Regular business hours', true)
+    + avRow('Thursday',  'Regular business hours', true)
+    + avRow('Friday',    'Regular business hours', true)
+    + avRow('Saturday',  'Regular business hours', true)
+    + avRow('Sunday',    'Regular business hours', true)
+  );
+
+  const arizona = spaceSection(
+    'Arizona Room', '$400 bar min', 'Intimate back room of the Disco &middot; Up to 25 guests &middot; Late-night only',
+    avRow('Monday',    '10:00 pm - 2:00 am', true)
+    + avRow('Tuesday',   'Not available', false)
+    + avRow('Wednesday', '10:00 pm - 2:00 am', true)
+    + avRow('Thursday',  'Not available', false)
+    + avRow('Friday',    '10:00 pm - 3:00 am', true)
+    + avRow('Saturday',  'Not available', false)
+    + avRow('Sunday',    '4:00 pm - 2:00 am', true)
+  );
+
+  const buyout = spaceSection(
+    'Full Bar Buyout', '$15,000+', 'Exclusive use of entire venue &middot; Up to 250 guests',
+    avRow('Selected dates', 'By arrangement - we will confirm after reviewing your inquiry', true)
+  );
+
+  return '<div style="max-width:620px;margin:0 auto;background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden">'
+    + '<div style="background:var(--ink);border-bottom:1px solid var(--rule);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">'
+    + '<div>'
+    + '<div style="font-family:var(--font-d);font-size:22px;letter-spacing:0.06em;color:var(--white)">Space Availability</div>'
+    + '<div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px">The Manhattan Monster Bar &middot; 80 Grove St, West Village</div>'
+    + '</div>'
+    + '<button onclick="closeAvailPopup()" style="background:none;border:1px solid var(--rule);border-radius:6px;color:var(--muted);font-size:18px;width:34px;height:34px;cursor:pointer;line-height:1">&times;</button>'
+    + '</div>'
+    + '<div style="padding:22px">'
+    + '<p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">All spaces are subject to prior bookings and confirmed availability. Times shown are the outer limits - events must start and end within these windows.</p>'
+    + disco + piano + arizona + buyout
+    + '<p style="font-size:11px;color:var(--muted);line-height:1.6;padding-top:12px;border-top:1px solid var(--rule)">Tuesday and Sunday are not available for Disco events. Arizona Room is not available Thursday or Saturday. All bookings are subject to availability confirmation.</p>'
+    + '<div style="text-align:center;margin-top:18px">'
+    + '<button onclick="closeAvailPopup()" style="background:var(--gold);color:var(--black);border:none;border-radius:6px;padding:12px 32px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-b)">Got it &#8212; back to my date</button>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
 function openAvailPopup() {
   const el = document.getElementById('avail-popup');
-  // Render rows now that avRow is defined
-  el.innerHTML = el.innerHTML; // already rendered via template
+  el.innerHTML = buildPopupHTML();
   el.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
+
 function closeAvailPopup() {
   document.getElementById('avail-popup').style.display = 'none';
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeAvailPopup(); });
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAvailPopup(); });
 </script>
 </body>
-</html>
